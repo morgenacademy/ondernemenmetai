@@ -41,15 +41,17 @@ export function nextTranscriptPath(s: RepoSnapshot, rol: string): string {
   return `${INTERVIEWS_DIR}/${String(next).padStart(2, '0')}-${slugify(rol)}.md`;
 }
 
+/** Tekstversies van een gesprek. .vtt is de ondertitel-export van Teams en Zoom. */
+export const TRANSCRIPT_EXTENSIONS = ['.md', '.txt', '.vtt'];
+export const TRANSCRIPT_WEIGERTEKST = 'Alleen .md-, .txt- of .vtt-bestanden. Audio of Word? Zet het eerst om met skill transcriberen.';
+
 export function isTranscriptFileName(name: string): boolean {
   const lower = name.toLowerCase();
-  return lower.endsWith('.md') || lower.endsWith('.txt');
+  return TRANSCRIPT_EXTENSIONS.some((ext) => lower.endsWith(ext));
 }
 
 export function transcriptFromUpload(fileName: string, text: string, rol: string, s: RepoSnapshot): FileWrite | { error: string } {
-  if (!isTranscriptFileName(fileName)) {
-    return { error: 'Alleen .md- of .txt-bestanden. Audio of Word? Zet het eerst om met skill transcriberen.' };
-  }
+  if (!isTranscriptFileName(fileName)) return { error: TRANSCRIPT_WEIGERTEKST };
   if (text.trim().length === 0) return { error: 'Dit bestand is leeg.' };
   const path = nextTranscriptPath(s, rol);
   const label = rol.trim() || 'onbekend';

@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from 'react';
 import { filledFilesIn, mdFilesIn } from '../lib/levels/checks';
-import { isTranscriptFileName, transcriptFromUpload } from '../lib/levels/level2';
+import { TRANSCRIPT_EXTENSIONS, TRANSCRIPT_WEIGERTEKST, isTranscriptFileName, transcriptFromUpload } from '../lib/levels/level2';
 import type { FileWrite, UploadStep } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
 import { CheckIcon, CircleIcon } from './icons';
@@ -20,7 +20,7 @@ export function UploadStap({ step, snapshot, onSave }: Props) {
     e.target.value = '';
     if (!file) return;
     if (!isTranscriptFileName(file.name)) {
-      setMelding('Alleen .md- of .txt-bestanden. Audio of Word? Zet het eerst om met skill transcriberen.');
+      setMelding(TRANSCRIPT_WEIGERTEKST);
       return;
     }
     const result = transcriptFromUpload(file.name, await file.text(), rol, snapshot);
@@ -58,10 +58,19 @@ export function UploadStap({ step, snapshot, onSave }: Props) {
           <input id={`${step.id}-rol`} className="veld" placeholder="bijvoorbeeld apotheker" value={rol} onChange={(e) => setRol(e.target.value)} />
         </div>
         <label className="btn-o">
-          Upload transcript (.md of .txt)
-          <input type="file" accept=".md,.txt,text/plain,text/markdown" className="sr-only" onChange={onFile} />
+          Upload transcript (.md, .txt of .vtt)
+          <input
+            type="file"
+            accept={[...TRANSCRIPT_EXTENSIONS, 'text/plain', 'text/markdown', 'text/vtt'].join(',')}
+            className="sr-only"
+            aria-describedby={`${step.id}-privacy`}
+            onChange={onFile}
+          />
         </label>
       </div>
+      <p id={`${step.id}-privacy`} className="mt-2 text-sm text-[var(--text-secondary)]">
+        Namen eruit: gebruik een rol en initialen, nooit iemands volledige naam.
+      </p>
       {melding && (
         <p role="status" className="mt-2 text-sm">
           {melding}

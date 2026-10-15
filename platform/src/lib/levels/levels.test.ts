@@ -10,7 +10,9 @@ import {
   ANALYSE_PATH,
   DOELGROEP_PATH,
   INTERVIEWS_DIR,
+  TRANSCRIPT_WEIGERTEKST,
   VRAGEN_PATH,
+  isTranscriptFileName,
   level2,
   nextTranscriptPath,
   requiredInterviews,
@@ -194,11 +196,22 @@ describe('level 2', () => {
   });
 
   it('transcriptFromUpload weigert audio, Word en lege bestanden', () => {
-    expect(transcriptFromUpload('gesprek.m4a', 'x', 'apotheker', snap({}))).toEqual({
-      error: 'Alleen .md- of .txt-bestanden. Audio of Word? Zet het eerst om met skill transcriberen.',
-    });
+    expect(transcriptFromUpload('gesprek.m4a', 'x', 'apotheker', snap({}))).toEqual({ error: TRANSCRIPT_WEIGERTEKST });
     expect('error' in transcriptFromUpload('gesprek.docx', 'x', 'apotheker', snap({}))).toBe(true);
     expect(transcriptFromUpload('leeg.txt', '  \n', 'apotheker', snap({}))).toEqual({ error: 'Dit bestand is leeg.' });
+  });
+
+  it('de weigertekst noemt alle toegestane soorten', () => {
+    expect(TRANSCRIPT_WEIGERTEKST).toContain('.vtt');
+  });
+
+  it('accepteert ondertitels uit Teams of Zoom (.vtt)', () => {
+    expect(isTranscriptFileName('teams-export.VTT')).toBe(true);
+    const vtt = transcriptFromUpload('teams.vtt', 'WEBVTT\n\n00:00:01.000 --> 00:00:04.000\nGoedemorgen.', 'Apotheker', snap({}));
+    if ('error' in vtt) throw new Error(vtt.error);
+    expect(vtt.path).toBe(`${INTERVIEWS_DIR}/01-apotheker.md`);
+    expect(parseMarkdown(vtt.content).frontmatter).toEqual({ rol: 'Apotheker' });
+    expect(vtt.content).toContain('Goedemorgen.');
   });
 
   it('transcriptFromUpload pakt .txt in en laat .md zoals het is', () => {
