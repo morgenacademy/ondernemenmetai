@@ -1,6 +1,5 @@
 ---
 type: B2B
-interviews_nodig: 5
 ---
 <!-- invullen -->
 # Doelgroep

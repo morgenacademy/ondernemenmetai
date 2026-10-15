@@ -150,6 +150,19 @@ describe('level 2', () => {
     expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep('B2C') }))).toBe(15);
   });
 
+  it('requiredInterviews leest het type hoofdletterongevoelig', () => {
+    for (const type of ['b2c', 'B2c', ' B2C ']) {
+      expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep(type) })), type).toBe(15);
+    }
+    expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep('b2b') }))).toBe(5);
+  });
+
+  it('de starter-doelgroep vraagt 15 interviews zodra de AI het type op B2C zet', () => {
+    expect(requiredInterviews(snap({}))).toBe(5);
+    const b2c = starterFiles[DOELGROEP_PATH].replace('type: B2B', 'type: b2c');
+    expect(requiredInterviews(snap({ [DOELGROEP_PATH]: b2c }))).toBe(15);
+  });
+
   it('requiredInterviews begrenst absurd grote aantallen op 50', () => {
     expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep('B2B', 10_000_000_000) }))).toBe(50);
   });

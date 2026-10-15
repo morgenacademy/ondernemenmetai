@@ -36,9 +36,9 @@ describe('starter-repo', () => {
     expect(starterFiles['CLAUDE.md'].trim()).toBe('@AGENTS.md');
   });
 
-  it('doelgroep.md heeft geldige frontmatter met B2B en 5 interviews', () => {
+  it('doelgroep.md heeft geldige frontmatter met alleen het type, zodat het aantal interviews meegaat met B2B of B2C', () => {
     const parsed = parseMarkdown(starterFiles['level-2-probleemvalidatie/doelgroep.md']);
     expect(parsed.error).toBeUndefined();
-    expect(parsed.frontmatter).toEqual({ type: 'B2B', interviews_nodig: 5 });
+    expect(parsed.frontmatter).toEqual({ type: 'B2B' });
   });
 });

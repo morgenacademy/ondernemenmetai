@@ -12,7 +12,7 @@ export const INTERVIEWS_DIR = 'level-2-probleemvalidatie/interviews';
 export const MAX_INTERVIEWS = 50;
 
 export function defaultInterviews(type: unknown): number {
-  return type === 'B2C' ? 15 : 5;
+  return typeof type === 'string' && type.trim().toUpperCase() === 'B2C' ? 15 : 5;
 }
 
 export function requiredInterviews(s: RepoSnapshot): number {
