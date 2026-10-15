@@ -28,15 +28,17 @@ export function slugify(text: string): string {
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 40);
+    .slice(0, 40)
+    .replace(/^-+|-+$/g, '');
   return slug || 'interview';
 }
 
 export function nextTranscriptPath(s: RepoSnapshot, rol: string): string {
+  // Alleen "01-rol.md" telt; een bestand als "2026-notities.md" is geen interviewnummer.
   const numbers = mdFilesIn(s, INTERVIEWS_DIR)
-    .map((path) => Number.parseInt(path.slice(INTERVIEWS_DIR.length + 1), 10))
-    .filter((n) => !Number.isNaN(n));
+    .map((path) => path.slice(INTERVIEWS_DIR.length + 1).match(/^(\d{1,3})-/)?.[1])
+    .filter((n): n is string => n !== undefined)
+    .map(Number);
   const next = (numbers.length > 0 ? Math.max(...numbers) : 0) + 1;
   return `${INTERVIEWS_DIR}/${String(next).padStart(2, '0')}-${slugify(rol)}.md`;
 }

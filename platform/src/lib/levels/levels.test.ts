@@ -189,6 +189,22 @@ describe('level 2', () => {
     expect(slugify('!!!')).toBe('interview');
   });
 
+  it('slugify laat geen streepje achter na het afkappen', () => {
+    const slug = slugify(`${'a'.repeat(39)} eigenaar`);
+    expect(slug).toBe('a'.repeat(39));
+    expect(slugify('apotheker in een middelgrote stad (eigenaar)').endsWith('-')).toBe(false);
+  });
+
+  it('nextTranscriptPath telt alleen een nummer van hooguit drie cijfers met een streepje', () => {
+    const files = {
+      [`${INTERVIEWS_DIR}/02-a.md`]: '# 2\n\nx',
+      [`${INTERVIEWS_DIR}/2026-notities.md`]: '# notities\n\nx',
+      [`${INTERVIEWS_DIR}/7apotheker.md`]: '# x\n\nx',
+    };
+    expect(nextTranscriptPath(snap(files), 'assistent')).toBe(`${INTERVIEWS_DIR}/03-assistent.md`);
+    expect(nextTranscriptPath(snap({ [`${INTERVIEWS_DIR}/123-a.md`]: '# x\n\nx' }), 'b')).toBe(`${INTERVIEWS_DIR}/124-b.md`);
+  });
+
   it('nextTranscriptPath neemt het hoogste nummer plus één', () => {
     expect(nextTranscriptPath(snap({}), 'Apotheker')).toBe(`${INTERVIEWS_DIR}/01-apotheker.md`);
     const files = { [`${INTERVIEWS_DIR}/01-a.md`]: '# 1\n\nx', [`${INTERVIEWS_DIR}/03-b.md`]: '# 3\n\nx' };
