@@ -51,6 +51,11 @@ export default function App({ repo }: { repo: MockRepoAdapter }) {
           {r.error}
         </p>
       )}
+      {r.warning && (
+        <p role="alert" className="card mt-4 text-sm">
+          {r.warning}
+        </p>
+      )}
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px]">
         <LevelPagina
           level={current}

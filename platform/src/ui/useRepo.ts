@@ -6,18 +6,28 @@ import type { Commit, MockRepoAdapter } from '../lib/repo/mockRepo';
 import { buildSnapshot } from '../lib/repo/snapshot';
 import type { RepoInfo, RepoSnapshot } from '../lib/repo/types';
 
+export const NIET_BEWAARD_MELDING =
+  'Je browser bewaart de demo niet meer: de opslag is vol of geblokkeerd. Je werk staat alleen in dit tabblad. Herlaad je de pagina, dan ben je het kwijt.';
+
+/** Melding als de demo-opslag het werk niet meer bewaart, anders null. */
+export function opslagMelding(repo: MockRepoAdapter): string | null {
+  return repo.isPersisted() ? null : NIET_BEWAARD_MELDING;
+}
+
 export function useRepo(repo: MockRepoAdapter) {
   const [snapshot, setSnapshot] = useState<RepoSnapshot | null>(null);
   const [info, setInfo] = useState<RepoInfo | null>(null);
   const [commits, setCommits] = useState<Commit[]>([]);
   const [lastWritten, setLastWritten] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [warning, setWarning] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
     const [nextSnapshot, nextInfo, nextCommits] = await Promise.all([buildSnapshot(repo), repo.getInfo(), repo.commits()]);
     setSnapshot(nextSnapshot);
     setInfo(nextInfo);
     setCommits(nextCommits);
+    setWarning(opslagMelding(repo));
   }, [repo]);
 
   useEffect(() => {
@@ -57,5 +67,5 @@ export function useRepo(repo: MockRepoAdapter) {
 
   const status = useMemo(() => (snapshot ? levelStatus(LEVELS, snapshot) : null), [snapshot]);
 
-  return { snapshot, info, commits, status, lastWritten, error, write, run, refresh };
+  return { snapshot, info, commits, status, lastWritten, error, warning, write, run, refresh };
 }

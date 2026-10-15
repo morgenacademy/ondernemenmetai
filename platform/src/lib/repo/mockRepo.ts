@@ -15,6 +15,7 @@ function isState(value: unknown): value is State {
 /** Nagebootste repo voor de klikbare demo. Bewaart in localStorage, valt terug op geheugen. */
 export class MockRepoAdapter implements RepoAdapter {
   private memory: State | null = null;
+  private persisted = true;
 
   constructor(
     private readonly storage: StorageLike | null,
@@ -45,10 +46,18 @@ export class MockRepoAdapter implements RepoAdapter {
   private save(state: State): void {
     this.memory = state;
     try {
-      this.storage?.setItem(DEMO_STORAGE_KEY, JSON.stringify(state));
+      if (!this.storage) throw new Error('geen opslag');
+      this.storage.setItem(DEMO_STORAGE_KEY, JSON.stringify(state));
+      this.persisted = true;
     } catch {
-      // Opslag vol of geblokkeerd: de demo werkt verder in het geheugen.
+      // Opslag vol of geblokkeerd: de demo werkt verder in het geheugen, maar meldt dat via isPersisted().
+      this.persisted = false;
     }
+  }
+
+  /** false = de laatste wijziging staat alleen in het geheugen en is weg na herladen. */
+  isPersisted(): boolean {
+    return this.persisted;
   }
 
   async getInfo(): Promise<RepoInfo> {
@@ -82,8 +91,10 @@ export class MockRepoAdapter implements RepoAdapter {
     this.memory = this.initial();
     try {
       this.storage?.removeItem(DEMO_STORAGE_KEY);
+      this.persisted = true;
     } catch {
-      // Niets te doen: het geheugen is al teruggezet.
+      // Het geheugen is al teruggezet, maar de oude stand komt terug na herladen.
+      this.persisted = false;
     }
   }
 }

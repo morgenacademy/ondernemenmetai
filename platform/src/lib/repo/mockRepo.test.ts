@@ -27,6 +27,15 @@ class BrokenStorage implements StorageLike {
   }
 }
 
+/** Leest gewoon, maar weigert te schrijven zolang `full` aan staat. */
+class FullStorage extends MapStorage {
+  full = true;
+  setItem(key: string, value: string) {
+    if (this.full) throw new DOMException('Quota overschreden', 'QuotaExceededError');
+    super.setItem(key, value);
+  }
+}
+
 const seed = { 'README.md': '# Start\n' };
 
 describe('MockRepoAdapter', () => {
@@ -55,6 +64,38 @@ describe('MockRepoAdapter', () => {
     await repo.mergePullRequest();
     expect(await repo.readFile('a.md')).toBe('x');
     expect((await repo.getInfo()).mergedPullRequests).toBe(1);
+  });
+
+  it('bewaart gewoon zolang de opslag werkt', async () => {
+    const repo = new MockRepoAdapter(new MapStorage(), seed);
+    expect(repo.isPersisted()).toBe(true);
+    await repo.writeFile('a.md', 'x', 'm');
+    expect(repo.isPersisted()).toBe(true);
+  });
+
+  it('meldt dat het werk niet bewaard wordt als de opslag vol is', async () => {
+    const repo = new MockRepoAdapter(new FullStorage(), seed);
+    await repo.writeFile('a.md', 'x', 'm');
+    expect(repo.isPersisted()).toBe(false);
+    expect(await repo.readFile('a.md')).toBe('x');
+  });
+
+  it('meldt het ook zonder opslag of bij geblokkeerde opslag', async () => {
+    for (const storage of [null, new BrokenStorage()]) {
+      const repo = new MockRepoAdapter(storage, seed);
+      await repo.mergePullRequest();
+      expect(repo.isPersisted()).toBe(false);
+    }
+  });
+
+  it('de melding verdwijnt zodra opslaan weer lukt', async () => {
+    const storage = new FullStorage();
+    const repo = new MockRepoAdapter(storage, seed);
+    await repo.writeFile('a.md', 'x', 'm');
+    storage.full = false;
+    await repo.writeFile('b.md', 'y', 'm');
+    expect(repo.isPersisted()).toBe(true);
+    expect(await new MockRepoAdapter(storage, seed).readFile('a.md')).toBe('x');
   });
 
   it('valt terug op de starter-repo bij kapotte opslag', async () => {
