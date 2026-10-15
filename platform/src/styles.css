@@ -10,7 +10,7 @@
   --white: #FFFFFF;
   --text-primary: #F0ECF5;
   --text-secondary: #D8CCEC;
-  --text-muted: #7A6B8E;
+  --text-muted: #BAAED0; /* minstens 4,5:1 op een kaart, ook bovenaan de pagina (zie styles.test.ts) */
   --glass-bg: rgba(255, 255, 255, 0.08);
   --glass-bg-strong: rgba(255, 255, 255, 0.12);
   --glass-border: rgba(255, 255, 255, 0.18);
@@ -87,6 +87,8 @@ body::before {
     padding: .8rem 1.6rem; cursor: pointer; transition: var(--transition);
   }
   .btn-o:hover { color: var(--white); border-color: rgba(255, 255, 255, .35); }
+  /* focus-within: het uploadlabel verbergt de echte bestandskiezer, dus de focus moet op het label te zien zijn */
+  .btn-o:focus-visible, .btn-o:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
   .btn-klein { padding: .5rem 1rem; font-size: .85rem; }
 
   .btn-demo {

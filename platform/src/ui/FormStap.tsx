@@ -12,10 +12,19 @@ function isRequired(field: Field): boolean {
   return (field.kind === 'text' || field.kind === 'textarea') && !field.optional;
 }
 
+/** Uitleg bij een uitgeschakelde knop: het eerste lege veld, plus hoeveel er nog meer leeg zijn. */
+export function missingFieldsHint(labels: string[]): string | null {
+  if (labels.length === 0) return null;
+  const rest = labels.length - 1;
+  return rest === 0 ? `Nog leeg: ${labels[0]}` : `Nog leeg: ${labels[0]} en nog ${rest} ${rest === 1 ? 'veld' : 'velden'}`;
+}
+
 export function FormStap({ step, snapshot, alreadyDone, onSave }: Props) {
   const [values, setValues] = useState<FormValues>(() => initialValues(step.fields));
   const [saving, setSaving] = useState(false);
-  const missing = step.fields.some((f) => isRequired(f) && values[f.name].trim() === '');
+  const hint = missingFieldsHint(step.fields.filter((f) => isRequired(f) && values[f.name].trim() === '').map((f) => f.label));
+  const missing = hint !== null;
+  const hintId = `${step.id}-leeg`;
   const set = (name: string, value: string) => setValues((prev) => ({ ...prev, [name]: value }));
 
   const submit = async (e: FormEvent) => {
@@ -61,9 +70,14 @@ export function FormStap({ step, snapshot, alreadyDone, onSave }: Props) {
         );
       })}
       <div className="flex flex-wrap items-center gap-3">
-        <button type="submit" className="btn-p" disabled={saving || missing}>
+        <button type="submit" className="btn-p" disabled={saving || missing} aria-describedby={hint ? hintId : undefined}>
           {saving ? 'Bezig…' : 'Zet in je repo'}
         </button>
+        {hint && (
+          <span id={hintId} className="text-sm text-[var(--text-secondary)]">
+            {hint}
+          </span>
+        )}
         {alreadyDone && <span className="text-sm text-[var(--text-secondary)]">Staat al in je repo. Opnieuw opslaan overschrijft het.</span>}
       </div>
     </form>

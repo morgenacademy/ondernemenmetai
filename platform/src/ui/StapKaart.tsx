@@ -26,7 +26,7 @@ export function StapKaart({ level, step, index, snapshot, evaluation, setup, onS
     <article className={`card${done ? ' stap-af' : ''}`}>
       <header className="flex items-start gap-3">
         <span className="stap-nr">{done ? <CheckIcon /> : index + 1}</span>
-        <h3 className="stap-titel">{step.title}</h3>
+        <h2 className="stap-titel">{step.title}</h2>
       </header>
       {content && <Markdown text={filterVariants(content, setup)} />}
       {step.kind === 'form' && <FormStap step={step} snapshot={snapshot} alreadyDone={done} onSave={onSave} />}
