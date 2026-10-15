@@ -1,0 +1,1 @@
+Je visie is het beeld van de wereld als jouw onderneming slaagt. Niet wat je verkoopt, maar wat er dan anders is. Een goede visie is groot genoeg om je jarenlang richting te geven, en concreet genoeg om er keuzes mee te maken.
