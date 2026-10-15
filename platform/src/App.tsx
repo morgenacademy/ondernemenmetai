@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { SIMULATIONS } from './demo/simulations';
 import { LEVELS } from './lib/levels';
 import type { MockRepoAdapter } from './lib/repo/mockRepo';
 import { DemoBalk } from './ui/DemoBalk';
 import { LevelKaart } from './ui/LevelKaart';
+import { LevelPagina } from './ui/LevelPagina';
 import { RepoPaneel } from './ui/RepoPaneel';
 import { useRepo } from './ui/useRepo';
 
@@ -19,6 +21,11 @@ export default function App({ repo }: { repo: MockRepoAdapter }) {
     setSelected(null);
     await r.refresh();
   };
+  const simulate = (stepId: string) => {
+    const sim = SIMULATIONS[stepId];
+    if (sim) void r.run(() => sim.run(repo, snapshot));
+  };
+  const nextLevel = LEVELS.find((l) => l.id === current.id + 1);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
@@ -36,11 +43,14 @@ export default function App({ repo }: { repo: MockRepoAdapter }) {
         </p>
       )}
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px]">
-        <section className="card">
-          <p className="eyebrow">Level {current.id}</p>
-          <h1 className="level-titel">{current.name}</h1>
-          <p className="mt-2">{current.summary}</p>
-        </section>
+        <LevelPagina
+          level={current}
+          state={status[current.id]}
+          snapshot={snapshot}
+          onSave={r.write}
+          onSimulate={simulate}
+          onNext={nextLevel ? () => setSelected(nextLevel.id) : undefined}
+        />
         <RepoPaneel info={info} snapshot={snapshot} commits={r.commits} lastWritten={r.lastWritten} />
       </div>
     </div>
