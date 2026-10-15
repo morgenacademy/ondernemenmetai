@@ -19,6 +19,12 @@ describe('content', () => {
     expect(filterVariants(md, { os: 'windows', ai: 'codex' })).toBe('Intro\nWindows-tekst\nCodex-tekst\nSlot');
   });
 
+  it('filterVariants behandelt een onbekende computer of AI-tool als niet gekozen', () => {
+    expect(filterVariants(md, { os: 'linux', ai: 'codex' })).toBe('Intro\nMac-tekst\nWindows-tekst\nCodex-tekst\nSlot');
+    expect(filterVariants(md, { os: 'mac', ai: 'chatgpt' })).toBe('Intro\nMac-tekst\nCodex-tekst\nSlot');
+    expect(filterVariants(md, { os: 'Linux', ai: 'gemini' })).toBe('Intro\nMac-tekst\nWindows-tekst\nCodex-tekst\nSlot');
+  });
+
   it('filterVariants toont alles zolang er geen setup is', () => {
     expect(filterVariants(md, {})).toBe('Intro\nMac-tekst\nWindows-tekst\nCodex-tekst\nSlot');
   });

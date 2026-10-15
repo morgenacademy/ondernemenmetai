@@ -5,6 +5,9 @@ import type { LevelDef } from './types';
 export const SETUP_PATH = 'level-0-werkplek/setup.md';
 export const WERKPLEK_PATH = 'level-0-werkplek/werkplek.md';
 
+export const OS_OPTIONS = [{ value: 'mac', label: 'Mac' }, { value: 'windows', label: 'Windows' }];
+export const AI_OPTIONS = [{ value: 'claude-code', label: 'Claude Code' }, { value: 'codex', label: 'Codex' }];
+
 export const level0: LevelDef = {
   id: 0,
   name: 'Werkplek',
@@ -17,8 +20,8 @@ export const level0: LevelDef = {
       title: 'Kies je setup',
       kind: 'form',
       fields: [
-        { kind: 'select', name: 'os', label: 'Mijn computer', options: [{ value: 'mac', label: 'Mac' }, { value: 'windows', label: 'Windows' }] },
-        { kind: 'select', name: 'ai', label: 'Mijn AI-tool', options: [{ value: 'claude-code', label: 'Claude Code' }, { value: 'codex', label: 'Codex' }] },
+        { kind: 'select', name: 'os', label: 'Mijn computer', options: OS_OPTIONS },
+        { kind: 'select', name: 'ai', label: 'Mijn AI-tool', options: AI_OPTIONS },
       ],
       toFile: (v) => ({
         path: SETUP_PATH,
