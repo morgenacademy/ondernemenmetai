@@ -1,0 +1,5 @@
+# Lokale context en input (niet in git)
+context/
+
+# macOS
+.DS_Store
