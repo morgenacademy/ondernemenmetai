@@ -43,8 +43,12 @@ export function isFilled(text: string | undefined | null): boolean {
   return content.trim().length > 0;
 }
 
+/** Telt lijstregels met inhoud. Een regel met alleen een label, zoals "- [wens]", telt niet. */
 export function countListItems(text: string | undefined | null): number {
   if (text == null) return 0;
   const { body } = parseMarkdown(text);
-  return body.split('\n').filter((line) => /^\s*[-*]\s+\S/.test(line)).length;
+  return body.split('\n').filter((line) => {
+    const item = line.match(/^\s*[-*]\s+(.*)$/);
+    return item !== null && item[1].replace(/^\[[^\]]*\]/, '').trim().length > 0;
+  }).length;
 }

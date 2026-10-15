@@ -92,6 +92,20 @@ describe('level 1', () => {
     expect(evaluation.results.find((r) => r.id === 'idee')?.reason).toBe('level-1-idee/idee.md is nog niet ingevuld');
   });
 
+  it('het aannames-template telt als nul aannames', () => {
+    expect(evaluateLevel(level1, snap({})).results.find((r) => r.id === 'aannames')?.reason).toBe('level-1-idee/aannames.md is nog niet ingevuld');
+  });
+
+  it('aannames tellen niet zolang de markering erin staat', () => {
+    const files = { ...LEVEL1_DONE, [AANNAMES_PATH]: `${MARKER}\n# Aannames\n\n- [wens] a\n- [haalbaar] b\n- [rendabel] c\n` };
+    expect(evaluateLevel(level1, snap(files)).done).toBe(false);
+  });
+
+  it('een label zonder tekst is geen aanname', () => {
+    const files = { ...LEVEL1_DONE, [AANNAMES_PATH]: '# Aannames\n\n- [wens]\n- [haalbaar] b\n- [rendabel] c\n' };
+    expect(evaluateLevel(level1, snap(files)).results.find((r) => r.id === 'aannames')?.reason).toBe('2 van de 3');
+  });
+
   it('is af met alle bestanden en drie aannames', () => {
     expect(evaluateLevel(level1, snap(LEVEL1_DONE)).done).toBe(true);
   });
@@ -134,6 +148,16 @@ describe('level 2', () => {
       expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep('B2B', value) })), String(value)).toBe(5);
     }
     expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep('B2C') }))).toBe(15);
+  });
+
+  it('requiredInterviews begrenst absurd grote aantallen op 50', () => {
+    expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep('B2B', 10_000_000_000) }))).toBe(50);
+  });
+
+  it('doelgroep-formulier begrenst het aantal op 50', () => {
+    const step = formStep(level2, 'l2-doelgroep');
+    const values = { waarde: 'a', gebruiker: 'b', betaler: 'c', beslisser: 'd', type: 'B2B', aantal: '10000000000' };
+    expect(parseMarkdown(step.toFile(values, snap({})).content).frontmatter).toEqual({ type: 'B2B', interviews_nodig: 50 });
   });
 
   it('doelgroep-formulier gebruikt de standaard als het aantal leeg is', () => {

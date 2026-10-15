@@ -8,6 +8,9 @@ export const VRAGEN_PATH = 'level-2-probleemvalidatie/interviewvragen.md';
 export const ANALYSE_PATH = 'level-2-probleemvalidatie/analyse.md';
 export const INTERVIEWS_DIR = 'level-2-probleemvalidatie/interviews';
 
+/** Bovengrens: meer vakjes dan dit tekenen heeft geen zin en kan de pagina laten vastlopen. */
+export const MAX_INTERVIEWS = 50;
+
 export function defaultInterviews(type: unknown): number {
   return type === 'B2C' ? 15 : 5;
 }
@@ -15,7 +18,7 @@ export function defaultInterviews(type: unknown): number {
 export function requiredInterviews(s: RepoSnapshot): number {
   const fm = frontmatterOf(s, DOELGROEP_PATH);
   const n = fm.interviews_nodig;
-  if (typeof n === 'number' && Number.isInteger(n) && n > 0) return n;
+  if (typeof n === 'number' && Number.isInteger(n) && n > 0) return Math.min(n, MAX_INTERVIEWS);
   return defaultInterviews(fm.type);
 }
 
@@ -71,12 +74,12 @@ export const level2: LevelDef = {
         { kind: 'textarea', name: 'betaler', label: 'Wie betaalt jou voor je oplossing?' },
         { kind: 'textarea', name: 'beslisser', label: 'Wie beslist welke oplossing gebruikt wordt?' },
         { kind: 'select', name: 'type', label: 'Verkoop je aan bedrijven of consumenten?', options: [{ value: 'B2B', label: 'Bedrijven (B2B)' }, { value: 'B2C', label: 'Consumenten (B2C)' }] },
-        { kind: 'number', name: 'aantal', label: 'Aantal interviews (leeg = 5 bij B2B, 15 bij B2C)', optional: true },
+        { kind: 'number', name: 'aantal', label: 'Aantal interviews (leeg = 5 bij B2B, 15 bij B2C)', optional: true, max: MAX_INTERVIEWS },
       ],
       toFile: (v) => {
         const type = v.type === 'B2C' ? 'B2C' : 'B2B';
         const n = Number.parseInt(v.aantal, 10);
-        const nodig = Number.isInteger(n) && n > 0 ? n : defaultInterviews(type);
+        const nodig = Number.isInteger(n) && n > 0 ? Math.min(n, MAX_INTERVIEWS) : defaultInterviews(type);
         return {
           path: DOELGROEP_PATH,
           message: 'Doelgroep bepaald',

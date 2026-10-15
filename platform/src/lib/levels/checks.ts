@@ -50,7 +50,10 @@ export function minListItems(id: string, stepId: string, path: string, min: numb
     stepId,
     label,
     run: (s) => {
-      const count = countListItems(s.files[path]);
+      const text = s.files[path];
+      if (text === undefined) return { ok: false, reason: `${path} staat nog niet in je repo` };
+      if (!isFilled(text)) return { ok: false, reason: `${path} is nog niet ingevuld` };
+      const count = countListItems(text);
       return { ok: count >= min, reason: `${count} van de ${min}` };
     },
   };

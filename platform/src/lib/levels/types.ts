@@ -8,7 +8,7 @@ export type Field =
   | { kind: 'text'; name: string; label: string; placeholder?: string; optional?: boolean }
   | { kind: 'textarea'; name: string; label: string; placeholder?: string; optional?: boolean }
   | { kind: 'select'; name: string; label: string; options: { value: string; label: string }[] }
-  | { kind: 'number'; name: string; label: string; placeholder?: string; optional?: boolean };
+  | { kind: 'number'; name: string; label: string; placeholder?: string; optional?: boolean; max?: number };
 
 export type FormValues = Record<string, string>;
 export type FileWrite = { path: string; content: string; message: string };

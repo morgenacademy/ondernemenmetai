@@ -51,6 +51,7 @@ export function FormStap({ step, snapshot, alreadyDone, onSave }: Props) {
                 className="veld"
                 type={field.kind === 'number' ? 'number' : 'text'}
                 min={field.kind === 'number' ? 1 : undefined}
+                max={field.kind === 'number' ? field.max : undefined}
                 placeholder={field.placeholder}
                 value={values[field.name]}
                 onChange={(e) => set(field.name, e.target.value)}
