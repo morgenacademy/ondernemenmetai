@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEMO_STORAGE_KEY, MockRepoAdapter, type StorageLike } from './mockRepo';
+import { DEMO_STORAGE_KEY, MockRepoAdapter, clearDemoStorage, type StorageLike } from './mockRepo';
 import { buildSnapshot } from './snapshot';
 
 class MapStorage implements StorageLike {
@@ -113,6 +113,21 @@ describe('MockRepoAdapter', () => {
     expect(await repo.listFiles()).toEqual(['README.md']);
     expect((await repo.getInfo()).mergedPullRequests).toBe(0);
     expect(storage.getItem(DEMO_STORAGE_KEY)).toBeNull();
+  });
+
+  it('clearDemoStorage wist alleen de demo-stand', async () => {
+    const storage = new MapStorage();
+    await new MockRepoAdapter(storage, seed).writeFile('a.md', 'x', 'm');
+    storage.setItem('iets-anders', 'blijft');
+    clearDemoStorage(storage);
+    expect(storage.getItem(DEMO_STORAGE_KEY)).toBeNull();
+    expect(storage.getItem('iets-anders')).toBe('blijft');
+    expect(await new MockRepoAdapter(storage, seed).listFiles()).toEqual(['README.md']);
+  });
+
+  it('clearDemoStorage gooit niet bij ontbrekende of geblokkeerde opslag', () => {
+    expect(() => clearDemoStorage(null)).not.toThrow();
+    expect(() => clearDemoStorage(new BrokenStorage())).not.toThrow();
   });
 
   it('buildSnapshot bundelt bestanden en PR-teller', async () => {

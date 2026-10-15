@@ -1,8 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { MockRepoAdapter } from './lib/repo/mockRepo';
+import { MockRepoAdapter, clearDemoStorage } from './lib/repo/mockRepo';
 import { starterFiles } from './lib/repo/starterFiles';
+import { Foutgrens } from './ui/Foutgrens';
 import './styles.css';
 
 function browserStorage(): Storage | null {
@@ -13,10 +14,18 @@ function browserStorage(): Storage | null {
   }
 }
 
-const repo = new MockRepoAdapter(browserStorage(), starterFiles);
+const storage = browserStorage();
+const repo = new MockRepoAdapter(storage, starterFiles);
+
+const clearAndReload = () => {
+  clearDemoStorage(storage);
+  window.location.reload();
+};
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App repo={repo} />
+    <Foutgrens onClear={clearAndReload}>
+      <App repo={repo} />
+    </Foutgrens>
   </StrictMode>,
 );

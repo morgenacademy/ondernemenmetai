@@ -6,6 +6,15 @@ type State = { files: Record<string, string>; mergedPullRequests: number; commit
 
 export const DEMO_STORAGE_KEY = 'ondernemen-met-ai.demo-repo.v1';
 
+/** Wist de opgeslagen demo-stand, zodat de demo na herladen opnieuw begint vanaf de starter-repo. */
+export function clearDemoStorage(storage: StorageLike | null): void {
+  try {
+    storage?.removeItem(DEMO_STORAGE_KEY);
+  } catch {
+    // Geblokkeerde opslag: er staat dan ook niets dat de demo kan laten vastlopen.
+  }
+}
+
 function isState(value: unknown): value is State {
   if (typeof value !== 'object' || value === null) return false;
   const v = value as Partial<State>;
