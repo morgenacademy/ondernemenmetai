@@ -1,6 +1,9 @@
 # Lokale context en input (niet in git)
 context/
 
+# Schetsen uit brainstormsessies
+.superpowers/
+
 # macOS
 .DS_Store
 
