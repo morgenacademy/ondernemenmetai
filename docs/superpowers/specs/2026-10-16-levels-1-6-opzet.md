@@ -40,7 +40,7 @@ Bij elke keuze staat waar hij vandaan komt:
    - Level 3: oplossingen zoeken door te divergeren en te convergeren, tot je er één kiest.
    - Level 4: bewijzen dat mensen het willen, met testen en marktfeedback (commitment).
 8. **De pull request komt in level 2, bij het bijwerken van je canvas na de interviews.**
-9. **Interviews komen per stuk in je repo, via een uploadvak op het platform, zonder pull request.** Het aantal vakken volgt uit B2B (5) of B2C (15). Je uploadt de opname. *(Harmen)*
+9. **Interviews komen per stuk in je repo, zonder pull request. Je eigen AI zet ze om, het platform niet.** Een spraakdienst aan het platform hangen kost te veel bij zo'n 100 deelnemers per kwartaal. Het platform toont 5 (B2B) of 15 (B2C) vakken die afvinken zodra een interview in je repo staat. *(Harmen)*
 10. **Brainwriting in level 3 doe je in een training met medecursisten.** Wie alleen werkt, bedenkt zelf en laat de AI aanvullen.
 11. **Level 4, 5 en 6 volgen het verhaal van Harmen.** Je gaat terug naar dezelfde mensen met je MVP en je voorstel. Bij nee vraag je waarom, je verbetert, en je komt terug, tot iemand zegt "ja, dit zocht ik". Zo krijg je je eerste klanten, en ontdek je onderweg hoe je verkoopt.
 12. **De AI in de cloud vervalt.** Voor de route is hij niet nodig.
@@ -119,8 +119,8 @@ Op elke kaart met een AI-stap staat welke skill je AI gebruikt en wat die doet, 
 
 ### Drie manieren waarop iets in je repo komt
 
-1. **Het platform schrijft het direct op GitHub.** Zo komen formulieren en uploads erin, zoals een interview. Je hoeft niets te doen.
-2. **Je AI legt vast, jij pusht in GitHub Desktop.** Zo komt wat je AI op je computer maakt erin, zoals een analyse of een testkaart. Pas na Push origin ziet het platform het en wordt de check groen.
+1. **Het platform schrijft het direct op GitHub.** Zo komen formulieren erin. Je hoeft niets te doen.
+2. **Je AI legt vast, jij pusht in GitHub Desktop.** Zo komt wat je AI op je computer maakt erin, zoals een interview, een analyse of een testkaart. Pas na Push origin ziet het platform het en wordt de check groen.
 3. **Een pull request.** Je AI zet een wijziging op een zijspoor (een branch). Jij bekijkt hem op GitHub; pas na Merge pull request telt hij mee.
 
 Een pull request is dus geen manier om iets binnen te krijgen. Het is een controle voordat een wijziging meetelt, en die is alleen nodig als je AI iets aanpast wat jij hebt gekozen. Daarom staat vanaf level 2 in `AGENTS.md` *(Harmen: pull request in level 2 · regel: voorstel)*:
@@ -165,7 +165,7 @@ De checks kijken naar de inhoud van de repo. Werk je na de interviews je madlib 
 ### Privacy
 
 - Reacties, feedback en verkoopgesprekken krijgen een rol en initialen, nooit een volledige naam. Contactgegevens horen niet in de repo. *(Bron: Spec, AVG · uitbreiding: voorstel)*
-- Opnames komen nooit in de repo. Het platform maakt er tekst van, haalt namen eruit en wist de opname daarna. Zo staat er ook in de git-geschiedenis nooit een naam of een stem. *(Bron: Spec, "audio komt nooit in de repo" · route via het platform: voorstel)*
+- Opnames en ruwe transcripts blijven op je computer, in de map `opnames/`. Die staat in `.gitignore`, dus git ziet hem niet. Je AI leest daaruit en zet alleen het interview zonder namen in `interviews/`. Zo staat er ook in de git-geschiedenis nooit een naam of een stem. *(Bron: Spec, "audio blijft lokaal" · map `opnames/`: voorstel)*
 - Voor het opnemen vraag je toestemming. Die zin staat al in skill `interviewhulp`.
 
 ### Nieuwe checktypes
@@ -223,15 +223,15 @@ Level 1 blijft kort *(Harmen)*. Nieuw is het canvas in stap 4.
 | 1 | Bepaal je doelgroep | Platform | `doelgroep.md` | Spec |
 | 2 | Formuleer je interviewvragen | AI-app | `interviewvragen.md` | Spec |
 | 3 | Interview je doelgroep | Buiten | — | Spec |
-| 4 | Zet je interviews in je repo | Platform (upload) | `interviews/NN-rol.md` | Spec; opname uploaden: Harmen |
+| 4 | Zet je interviews in je repo | AI-app, daarna GitHub Desktop | `interviews/NN-rol.md` | Spec; per interview, met je eigen AI: Harmen |
 | 5 | Analyseer je interviews | AI-app | `analyse.md`, `eerste-doelgroep.md` | Spec; `eerste-doelgroep.md`: Harmen, voorstel |
 | 6 | Werk je canvas bij | AI-app, daarna GitHub Desktop en GitHub | wijzigingen in `level-1-idee/vpc.md` en `aannames.md`, via een pull request | Harmen |
 
 - **Stap 3.** Het interview sluit af met de terugbelvraag (zie "Dezelfde mensen door de route").
-- **Stap 4.** Na elk interview upload je de opname in het volgende vak. Het platform maakt er tekst van, haalt namen eruit, zet het interview als `interviews/NN-rol.md` direct in je repo en wist de opname. Het vak krijgt een vinkje zodra het bestand in je repo staat. Een tekstversie (.txt, .vtt, .md uit Teams, Zoom of een opname-app) mag ook; die gaat langs dezelfde route. *(Harmen · uitwerking: voorstel)*
-  - Waarom zo: het platform schrijft al rechtstreeks naar je repo, dus een interview komt erin zonder pull request en zonder GitHub Desktop. De opname zelf komt nooit in je repo, zoals de spec vraagt.
-  - Hoe: spraak omzetten naar tekst kan alleen met een spraakmodel (zoals Whisper). Namen eruit halen doet het platform in twee lagen: eerst vervangt het de namen die je bij de upload opgeeft, daarna zoekt een taalmodel de namen die je vergat. Het platform roept die modellen zelf aan. Jij hebt er je AI-app niet voor nodig. *(Voorstel)*
-  - In de demo bootst het platform dit na: een upload levert een voorbeeldtranscript op. Echte transcriptie komt in de pilot.
+- **Stap 4.** Na elk interview zet je de opname of het transcript in de map `opnames/` op je computer. Je vraagt je AI: "Gebruik skill transcriberen. Zet het nieuwe interview in opnames/ om." Je AI haalt de namen eruit, deelt het in volgens vraag 5 tot en met 8 en zet het als `interviews/NN-rol.md` in je repo. Jij pusht in GitHub Desktop; daarna krijgt het vak op het platform een vinkje. *(Harmen · uitwerking: voorstel)*
+  - **Heb je al tekst?** Teams en Zoom maken zelf een transcript. Dat is de snelste route. Claude Code en Codex kunnen een tekstbestand omzetten naar een interviewbestand.
+  - **Heb je alleen een opname?** Claude Code en Codex kunnen zelf niet naar een audiobestand luisteren. Je AI kan wel een spraakprogramma (Whisper) op je computer installeren en draaien. Dat kost niets en de opname gaat de deur niet uit. Nog testen: hoe lang de installatie en het omzetten duren, vooral op Windows en op oudere laptops.
+  - De uploadvakken uit de demo vervallen voor ruwe tekst: wat het platform uploadt, staat direct op GitHub, ook de namen. De vakken blijven als voortgang, met de AI-opdracht als kopieerblok.
 - **Stap 5.** Hier is je AI sterk: 5 tot 15 gesprekken naast elkaar leggen, patronen tellen en per patroon de citaten terugvinden *(Harmen)*. Het resultaat krijgt een eigen bestand, zodat het platform het als resultaat van het level kan tonen. `eerste-doelgroep.md` heeft frontmatter `gevonden: ja | nee`, `doelgroep` en `probleem`, en in de tekst het bewijs: hoeveel van de interviews, welke klachten steeds terugkomen, en de citaten. *(Voorstel)*
 - **Stap 6.** Je AI zet bij elke regel in je canvas en bij elke aanname wat de interviews zeiden: bevestigd, ontkracht of open. Hij doet dat op een branch. In GitHub Desktop klik je Publish branch en Create Pull Request. Op GitHub zie je onder Files changed in rood wat sneuvelde en in groen wat erbij kwam. Daarna klik je Merge pull request. *(Harmen: besloten · uitwerking: voorstel)*
 
@@ -240,7 +240,7 @@ Level 1 blijft kort *(Harmen)*. Nieuw is het canvas in stap 4.
 **Skills:**
 
 - `interviewhulp`: bestaat; de terugbelvraag komt erbij.
-- `transcriberen`: bestaat; voor aantekeningen die je zelf uitschrijft, met het veld `terugbellen`. Opnames gaan via het platform.
+- `transcriberen`: bestaat; leest uit `opnames/`, met het veld `terugbellen`. Vindt hij alleen audio, dan biedt hij aan Whisper lokaal te installeren; de skill zegt nu al dat audio nooit zonder toestemming naar een externe dienst gaat.
 - `interview-analyse`: bestaat; schrijft voortaan ook `eerste-doelgroep.md` en werkt het canvas en de aannames bij via een pull request. De mijlpaalvraag staat al in de skill (stap 5), net als de vergelijking met de aannames (stap 6).
 
 **Nieuw begrip: pull request.** "De AI stelt voor, ik keur goed." Je interviews en je analyse zijn nieuw; die komen direct in je repo. Je canvas en je aannames zijn van jou; daar stelt je AI wijzigingen voor, en jij beslist. De pull request laat zien wat de markt je leerde. *(Bron: Besluit, de gewoonte; pop-up level 0, reden 3 · level 2: Harmen)*
@@ -406,7 +406,7 @@ Kaarten zonder check, die je kunt pakken als je eraan toe bent. Voorlopig als pl
 | `vpc` | 1 | Reader H1 §7 en H3 §7 | nieuw |
 | `propositie-validator` | 1 | GPT 03 | bestaat; buddy-check erbij |
 | `interviewhulp` | 2 | GPT 04 | bestaat; terugbelvraag erbij |
-| `transcriberen` | 2 | Spec | bestaat; voor eigen aantekeningen, met `terugbellen` |
+| `transcriberen` | 2 | Spec | bestaat; leest uit `opnames/`, met `terugbellen` en lokale Whisper |
 | `interview-analyse` | 2 | Workshop Interviews | bestaat; schrijft `eerste-doelgroep.md` en werkt canvas en aannames bij via een pull request |
 | `oplossing-kiezen` | 3 | Reader H3, Workshop Creatieve brainstormtechnieken | nieuw |
 | `waardepropositie-bouwer` | 3 | GPT 05 | nieuw, overgezet |
@@ -429,9 +429,9 @@ Geen code in dit document, wel deze gevolgen voor later:
 
 - `platform/src/lib/levels/lockedLevels.ts`: de mijlpaal van level 6 noemt nog "zicht op een positieve cashflow".
 - De levelstabel in de spec van 15 oktober: level 6 staat daar met mijlpaal 5 en 6.
-- De spec van 15 oktober zegt "audio blijft lokaal". Voortaan gaat een opname kort via het platform, dat er tekst van maakt en hem daarna wist. In de repo komt nog steeds nooit audio.
+- `starter-repo/.gitignore`: de map `opnames/` erbij.
 - `starter-repo/`: templates en skills van level 1 en hoger gaan naar het platform; `AGENTS.md` krijgt de algemene skillregel en de regel over keuzes en materiaal vanaf level 2.
-- `level1.ts` en `level2.ts`: de stap met het canvas in level 1; in level 2 uploadvakken die ook opnames aannemen, de stap met de pull request en het resultaatbestand.
+- `level1.ts` en `level2.ts`: de stap met het canvas in level 1; in level 2 de uploadvakken als voortgang met kopieerblok, de stap met de pull request en het resultaatbestand.
 - `interviewhulp` en `transcriberen`: de terugbelvraag en het veld `terugbellen`.
 - Het repo-paneel: het aantal pull requests pas vanaf level 2.
 
@@ -440,7 +440,7 @@ Geen code in dit document, wel deze gevolgen voor later:
 - De eigen idee-validator. *(Harmen)*
 - Hoe skills buiten het platform worden verspreid. Een ander project. *(Harmen)*
 - Vorm en beeld van de losse kaarten. *(Harmen)*
-- Transcriptie in de pilot: een dienst (bij voorkeur in de EU, met een verwerkersovereenkomst) of Whisper op een eigen server, zodat opnames het huis niet uit gaan. Daarnaast: wat het per interview kost en hoe lange opnames worden opgeknipt.
+- Lokale Whisper testen op Mac en Windows, met Claude Code en met Codex: installatie zonder terminal voor de deelnemer, duur per interview, kwaliteit in het Nederlands. Dit stond al als open punt in de spec.
 - Module 2: schaalbaar verkopen, positieve cashflow, stap 7 tot en met 12.
 
 ## Open vragen voor Harmen
