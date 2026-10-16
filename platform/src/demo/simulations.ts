@@ -8,12 +8,9 @@ export type Simulation = { label: string; run: (repo: MockRepoAdapter, s: RepoSn
 
 /** Demo-knoppen voor wat normaal buiten het platform gebeurt (door de AI of op GitHub). */
 export const SIMULATIONS: Record<string, Simulation> = {
-  'l0-git': {
-    label: 'doe alsof je AI de pull request maakte en jij hem mergde',
-    run: async (repo) => {
-      await repo.writeFile(WERKPLEK_PATH, VOORBEELD_WERKPLEK, 'werkplek.md ingevuld (branch werkplek)');
-      await repo.mergePullRequest();
-    },
+  'l0-eerste-opdracht': {
+    label: 'doe alsof je AI werkplek.md invulde en jij hem pushte',
+    run: (repo) => repo.writeFile(WERKPLEK_PATH, VOORBEELD_WERKPLEK, 'Werkplek ingevuld'),
   },
   'l2-vragen': {
     label: 'doe alsof je AI vraag 5 tot en met 8 invulde',

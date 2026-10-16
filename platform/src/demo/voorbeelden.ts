@@ -4,7 +4,7 @@ export const VOORBEELD_WERKPLEK = `# Mijn werkplek
 
 - Mijn AI-tool: Claude Code
 - Mijn computer: Mac
-- Wat ik geleerd heb over branches en pull requests: ik werk op een zijspoor en zet het pas in main als ik het heb nagekeken.
+- Wat ik geleerd heb over commit en push: een commit is een opgeslagen versie van mijn werk, en met push zet ik die online in mijn repo.
 `;
 
 export const VOORBEELD_VRAGEN = `# Interviewvragen

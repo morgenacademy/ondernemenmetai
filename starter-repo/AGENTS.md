@@ -29,7 +29,7 @@ Vraagt de eigenaar om een skill, of past een skill duidelijk bij de vraag, lees 
 - Werk in het Nederlands, tenzij de eigenaar iets anders vraagt.
 - Stel vragen één voor één en wacht op antwoord.
 - Verzin geen marktinformatie. Wat niet uit de repo of van de eigenaar komt, benoem je als aanname.
-- Wijzigingen gaan via een branch en een pull request. De eigenaar merget zelf.
+- Leg wijzigingen vast met een duidelijke commit; de eigenaar pusht via GitHub Desktop. Branches en pull requests komen in een later level.
 - Schrijf kort en concreet, zonder vage claims.
 
 ## Privacy

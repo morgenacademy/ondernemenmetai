@@ -32,6 +32,16 @@ describe('starter-repo', () => {
     }
   });
 
+  it('AGENTS.md laat de eigenaar via GitHub Desktop pushen, zonder branches of pull requests', () => {
+    const agents = starterFiles['AGENTS.md'];
+    expect(agents).toContain('Leg wijzigingen vast met een duidelijke commit; de eigenaar pusht via GitHub Desktop. Branches en pull requests komen in een later level.');
+    expect(agents).not.toContain('Wijzigingen gaan via een branch en een pull request');
+  });
+
+  it('het werkplek-template gaat niet meer over branches en pull requests', () => {
+    expect(starterFiles['level-0-werkplek/werkplek.md']).not.toMatch(/pull request|branch/i);
+  });
+
   it('CLAUDE.md importeert AGENTS.md', () => {
     expect(starterFiles['CLAUDE.md'].trim()).toBe('@AGENTS.md');
   });

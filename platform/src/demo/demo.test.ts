@@ -28,7 +28,7 @@ async function simulate(repo: MockRepoAdapter, id: string) {
 it('de demo doorloopt level 0 tot en met 2 en opent level 3', async () => {
   const repo = new MockRepoAdapter(null, starterFiles);
   await saveForm(repo, level0, 'l0-setup', { os: 'mac', ai: 'claude-code' });
-  await simulate(repo, 'l0-git');
+  await simulate(repo, 'l0-eerste-opdracht');
   await saveForm(repo, level1, 'l1-idee', { wat: 'Medicijnen bezorgen per bakfiets', voorWie: 'Zelfstandige apotheken in Breda', waaromJij: 'Ik was vijf jaar koerier.' });
   await saveForm(repo, level1, 'l1-visie', { wereld: 'Een binnenstad zonder bestelbusjes.', bijdrage: 'Snelle, schone bezorging voor de zorg.' });
   await saveForm(repo, level1, 'l1-madlib', { naam: 'Trapzorg', aanbod: 'bezorging per bakfiets binnen twee uur', doelgroep: 'zelfstandige apotheken in Breda', probleem: 'medicijnen niet op tijd bij patiënten krijgen', usp: 'vaste koeriers die de patiënten kennen' });
@@ -40,4 +40,16 @@ it('de demo doorloopt level 0 tot en met 2 en opent level 3', async () => {
   await simulate(repo, 'l2-transcripts');
   await simulate(repo, 'l2-analyse');
   expect(levelStatus(LEVELS, await buildSnapshot(repo))).toEqual({ 0: 'done', 1: 'done', 2: 'done', 3: 'active', 4: 'locked', 5: 'locked', 6: 'locked' });
+});
+
+it('je eerste opdracht in de demo zet werkplek.md online zonder pull request', async () => {
+  const repo = new MockRepoAdapter(null, starterFiles);
+  await saveForm(repo, level0, 'l0-setup', { os: 'windows', ai: 'codex' });
+  expect(SIMULATIONS['l0-git']).toBeUndefined();
+  expect(SIMULATIONS['l0-eerste-opdracht'].label).toBe('doe alsof je AI werkplek.md invulde en jij hem pushte');
+  await simulate(repo, 'l0-eerste-opdracht');
+  const snapshot = await buildSnapshot(repo);
+  expect(snapshot.mergedPullRequests).toBe(0);
+  expect(levelStatus(LEVELS, snapshot)[0]).toBe('done');
+  expect(snapshot.files['level-0-werkplek/werkplek.md']).not.toMatch(/pull request|branch/i);
 });
