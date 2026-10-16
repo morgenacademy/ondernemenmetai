@@ -1,6 +1,6 @@
 # Ondernemen met AI: opzet level 1 tot en met 6
 
-Datum: 16 oktober 2026 · Status: vijfde versie, na vier reactierondes van Harmen · Bouwt voort op de spec van 15 oktober (`2026-10-15-klikbare-demo-design.md`)
+Datum: 16 oktober 2026 · Status: zesde versie, na vijf reactierondes van Harmen · Bouwt voort op de spec van 15 oktober (`2026-10-15-klikbare-demo-design.md`)
 
 Level 0 tot en met 2 zijn uitgewerkt in de spec van 15 oktober. Dit document zet level 1 tot en met 6 naast elkaar. Per level staat erin: de vraag, wanneer het level klaar is, de mijlpaal, de stappen en waar je ze doet, de bestanden in de repo, de skills van de AI, het ene nieuwe begrip en waar je heen en weer gaat. Platformcode zit er niet bij.
 
@@ -65,6 +65,7 @@ Een level is klaar als alle stappen af zijn; pas dan gaat het volgende open *(Ha
 13. **Een level is klaar als alle stappen af zijn.** Elk level heeft een kern, zoals in de tabel "Wanneer is een level klaar?". Level 6 gaat open zodra je een klant hebt.
 14. **Level 5 vraagt minstens één ronde na het doorontwikkelen.** De check wil twee resultaatkaarten zien. Akkoord voor nu.
 15. **De deelnemer leert dat de repo op twee plekken staat**: op de computer en op GitHub. Het plaatje groeit per level, en "Is alles in sync?" aan je AI vragen is altijd genoeg.
+16. **Het platform kent geen termijnen.** Een level gaat open als je eraan toe bent. Na een dag is prima, na zes maanden ook. Een proeftijd duurt dus zo lang als je MVP vraagt.
 
 ## Hoe de modellen op elkaar passen
 
@@ -482,4 +483,4 @@ Geen code in dit document, wel deze gevolgen voor later:
 
 ## Open vragen voor Harmen
 
-1. **Hoe lang mag een proeftijd duren in een training?** Je noemde een maand. In een blok van 7 weken, zoals bij de reader, is dat krap naast level 1 tot en met 3.
+Geen. Alle vragen uit eerdere versies zijn beantwoord; de antwoorden staan bij "Besloten op 16 oktober".
