@@ -39,6 +39,7 @@ Bij elke keuze staat waar hij vandaan komt:
    - Level 2: interviews, analyse met hulp van je AI, en als benoemd resultaat je eerste doelgroep die allemaal hetzelfde probleem ervaart.
    - Level 3: oplossingen zoeken door te divergeren en te convergeren, tot je er één kiest.
    - Level 4: bewijzen dat mensen het willen, met testen en marktfeedback (commitment).
+8. **De pull request komt in level 2, bij het bijwerken van je canvas na de interviews.** Je interviews en je analyse komen direct in je repo. Wat je AI daarna aan je canvas en je aannames verandert, komt als pull request.
 
 ## Hoe de modellen op elkaar passen
 
@@ -205,16 +206,16 @@ Level 1 blijft kort *(Harmen)*. Nieuw is het canvas in stap 4.
 | 3 | Interview je doelgroep | Buiten | — | Spec |
 | 4 | Zet je transcripts in je repo | Platform (upload) of AI-app | `interviews/NN-rol.md` | Spec |
 | 5 | Analyseer je interviews | AI-app | `analyse.md`, `eerste-doelgroep.md` | Spec; `eerste-doelgroep.md`: Harmen, voorstel |
-| 6 | Werk je canvas bij | AI-app, daarna GitHub Desktop en GitHub | wijzigingen in `level-1-idee/vpc.md` en `aannames.md`, via een pull request | Harmen (canvas vol aannames toetsen); pull request: voorstel |
+| 6 | Werk je canvas bij | AI-app, daarna GitHub Desktop en GitHub | wijzigingen in `level-1-idee/vpc.md` en `aannames.md`, via een pull request | Harmen |
 
 - **Stap 5.** Hier is je AI sterk: 5 tot 15 gesprekken naast elkaar leggen, patronen tellen en per patroon de citaten terugvinden *(Harmen)*. Het resultaat krijgt een eigen bestand, zodat het platform het als resultaat van het level kan tonen. `eerste-doelgroep.md` heeft frontmatter `gevonden: ja | nee`, `doelgroep` en `probleem`, en in de tekst het bewijs: hoeveel van de interviews, welke klachten steeds terugkomen, en de citaten. *(Voorstel)*
-- **Stap 6.** Je AI zet bij elke regel in je canvas en bij elke aanname wat de interviews zeiden: bevestigd, ontkracht of open. Hij doet dat op een branch. In GitHub Desktop klik je Publish branch en Create Pull Request. Op GitHub zie je onder Files changed in rood wat sneuvelde en in groen wat erbij kwam. Daarna klik je Merge pull request. *(Voorstel)*
+- **Stap 6.** Je AI zet bij elke regel in je canvas en bij elke aanname wat de interviews zeiden: bevestigd, ontkracht of open. Hij doet dat op een branch. In GitHub Desktop klik je Publish branch en Create Pull Request. Op GitHub zie je onder Files changed in rood wat sneuvelde en in groen wat erbij kwam. Daarna klik je Merge pull request. *(Harmen: besloten · uitwerking: voorstel)*
 
 **Checks:** zoals nu, plus `gevonden: ja` in `eerste-doelgroep.md` (`frontmatterIs`) en minstens 1 gemergde pull request (`minMergedPullRequests`, bestaat al). *(Voorstel)*
 
 **Skills:** de drie bestaande. `interview-analyse` schrijft voortaan ook `eerste-doelgroep.md` en werkt het canvas en de aannames bij via een pull request. De mijlpaalvraag staat al in de skill (stap 5), net als de vergelijking met de aannames (stap 6).
 
-**Nieuw begrip: pull request.** "De AI stelt voor, ik keur goed." Je interviews en je analyse zijn nieuw; die komen direct in je repo. Je canvas en je aannames zijn van jou; daar stelt je AI wijzigingen voor, en jij beslist. De pull request laat zien wat de markt je leerde. *(Bron: Besluit, de gewoonte; pop-up level 0, reden 3 · level 2: voorstel)*
+**Nieuw begrip: pull request.** "De AI stelt voor, ik keur goed." Je interviews en je analyse zijn nieuw; die komen direct in je repo. Je canvas en je aannames zijn van jou; daar stelt je AI wijzigingen voor, en jij beslist. De pull request laat zien wat de markt je leerde. *(Bron: Besluit, de gewoonte; pop-up level 0, reden 3 · level 2: Harmen)*
 
 **Itereren:** tussen 1 en 2 *(Bron: Besluit)*. Bij `gevonden: nee` toont het platform drie routes terug: een andere doelgroep, meer interviews, of je idee bijstellen in level 1. Kies je een andere doelgroep, dan zet je AI de oude interviews in `interviews/ronde-1/`. De check telt alleen bestanden direct in `interviews/`, dus de teller begint weer bij 0. *(Voorstel; werkt met de huidige `mdFilesIn`)*
 
@@ -409,7 +410,6 @@ Geen code in dit document, wel deze gevolgen voor later:
 
 ## Open vragen voor Harmen
 
-1. **Komt de pull request in level 2, bij het bijwerken van je canvas?** Je interviews komen er direct in, via upload of commit en push. Wat je AI daarna aan je eigen canvas en aannames verandert, komt als voorstel.
-2. **Mag je AI in level 4 in de cloud werken?** Dan koppelt de deelnemer de AI-app ook aan GitHub, naast het platform.
-3. **Klopt level 6 als Proof of Concept met een vastgelegde verkoopaanpak?** "Schaalbaar" en positieve cashflow gaan naar module 2.
-4. **Doen deelnemers brainwriting in level 3 met anderen?** Brainwriting 6-3-5 werkt met zes mensen. In een training kan dat met medecursisten; wie alleen werkt, bedenkt zelf en laat de AI aanvullen.
+1. **Mag je AI in level 4 in de cloud werken?** Dan koppelt de deelnemer de AI-app ook aan GitHub, naast het platform.
+2. **Klopt level 6 als Proof of Concept met een vastgelegde verkoopaanpak?** "Schaalbaar" en positieve cashflow gaan naar module 2.
+3. **Doen deelnemers brainwriting in level 3 met anderen?** Brainwriting 6-3-5 werkt met zes mensen. In een training kan dat met medecursisten; wie alleen werkt, bedenkt zelf en laat de AI aanvullen.
