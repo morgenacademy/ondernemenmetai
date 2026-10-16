@@ -1,4 +1,5 @@
-import { SIMULATIONS } from '../demo/simulations';
+import { DEMO_FORMS } from '../demo/formulieren';
+import { demoVoorStap } from '../demo/vullen';
 import { setupFrom } from '../lib/content';
 import { evaluateLevel } from '../lib/levels/evaluate';
 import type { FileWrite, LevelDef, LevelState } from '../lib/levels/types';
@@ -11,18 +12,25 @@ type Props = {
   state: LevelState;
   snapshot: RepoSnapshot;
   onSave: (w: FileWrite) => Promise<boolean>;
-  onSimulate: (stepId: string) => void;
+  /** Demo: zet de demo-content van een stap in de repo (voor stappen die je AI of jij buiten het platform doet). */
+  onDemo: (stepId: string) => void;
+  /** Demo: vult het hele level met demo-content, stap voor stap. */
+  onFillLevel: () => void;
   onNext?: () => void;
 };
 
-export function LevelPagina({ level, state, snapshot, onSave, onSimulate, onNext }: Props) {
+export function LevelPagina({ level, state, snapshot, onSave, onDemo, onFillLevel, onNext }: Props) {
   const header = (
     <header className="mb-6">
       <p className="eyebrow">
         Level {level.id} · {STATE_LABEL[state]}
       </p>
       <h1 className="level-titel">{level.name}</h1>
-      <p className="mt-3">{level.summary}</p>
+      {level.vraag && <p className="level-vraag">{level.vraag}</p>}
+      <div className="level-doel">
+        <p className="eyebrow">Je doel</p>
+        <p>{level.doel}</p>
+      </div>
       <p className="mijlpaal">Mijlpaal: {level.milestone}</p>
     </header>
   );
@@ -32,20 +40,20 @@ export function LevelPagina({ level, state, snapshot, onSave, onSimulate, onNext
       <section className="card">
         {header}
         <p className="text-[var(--text-secondary)]">
-          {state === 'locked'
-            ? 'Dit level gaat open zodra je het vorige level hebt afgerond.'
-            : 'Dit level komt in een volgende versie van het platform.'}
+          {state === 'locked' ? 'Dit level gaat open zodra je het vorige level hebt afgerond.' : 'Dit level komt in een volgende versie van het platform.'}
         </p>
+        <p className="mt-3">{level.summary}</p>
       </section>
     );
   }
 
   const evaluation = evaluateLevel(level, snapshot);
   const setup = setupFrom(snapshot);
+  const nummers = level.steps.filter((s) => !s.optional);
   return (
     <section>
       {header}
-      {state === 'done' && (
+      {state === 'done' ? (
         <div className="card mb-4 flex flex-wrap items-center justify-between gap-3">
           <p className="font-semibold text-white">Level af. Je repo laat zien dat je de mijlpaal hebt gehaald.</p>
           {onNext && (
@@ -54,23 +62,30 @@ export function LevelPagina({ level, state, snapshot, onSave, onSimulate, onNext
             </button>
           )}
         </div>
+      ) : (
+        <div className="demo-level mb-4">
+          <button type="button" className="btn-demo btn-demo-groot" onClick={onFillLevel}>
+            Vul het hele level met demo content
+          </button>
+          <span className="demo-uitleg">Demo: zet de content van elke stap in je repo, alsof jij en je AI het deden.</span>
+        </div>
       )}
       <div className="space-y-4">
         {level.steps.map((step) => {
-          const sim = SIMULATIONS[step.id];
-          // Optionele kaarten tellen niet mee: zo blijft de toets in level 1 stap 5.
-          const nummer = step.optional ? undefined : level.steps.filter((s) => !s.optional).indexOf(step) + 1;
+          const demo = demoVoorStap(step);
+          const waarden = demo?.soort === 'formulier' ? DEMO_FORMS[step.id](snapshot) : undefined;
           return (
             <StapKaart
               key={step.id}
               level={level}
               step={step}
-              nummer={nummer}
+              // Optionele kaarten tellen niet mee: zo blijft de toets in level 1 stap 5.
+              nummer={step.optional ? undefined : nummers.indexOf(step) + 1}
               snapshot={snapshot}
               evaluation={evaluation}
               setup={setup}
               onSave={onSave}
-              simulation={sim ? { label: sim.label, onRun: () => onSimulate(step.id) } : undefined}
+              demo={demo?.soort === 'simulatie' ? { label: demo.label, onRun: () => onDemo(step.id) } : waarden ? { waarden } : undefined}
             />
           );
         })}
