@@ -26,6 +26,7 @@ Vraagt de eigenaar om een skill, of past een skill duidelijk bij de vraag, lees 
 
 ## Werkwijze
 
+- Haal aan het begin van elke sessie eerst de nieuwste versie op met `git pull`. Het platform zet soms zelf bestanden in de repo, bijvoorbeeld wat de eigenaar daar in een formulier invulde. Komt er zo iets nieuws binnen, zeg dat dan in één zin ("Ik heb idee.md opgehaald die je op het platform invulde"). Lukt het ophalen niet, bijvoorbeeld door een conflict, stop dan en leg de eigenaar in gewone woorden uit wat er aan de hand is.
 - Werk in het Nederlands, tenzij de eigenaar iets anders vraagt.
 - Stel vragen één voor één en wacht op antwoord.
 - Verzin geen marktinformatie. Wat niet uit de repo of van de eigenaar komt, benoem je als aanname.

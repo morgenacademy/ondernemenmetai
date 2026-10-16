@@ -38,6 +38,13 @@ describe('starter-repo', () => {
     expect(agents).not.toContain('Wijzigingen gaan via een branch en een pull request');
   });
 
+  it('AGENTS.md laat de AI elke sessie eerst de nieuwste versie ophalen', () => {
+    const werkwijze = starterFiles['AGENTS.md'].split('## Werkwijze')[1]?.split('\n## ')[0] ?? '';
+    expect(werkwijze).toContain('`git pull`');
+    expect(werkwijze).toMatch(/conflict/i);
+    expect(werkwijze).toMatch(/in één zin/);
+  });
+
   it('het werkplek-template gaat niet meer over branches en pull requests', () => {
     expect(starterFiles['level-0-werkplek/werkplek.md']).not.toMatch(/pull request|branch/i);
   });
