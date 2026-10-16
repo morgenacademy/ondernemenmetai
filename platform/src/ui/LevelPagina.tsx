@@ -56,14 +56,16 @@ export function LevelPagina({ level, state, snapshot, onSave, onSimulate, onNext
         </div>
       )}
       <div className="space-y-4">
-        {level.steps.map((step, index) => {
+        {level.steps.map((step) => {
           const sim = SIMULATIONS[step.id];
+          // Optionele kaarten tellen niet mee: zo blijft de toets in level 1 stap 5.
+          const nummer = step.optional ? undefined : level.steps.filter((s) => !s.optional).indexOf(step) + 1;
           return (
             <StapKaart
               key={step.id}
               level={level}
               step={step}
-              index={index}
+              nummer={nummer}
               snapshot={snapshot}
               evaluation={evaluation}
               setup={setup}

@@ -1,1 +1,0 @@
-Laat je AI je propositie kritisch bekijken. De skill `propositie-validator` zet je antwoorden in één zin en toetst die op drie punten: idee/oplossing, probleem en klant. Je krijgt vragen terug, geen oordeel. Jij beslist wat je aanpast.

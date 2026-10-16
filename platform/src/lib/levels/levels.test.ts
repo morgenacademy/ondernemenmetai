@@ -5,26 +5,31 @@ import type { RepoSnapshot } from '../repo/types';
 import { evaluateLevel, levelStatus } from './evaluate';
 import { LEVELS } from './index';
 import { SETUP_PATH, WERKPLEK_PATH, level0 } from './level0';
-import { AANNAMES_PATH, IDEE_PATH, MADLIB_PATH, VISIE_PATH, aannamesToMarkdown, level1, madlibSentence } from './level1';
 import {
-  ANALYSE_PATH,
-  DOELGROEP_PATH,
-  INTERVIEWS_DIR,
-  TRANSCRIPT_WEIGERTEKST,
-  VRAGEN_PATH,
-  isTranscriptFileName,
-  level2,
-  nextTranscriptPath,
-  requiredInterviews,
-  slugify,
-  transcriptFromUpload,
-} from './level2';
-import type { FormStep, LevelDef } from './types';
+  AANNAMES_PATH,
+  FEEDBACK_PROPOSITIE_PATH,
+  IDEE_PATH,
+  MADLIB_PATH,
+  VISIE_PATH,
+  VPC_PATH,
+  aannamesToMarkdown,
+  level1,
+  madlibSentence,
+} from './level1';
+import { ANALYSE_PATH, DOELGROEP_PATH, EERSTE_DOELGROEP_PATH, INTERVIEWS_DIR, VRAGEN_PATH, level2, nextInterviewPath, requiredInterviews, slugify } from './level2';
+import { level6 } from './lockedLevels';
+import type { FormStep, LevelDef, Step } from './types';
 
 const snap = (files: Record<string, string>, mergedPullRequests = 0): RepoSnapshot => ({
   files: { ...starterFiles, ...files },
   mergedPullRequests,
 });
+
+const stepOf = (level: LevelDef, id: string): Step => {
+  const step = level.steps.find((s) => s.id === id);
+  if (!step) throw new Error(`geen stap ${id}`);
+  return step;
+};
 
 const formStep = (level: LevelDef, id: string): FormStep => {
   const step = level.steps.find((s) => s.id === id);
@@ -41,6 +46,8 @@ const LEVEL1_DONE = {
   [VISIE_PATH]: '# Visie\n\nSchone binnenstad.\n',
   [MADLIB_PATH]: '# Madlib\n\nMijn bedrijf, Trapzorg, biedt ...\n',
   [AANNAMES_PATH]: '# Aannames\n\n- [wens] a\n- [haalbaar] b\n- [rendabel] c\n',
+  [FEEDBACK_PROPOSITIE_PATH]: '# Feedback op je propositie\n\n- Maak je doelgroep kleiner.\n',
+  [VPC_PATH]: '# Value Proposition Canvas\n\n## Jobs\n\n- Medicijnen op tijd bij patiënten krijgen (aanname)\n',
 };
 const doelgroep = (type: string, nodig?: unknown) =>
   toMarkdown({ type, ...(nodig === undefined ? {} : { interviews_nodig: nodig }) }, '# Doelgroep\n\nApothekers.');
@@ -51,12 +58,17 @@ const interviews = (n: number) =>
       `# Interview ${i + 1}\n\nInhoud.\n`,
     ]),
   );
+const eersteDoelgroep = (gevonden: string) =>
+  toMarkdown({ gevonden, doelgroep: 'zelfstandige apotheken', probleem: 'spoedbezorging rond het middaguur' }, '# Eerste doelgroep\n\n5 van de 5 noemen het.');
 const level2Done = (n: number, type = 'B2B') => ({
   [DOELGROEP_PATH]: doelgroep(type),
   [VRAGEN_PATH]: '# Vragen\n\n5. Wat doet u op een gewone dag?\n',
   ...interviews(n),
   [ANALYSE_PATH]: '# Analyse\n\nInzicht.\n',
+  [EERSTE_DOELGROEP_PATH]: eersteDoelgroep('ja'),
 });
+/** Level 2 telt pas na een gemergde pull request (stap "Werk je canvas bij"). */
+const PR = 1;
 
 describe('levelStatus', () => {
   it('bij de start is alleen level 0 actief', () => {
@@ -126,7 +138,58 @@ describe('level 0', () => {
   });
 });
 
+describe('alle stappen tellen', () => {
+  for (const level of [level1, level2]) {
+    it(`level ${level.id}: elke stap heeft een check, behalve een optionele kaart`, () => {
+      for (const step of level.steps) {
+        const checks = level.checks.filter((c) => c.stepId === step.id);
+        if (step.optional) expect(checks, step.id).toHaveLength(0);
+        else expect(checks.length, step.id).toBeGreaterThan(0);
+      }
+    });
+
+    it(`level ${level.id}: elke check hoort bij een stap`, () => {
+      const ids = level.steps.map((s) => s.id);
+      for (const check of level.checks) expect(ids, check.id).toContain(check.stepId);
+    });
+  }
+});
+
 describe('level 1', () => {
+  it('begint met een vrije kaart "Nog geen idee?" en eindigt met je eerste waardepropositie als stap 5', () => {
+    expect(level1.steps.map((s) => s.id)).toEqual(['l1-ideeen', 'l1-idee', 'l1-visie', 'l1-madlib', 'l1-aannames', 'l1-propositie']);
+    const ideeen = stepOf(level1, 'l1-ideeen');
+    expect(ideeen.optional).toBe(true);
+    expect(ideeen.title).toBe('Nog geen idee?');
+    expect(ideeen.aiPrompt).toContain('idee-generator');
+    expect(level1.steps.filter((s) => !s.optional).at(-1)?.title).toBe('Maak de eerste versie van je waardepropositie');
+    expect(stepOf(level1, 'l1-madlib').title).toBe('Je idee in één zin');
+  });
+
+  it('stap 5 laat je AI de propositie toetsen en het canvas schrijven', () => {
+    const prompt = stepOf(level1, 'l1-propositie').aiPrompt ?? '';
+    expect(prompt).toContain('propositie-validator');
+    expect(prompt).toContain('feedback-propositie.md');
+    expect(prompt).toContain('vpc.md');
+  });
+
+  it('stap 5 legt in een pop-up uit wat je AI ophaalde, met het plaatje van de twee plekken', () => {
+    expect(stepOf(level1, 'l1-propositie').popup).toEqual({
+      label: 'Wat haalde mijn AI op?',
+      title: 'Je repo staat op twee plekken',
+      contentId: 'l1-ophalen',
+      plaatje: 'twee-plekken',
+    });
+  });
+
+  it('stap 5 is pas af met een ingevuld canvas en de feedback op je propositie', () => {
+    const checks = level1.checks.filter((c) => c.stepId === 'l1-propositie').map((c) => c.id);
+    expect(checks).toEqual(['vpc', 'feedback-propositie']);
+    expect(evaluateLevel(level1, snap({ ...LEVEL1_DONE, [VPC_PATH]: starterFiles[VPC_PATH] })).done).toBe(false);
+    const { [FEEDBACK_PROPOSITIE_PATH]: _weg, ...zonderFeedback } = LEVEL1_DONE;
+    expect(evaluateLevel(level1, { files: { ...starterFiles, ...zonderFeedback }, mergedPullRequests: 0 }).done).toBe(false);
+  });
+
   it('templates met de markering tellen niet', () => {
     const evaluation = evaluateLevel(level1, snap({}));
     expect(evaluation.done).toBe(false);
@@ -147,7 +210,7 @@ describe('level 1', () => {
     expect(evaluateLevel(level1, snap(files)).results.find((r) => r.id === 'aannames')?.reason).toBe('2 van de 3');
   });
 
-  it('is af met alle bestanden en drie aannames', () => {
+  it('is af met alle bestanden, drie aannames, je canvas en de feedback op je propositie', () => {
     expect(evaluateLevel(level1, snap(LEVEL1_DONE)).done).toBe(true);
   });
 
@@ -165,23 +228,61 @@ describe('level 1', () => {
 });
 
 describe('level 2', () => {
-  it('4 van de 5 transcripts is niet genoeg, 5 wel', () => {
-    expect(evaluateLevel(level2, snap(level2Done(4))).done).toBe(false);
-    expect(evaluateLevel(level2, snap(level2Done(5))).done).toBe(true);
+  it('loopt van doelgroep via interviews en analyse naar het bijwerken van je canvas', () => {
+    expect(level2.steps.map((s) => s.id)).toEqual(['l2-doelgroep', 'l2-vragen', 'l2-interviewen', 'l2-interviews', 'l2-analyse', 'l2-canvas']);
+    expect(stepOf(level2, 'l2-interviews').title).toBe('Zet je interviews in je repo');
+    expect(stepOf(level2, 'l2-canvas').title).toBe('Werk je canvas bij');
   });
 
-  it('een transcript met de markering telt niet', () => {
+  it('de interviewvakken zijn voortgang zonder upload, met een opdracht voor skill transcriberen', () => {
+    const step = stepOf(level2, 'l2-interviews');
+    expect(step.kind).toBe('voortgang');
+    expect(step.aiPrompt).toMatch(/^Gebruik skill transcriberen\./);
+    expect(step.aiPrompt).toContain('opnames/');
+  });
+
+  it('interviewen telt via de interviews die in je repo staan', () => {
+    const interviewen = evaluateLevel(level2, snap(level2Done(3), PR)).results.filter((r) => r.stepId === 'l2-interviewen');
+    expect(interviewen.map((r) => [r.ok, r.reason])).toEqual([[false, '3 van de 5']]);
+  });
+
+  it('4 van de 5 interviews is niet genoeg, 5 wel', () => {
+    expect(evaluateLevel(level2, snap(level2Done(4), PR)).done).toBe(false);
+    expect(evaluateLevel(level2, snap(level2Done(5), PR)).done).toBe(true);
+  });
+
+  it('een interview met de markering telt niet', () => {
     const files = { ...level2Done(4), [`${INTERVIEWS_DIR}/05-apotheker.md`]: `${MARKER}\n# Interview 5\n\nInhoud` };
-    expect(evaluateLevel(level2, snap(files)).done).toBe(false);
+    expect(evaluateLevel(level2, snap(files, PR)).done).toBe(false);
   });
 
   it('B2C vraagt 15 interviews', () => {
-    expect(evaluateLevel(level2, snap(level2Done(5, 'B2C'))).done).toBe(false);
-    expect(evaluateLevel(level2, snap(level2Done(15, 'B2C'))).done).toBe(true);
+    expect(evaluateLevel(level2, snap(level2Done(5, 'B2C'), PR)).done).toBe(false);
+    expect(evaluateLevel(level2, snap(level2Done(15, 'B2C'), PR)).done).toBe(true);
   });
 
   it('interviews_nodig overschrijft de standaard', () => {
-    expect(evaluateLevel(level2, snap({ ...level2Done(3), [DOELGROEP_PATH]: doelgroep('B2B', 3) })).done).toBe(true);
+    expect(evaluateLevel(level2, snap({ ...level2Done(3), [DOELGROEP_PATH]: doelgroep('B2B', 3) }, PR)).done).toBe(true);
+  });
+
+  it('is pas af als je eerste doelgroep gevonden is', () => {
+    const nee = evaluateLevel(level2, snap({ ...level2Done(5), [EERSTE_DOELGROEP_PATH]: eersteDoelgroep('nee') }, PR));
+    expect(nee.done).toBe(false);
+    expect(nee.results.find((r) => r.id === 'eerste-doelgroep')).toMatchObject({ stepId: 'l2-analyse', ok: false, reason: 'gevonden: nee' });
+    expect(evaluateLevel(level2, snap({ ...level2Done(5), [EERSTE_DOELGROEP_PATH]: starterFiles[EERSTE_DOELGROEP_PATH] }, PR)).done).toBe(false);
+  });
+
+  it('is pas af na een gemergde pull request bij "Werk je canvas bij"', () => {
+    expect(evaluateLevel(level2, snap(level2Done(5), 0)).done).toBe(false);
+    expect(evaluateLevel(level2, snap(level2Done(5), 0)).results.find((r) => r.stepId === 'l2-canvas')).toMatchObject({ ok: false, reason: '0 van de 1' });
+  });
+
+  it('de canvasstap werkt via een pull request en legt dat uit in een pop-up met de twee plekken', () => {
+    const step = stepOf(level2, 'l2-canvas');
+    expect(step.aiPrompt).toContain('vpc.md');
+    expect(step.aiPrompt).toContain('aannames.md');
+    expect(step.aiPrompt).toMatch(/branch/);
+    expect(step.popup).toEqual({ label: 'Wat is een pull request?', title: 'Je AI stelt voor, jij beslist', contentId: 'l2-pull-request', plaatje: 'twee-plekken' });
   });
 
   it('requiredInterviews valt terug bij ongeldige waarden', () => {
@@ -234,49 +335,26 @@ describe('level 2', () => {
     expect(slugify('apotheker in een middelgrote stad (eigenaar)').endsWith('-')).toBe(false);
   });
 
-  it('nextTranscriptPath telt alleen een nummer van hooguit drie cijfers met een streepje', () => {
+  it('nextInterviewPath telt alleen een nummer van hooguit drie cijfers met een streepje', () => {
     const files = {
       [`${INTERVIEWS_DIR}/02-a.md`]: '# 2\n\nx',
       [`${INTERVIEWS_DIR}/2026-notities.md`]: '# notities\n\nx',
       [`${INTERVIEWS_DIR}/7apotheker.md`]: '# x\n\nx',
     };
-    expect(nextTranscriptPath(snap(files), 'assistent')).toBe(`${INTERVIEWS_DIR}/03-assistent.md`);
-    expect(nextTranscriptPath(snap({ [`${INTERVIEWS_DIR}/123-a.md`]: '# x\n\nx' }), 'b')).toBe(`${INTERVIEWS_DIR}/124-b.md`);
+    expect(nextInterviewPath(snap(files), 'assistent')).toBe(`${INTERVIEWS_DIR}/03-assistent.md`);
+    expect(nextInterviewPath(snap({ [`${INTERVIEWS_DIR}/123-a.md`]: '# x\n\nx' }), 'b')).toBe(`${INTERVIEWS_DIR}/124-b.md`);
   });
 
-  it('nextTranscriptPath neemt het hoogste nummer plus één', () => {
-    expect(nextTranscriptPath(snap({}), 'Apotheker')).toBe(`${INTERVIEWS_DIR}/01-apotheker.md`);
+  it('nextInterviewPath neemt het hoogste nummer plus één', () => {
+    expect(nextInterviewPath(snap({}), 'Apotheker')).toBe(`${INTERVIEWS_DIR}/01-apotheker.md`);
     const files = { [`${INTERVIEWS_DIR}/01-a.md`]: '# 1\n\nx', [`${INTERVIEWS_DIR}/03-b.md`]: '# 3\n\nx' };
-    expect(nextTranscriptPath(snap(files), 'assistent')).toBe(`${INTERVIEWS_DIR}/04-assistent.md`);
+    expect(nextInterviewPath(snap(files), 'assistent')).toBe(`${INTERVIEWS_DIR}/04-assistent.md`);
   });
+});
 
-  it('transcriptFromUpload weigert audio, Word en lege bestanden', () => {
-    expect(transcriptFromUpload('gesprek.m4a', 'x', 'apotheker', snap({}))).toEqual({ error: TRANSCRIPT_WEIGERTEKST });
-    expect('error' in transcriptFromUpload('gesprek.docx', 'x', 'apotheker', snap({}))).toBe(true);
-    expect(transcriptFromUpload('leeg.txt', '  \n', 'apotheker', snap({}))).toEqual({ error: 'Dit bestand is leeg.' });
-  });
-
-  it('de weigertekst noemt alle toegestane soorten', () => {
-    expect(TRANSCRIPT_WEIGERTEKST).toContain('.vtt');
-  });
-
-  it('accepteert ondertitels uit Teams of Zoom (.vtt)', () => {
-    expect(isTranscriptFileName('teams-export.VTT')).toBe(true);
-    const vtt = transcriptFromUpload('teams.vtt', 'WEBVTT\n\n00:00:01.000 --> 00:00:04.000\nGoedemorgen.', 'Apotheker', snap({}));
-    if ('error' in vtt) throw new Error(vtt.error);
-    expect(vtt.path).toBe(`${INTERVIEWS_DIR}/01-apotheker.md`);
-    expect(parseMarkdown(vtt.content).frontmatter).toEqual({ rol: 'Apotheker' });
-    expect(vtt.content).toContain('Goedemorgen.');
-  });
-
-  it('transcriptFromUpload pakt .txt in en laat .md zoals het is', () => {
-    const txt = transcriptFromUpload('gesprek.TXT', 'Hallo, ik ben J.', 'Apotheker', snap({}));
-    if ('error' in txt) throw new Error(txt.error);
-    expect(txt.path).toBe(`${INTERVIEWS_DIR}/01-apotheker.md`);
-    expect(parseMarkdown(txt.content).frontmatter).toEqual({ rol: 'Apotheker' });
-    expect(txt.content).toContain('# Interview: Apotheker');
-    const md = transcriptFromUpload('gesprek.md', '# Interview\n\nTekst', 'apotheker', snap({}));
-    if ('error' in md) throw new Error(md.error);
-    expect(md.content).toBe('# Interview\n\nTekst');
+describe('level 6', () => {
+  it('heeft Proof of Concept als mijlpaal, zonder positieve cashflow', () => {
+    expect(level6.milestone).toMatch(/^Proof of Concept/);
+    expect(level6.milestone).not.toMatch(/cashflow/i);
   });
 });

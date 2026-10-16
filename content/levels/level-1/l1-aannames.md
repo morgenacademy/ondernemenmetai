@@ -6,4 +6,4 @@ Zet elke aanname op een eigen regel en geef hem een label:
 - **[haalbaar]**: kun jij dit maken en leveren? (feasibility)
 - **[rendabel]**: kun je hier geld mee verdienen? (viability)
 
-Schrijf er minstens drie op. In level 2 toets je de belangrijkste [wens]-aannames bij je doelgroep.
+Schrijf er minstens drie op. In level 2 zet je AI bij elke aanname wat je interviews erover zeiden: bevestigd, ontkracht of open.

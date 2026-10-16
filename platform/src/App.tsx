@@ -65,7 +65,7 @@ export default function App({ repo }: { repo: MockRepoAdapter }) {
           onSimulate={simulate}
           onNext={nextLevel ? () => setSelected(nextLevel.id) : undefined}
         />
-        <RepoPaneel info={info} snapshot={snapshot} commits={r.commits} lastWritten={r.lastWritten} />
+        <RepoPaneel info={info} snapshot={snapshot} commits={r.commits} lastWritten={r.lastWritten} showPullRequests={status[2] !== 'locked'} />
       </div>
     </div>
   );

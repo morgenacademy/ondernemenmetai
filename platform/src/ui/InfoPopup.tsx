@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { stepContent } from '../lib/content';
 import type { StepPopup } from '../lib/levels/types';
 import { Markdown } from './Markdown';
+import { TweePlekken } from './TweePlekken';
 
 /**
  * Knop met een pop-up voor extra uitleg. Gebruikt <dialog>: Esc sluit hem, de focus blijft erin
@@ -42,6 +43,7 @@ export function InfoPopup({ levelId, popup }: { levelId: number; popup: StepPopu
           <h2 id={`${id}-titel`} ref={title} tabIndex={-1} className="popup-titel">
             {popup.title}
           </h2>
+          {popup.plaatje === 'twee-plekken' && <TweePlekken level={levelId} />}
           <Markdown text={stepContent(levelId, popup.contentId) ?? ''} />
           <button type="button" className="btn-p mt-6" onClick={() => dialog.current?.close()}>
             Sluiten

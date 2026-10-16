@@ -47,7 +47,7 @@ describe('DownloadStap', () => {
     const snapshot = { files: starterFiles, mergedPullRequests: 0 };
     const step = level0.steps.find((s) => s.id === 'l0-download')!;
     const html = renderToStaticMarkup(
-      <StapKaart level={level0} step={step} index={1} snapshot={snapshot} evaluation={evaluateLevel(level0, snapshot)} setup={{ ai: 'codex' }} onSave={async () => true} />,
+      <StapKaart level={level0} step={step} nummer={2} snapshot={snapshot} evaluation={evaluateLevel(level0, snapshot)} setup={{ ai: 'codex' }} onSave={async () => true} />,
     );
     expect(html).toContain(`href="${CODEX}"`);
   });

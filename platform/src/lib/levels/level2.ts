@@ -1,11 +1,12 @@
 import { toMarkdown } from '../markdown';
 import type { RepoSnapshot } from '../repo/types';
-import { fileFilled, frontmatterOf, mdFilesIn, minFilledFiles } from './checks';
-import type { FileWrite, LevelDef } from './types';
+import { fileFilled, frontmatterIs, frontmatterOf, mdFilesIn, minFilledFiles, minMergedPullRequests } from './checks';
+import type { LevelDef } from './types';
 
 export const DOELGROEP_PATH = 'level-2-probleemvalidatie/doelgroep.md';
 export const VRAGEN_PATH = 'level-2-probleemvalidatie/interviewvragen.md';
 export const ANALYSE_PATH = 'level-2-probleemvalidatie/analyse.md';
+export const EERSTE_DOELGROEP_PATH = 'level-2-probleemvalidatie/eerste-doelgroep.md';
 export const INTERVIEWS_DIR = 'level-2-probleemvalidatie/interviews';
 
 /** Bovengrens: meer vakjes dan dit tekenen heeft geen zin en kan de pagina laten vastlopen. */
@@ -33,7 +34,7 @@ export function slugify(text: string): string {
   return slug || 'interview';
 }
 
-export function nextTranscriptPath(s: RepoSnapshot, rol: string): string {
+export function nextInterviewPath(s: RepoSnapshot, rol: string): string {
   // Alleen "01-rol.md" telt; een bestand als "2026-notities.md" is geen interviewnummer.
   const numbers = mdFilesIn(s, INTERVIEWS_DIR)
     .map((path) => path.slice(INTERVIEWS_DIR.length + 1).match(/^(\d{1,3})-/)?.[1])
@@ -43,28 +44,10 @@ export function nextTranscriptPath(s: RepoSnapshot, rol: string): string {
   return `${INTERVIEWS_DIR}/${String(next).padStart(2, '0')}-${slugify(rol)}.md`;
 }
 
-/** Tekstversies van een gesprek. .vtt is de ondertitel-export van Teams en Zoom. */
-export const TRANSCRIPT_EXTENSIONS = ['.md', '.txt', '.vtt'];
-export const TRANSCRIPT_WEIGERTEKST = 'Alleen .md-, .txt- of .vtt-bestanden. Audio of Word? Zet het eerst om met skill transcriberen.';
-
-export function isTranscriptFileName(name: string): boolean {
-  const lower = name.toLowerCase();
-  return TRANSCRIPT_EXTENSIONS.some((ext) => lower.endsWith(ext));
-}
-
-export function transcriptFromUpload(fileName: string, text: string, rol: string, s: RepoSnapshot): FileWrite | { error: string } {
-  if (!isTranscriptFileName(fileName)) return { error: TRANSCRIPT_WEIGERTEKST };
-  if (text.trim().length === 0) return { error: 'Dit bestand is leeg.' };
-  const path = nextTranscriptPath(s, rol);
-  const label = rol.trim() || 'onbekend';
-  const content = fileName.toLowerCase().endsWith('.md') ? text : toMarkdown({ rol: label }, `# Interview: ${label}\n\n${text.trim()}`);
-  return { path, content, message: `Transcript toegevoegd: ${path.split('/').pop()}` };
-}
-
 export const level2: LevelDef = {
   id: 2,
   name: 'Probleem-validatie',
-  summary: 'Bepaal je doelgroep, interview ze echt, en ontdek of ze hetzelfde probleem ervaren.',
+  summary: 'Bepaal je doelgroep, interview ze echt, en ontdek met je AI welke groep allemaal hetzelfde probleem ervaart. Daarna werk je je canvas bij.',
   milestone: '1. Een eerste doelgroep die allemaal hetzelfde probleem ervaart.',
   ready: true,
   steps: [
@@ -102,24 +85,36 @@ export const level2: LevelDef = {
     },
     { id: 'l2-interviewen', title: 'Interview je doelgroep', kind: 'action' },
     {
-      id: 'l2-transcripts',
-      title: 'Zet je transcripts in je repo',
-      kind: 'uploads',
+      id: 'l2-interviews',
+      title: 'Zet je interviews in je repo',
+      kind: 'voortgang',
       folder: INTERVIEWS_DIR,
       required: requiredInterviews,
-      aiPrompt: 'Gebruik skill transcriberen. Zet het transcript dat ik je geef om naar een interviewbestand in level-2-probleemvalidatie/interviews/.',
+      aiPrompt: 'Gebruik skill transcriberen. Zet het nieuwe interview in opnames/ om.',
     },
     {
       id: 'l2-analyse',
       title: 'Analyseer je interviews',
       kind: 'action',
-      aiPrompt: 'Gebruik skill interview-analyse. Lees alle interviews in level-2-probleemvalidatie/interviews/ en vul analyse.md met mij in.',
+      aiPrompt:
+        'Gebruik skill interview-analyse. Lees alle interviews in level-2-probleemvalidatie/interviews/, vul analyse.md met mij in en schrijf onze conclusie in eerste-doelgroep.md.',
+    },
+    {
+      id: 'l2-canvas',
+      title: 'Werk je canvas bij',
+      kind: 'action',
+      aiPrompt:
+        'Gebruik skill interview-analyse. Zet bij elke regel in level-1-idee/vpc.md en bij elke aanname in aannames.md wat de interviews zeiden: bevestigd, ontkracht of open. Doe dat op een nieuwe branch, zodat ik een pull request kan maken.',
+      popup: { label: 'Wat is een pull request?', title: 'Je AI stelt voor, jij beslist', contentId: 'l2-pull-request', plaatje: 'twee-plekken' },
     },
   ],
   checks: [
     fileFilled('doelgroep', 'l2-doelgroep', DOELGROEP_PATH, 'Doelgroep bepaald'),
     fileFilled('vragen', 'l2-vragen', VRAGEN_PATH, 'Interviewvragen klaar'),
-    minFilledFiles('transcripts', 'l2-transcripts', INTERVIEWS_DIR, requiredInterviews, 'Transcripts in je repo'),
+    minFilledFiles('interviewen', 'l2-interviewen', INTERVIEWS_DIR, requiredInterviews, 'Interviews gehouden'),
+    minFilledFiles('interviews', 'l2-interviews', INTERVIEWS_DIR, requiredInterviews, 'Interviews in je repo'),
     fileFilled('analyse', 'l2-analyse', ANALYSE_PATH, 'Analyse geschreven'),
+    frontmatterIs('eerste-doelgroep', 'l2-analyse', EERSTE_DOELGROEP_PATH, 'gevonden', 'ja', 'Eerste doelgroep gevonden'),
+    minMergedPullRequests('canvas', 'l2-canvas', 1, 'Pull request gemerged'),
   ],
 };
