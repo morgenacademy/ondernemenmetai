@@ -179,6 +179,15 @@ body::before {
   .download-stappen { margin: 1rem 0 1.25rem; padding-left: 1.25rem; list-style: decimal; color: var(--text-secondary); }
   .download-stappen li + li { margin-top: .25rem; }
 
+  .popup {
+    width: min(40rem, calc(100vw - 2rem)); max-height: calc(100vh - 2rem); padding: 0; color: var(--text-primary);
+    background: #1a1030; border: 1px solid var(--card-border); border-radius: var(--radius-lg); box-shadow: var(--shadow);
+  }
+  .popup::backdrop { background: rgba(6, 4, 14, .75); backdrop-filter: blur(4px); }
+  .popup-inhoud { padding: 1.75rem; }
+  .popup-titel { font-weight: 900; font-size: 1.6rem; line-height: 1.1; color: var(--white); }
+  .popup .prose-morgen h3 { font-weight: 800; font-size: 1.05rem; color: var(--white); margin-top: 1.25rem; }
+
   .upload-vakken { list-style: none; padding: 0; margin: .75rem 0; display: grid; gap: .4rem; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); }
   .upload-vakken li { display: flex; gap: .5rem; align-items: center; padding: .5rem .75rem; border-radius: 14px; border: 1px dashed var(--glass-border); font-size: .85rem; color: var(--text-muted); }
   .upload-vakken li.gevuld { border-style: solid; color: var(--text-primary); background: var(--glass-bg); }

@@ -4,6 +4,7 @@ import type { RepoSnapshot } from '../lib/repo/types';
 import { FormStap } from './FormStap';
 import { DownloadStap } from './DownloadStap';
 import { CheckIcon, CircleIcon } from './icons';
+import { InfoPopup } from './InfoPopup';
 import { KopieerBlok } from './KopieerBlok';
 import { Markdown } from './Markdown';
 import { UploadStap } from './UploadStap';
@@ -33,6 +34,7 @@ export function StapKaart({ level, step, index, snapshot, evaluation, setup, onS
       {step.kind === 'form' && <FormStap step={step} snapshot={snapshot} alreadyDone={done} onSave={onSave} />}
       {step.kind === 'uploads' && <UploadStap step={step} snapshot={snapshot} onSave={onSave} />}
       {step.kind === 'download' && <DownloadStap setup={setup} />}
+      {step.popup && <InfoPopup levelId={level.id} popup={step.popup} />}
       {step.aiPrompt && <KopieerBlok prompt={step.aiPrompt} />}
       {checks.length > 0 && (
         <ul className="checks" aria-label="Checks op je repo">
