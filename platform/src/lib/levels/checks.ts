@@ -107,9 +107,9 @@ export function frontmatterIs(id: string, stepId: string, path: string, field: s
       if (error) return { ok: false, reason: `${path}: ${error}` };
       if (!isFilled(text)) return { ok: false, reason: `${path} is nog niet ingevuld` };
       const actual = frontmatter[field];
-      if (!hasValue(actual)) return { ok: false, reason: `${field} is nog leeg` };
+      if (!hasValue(actual)) return { ok: false, reason: `in ${path} is ${field} nog leeg` };
       const shown = String(actual).trim();
-      return { ok: shown.toLowerCase() === value.toLowerCase(), reason: `${field}: ${shown}` };
+      return { ok: shown.toLowerCase() === value.toLowerCase(), reason: `in ${path} staat ${field}: ${shown}` };
     },
   };
 }

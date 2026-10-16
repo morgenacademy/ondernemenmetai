@@ -94,14 +94,14 @@ describe('frontmatterIs', () => {
     });
   });
   it('slaagt als het veld de gevraagde waarde heeft, ook met hoofdletters of spaties', () => {
-    expect(check.run(snap({ 'e.md': '---\ngevonden: ja\n---\n# Eerste doelgroep\n\nApothekers.' }))).toEqual({ ok: true, reason: 'gevonden: ja' });
+    expect(check.run(snap({ 'e.md': '---\ngevonden: ja\n---\n# Eerste doelgroep\n\nApothekers.' }))).toEqual({ ok: true, reason: 'in e.md staat gevonden: ja' });
     expect(check.run(snap({ 'e.md': '---\ngevonden: " Ja "\n---\n# Eerste doelgroep\n\nApothekers.' })).ok).toBe(true);
   });
   it('noemt de waarde die er wel staat', () => {
-    expect(check.run(snap({ 'e.md': '---\ngevonden: nee\n---\n# Eerste doelgroep\n\nNog niet.' }))).toEqual({ ok: false, reason: 'gevonden: nee' });
+    expect(check.run(snap({ 'e.md': '---\ngevonden: nee\n---\n# Eerste doelgroep\n\nNog niet.' }))).toEqual({ ok: false, reason: 'in e.md staat gevonden: nee' });
   });
   it('meldt een leeg veld', () => {
-    expect(check.run(snap({ 'e.md': '---\ngevonden:\n---\n# Eerste doelgroep\n\nTekst.' }))).toEqual({ ok: false, reason: 'gevonden is nog leeg' });
+    expect(check.run(snap({ 'e.md': '---\ngevonden:\n---\n# Eerste doelgroep\n\nTekst.' }))).toEqual({ ok: false, reason: 'in e.md is gevonden nog leeg' });
   });
   it('faalt met een leesbare reden bij kapotte frontmatter', () => {
     expect(check.run(snap({ 'e.md': '---\ngevonden: [ja\n---\n# E\n\nTekst.' }))).toEqual({ ok: false, reason: 'e.md: Frontmatter is geen geldige YAML' });

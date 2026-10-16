@@ -10,4 +10,4 @@ Andersom gaat het met push. Je canvas en je feedback maakt je AI op je computer.
 
 ### Je hoeft dit niet te onthouden
 
-Vraag je AI: "Is alles in sync?" Je AI antwoordt in één zin: wat nog alleen op je computer staat, en wat nog op GitHub klaarstaat.
+De vraag onder het plaatje werkt altijd. Je AI antwoordt in één zin: wat nog alleen op je computer staat, en wat nog op GitHub klaarstaat.

@@ -268,7 +268,7 @@ describe('level 2', () => {
   it('is pas af als je eerste doelgroep gevonden is', () => {
     const nee = evaluateLevel(level2, snap({ ...level2Done(5), [EERSTE_DOELGROEP_PATH]: eersteDoelgroep('nee') }, PR));
     expect(nee.done).toBe(false);
-    expect(nee.results.find((r) => r.id === 'eerste-doelgroep')).toMatchObject({ stepId: 'l2-analyse', ok: false, reason: 'gevonden: nee' });
+    expect(nee.results.find((r) => r.id === 'eerste-doelgroep')).toMatchObject({ stepId: 'l2-analyse', ok: false, reason: `in ${EERSTE_DOELGROEP_PATH} staat gevonden: nee` });
     expect(evaluateLevel(level2, snap({ ...level2Done(5), [EERSTE_DOELGROEP_PATH]: starterFiles[EERSTE_DOELGROEP_PATH] }, PR)).done).toBe(false);
   });
 

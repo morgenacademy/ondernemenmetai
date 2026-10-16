@@ -192,14 +192,14 @@ body::before {
   .popup .prose-morgen h3 { font-weight: 800; font-size: 1.05rem; color: var(--white); margin-top: 1.25rem; }
 
   .twee-plekken { margin-top: 1.25rem; }
-  .plekken { display: grid; gap: .5rem; align-items: center; }
+  .plekken { display: grid; gap: .5rem; }
   .plek { padding: .9rem 1rem; border-radius: var(--radius); background: var(--glass-bg); border: 1px solid var(--glass-border); }
   .plek-naam { font-weight: 800; color: var(--white); }
   .plek-rol { font-size: .85rem; color: var(--text-secondary); }
   .plek ul { margin-top: .5rem; padding-left: 1.1rem; list-style: disc; font-size: .9rem; color: var(--text-primary); }
   .plek li + li { margin-top: .2rem; }
   .plek .alleen-hier code { font-size: .9em; background: rgba(255, 255, 255, .08); padding: .05rem .3rem; border-radius: 6px; }
-  .plek-pijlen { list-style: none; padding: 0; display: flex; flex-direction: column; align-items: center; gap: .15rem; font-size: .85rem; font-weight: 700; color: var(--white); }
+  .plek-pijlen { align-self: center; list-style: none; padding: 0; display: flex; flex-direction: column; align-items: center; gap: .15rem; font-size: .85rem; font-weight: 700; color: var(--white); }
   .plek-pijlen .pijl { color: var(--accent); margin-right: .35rem; font-size: 1.05rem; }
   .pijl-breed { display: none; }
   .twee-plekken figcaption { margin-top: .75rem; font-size: .9rem; color: var(--text-secondary); }
