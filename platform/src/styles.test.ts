@@ -64,3 +64,10 @@ describe('huisstijl-tokens', () => {
     expect(css).toMatch(/\.btn-o:focus-within\s*\{[^}]*outline:\s*2px solid var\(--accent\)/);
   });
 });
+
+describe('smalle schermen', () => {
+  it('een brede tabel duwt de kolommen niet breder dan het scherm', () => {
+    expect(css).toMatch(/\.hoofd-grid > \*\s*\{[^}]*min-width:\s*0/);
+    expect(css).toMatch(/\.paneel\s*\{[^}]*overflow-x:\s*auto/);
+  });
+});

@@ -20,7 +20,7 @@ describe('StapKaart', () => {
   it('zegt waar je de stap doet, in volgorde', () => {
     const html = kaart(level2, 'l2-canvas');
     expect(html).toContain('aria-label="Waar: AI-app, daarna GitHub Desktop, daarna GitHub"');
-    expect(html).toMatch(/<li class="plek">AI-app<\/li>[\s\S]*<li class="plek">GitHub Desktop<\/li>[\s\S]*<li class="plek">GitHub<\/li>/);
+    expect(html).toMatch(/<li class="waar-plek">AI-app<\/li>[\s\S]*<li class="waar-plek">GitHub Desktop<\/li>[\s\S]*<li class="waar-plek">GitHub<\/li>/);
   });
 
   it('heeft bij een AI-stap een knop "Vul met demo content" met uitleg wat hij nadoet', () => {

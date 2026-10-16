@@ -25,10 +25,12 @@ export function Tussenscherm({ level, volgende, onVolgende, onTerug }: Props) {
           <dt>Gehaald</dt>
           <dd>{level.doel}</dd>
         </div>
-        <div>
-          <dt>Mijlpaal</dt>
-          <dd>{level.milestone}</dd>
-        </div>
+        {level.milestone !== level.doel && (
+          <div>
+            <dt>Mijlpaal</dt>
+            <dd>{level.milestone}</dd>
+          </div>
+        )}
         {level.begrip && (
           <div>
             <dt>Wat je leerde</dt>

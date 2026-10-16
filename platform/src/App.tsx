@@ -92,7 +92,7 @@ export default function App({ repo }: { repo: MockRepoAdapter }) {
           {r.warning}
         </p>
       )}
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px]">
+      <div className="hoofd-grid mt-6 grid gap-6 lg:grid-cols-[1fr_340px]">
         {afLevel ? (
           <Tussenscherm
             level={afLevel}

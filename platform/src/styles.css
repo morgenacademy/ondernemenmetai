@@ -149,13 +149,16 @@ body::before {
   }
   .stap-af .stap-nr { background: var(--accent); color: #1A1A2E; }
   .stap-nr.stap-optioneel { background: transparent; box-shadow: inset 0 0 0 2px var(--purple-light); }
-  .plekken-rij { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .4rem; padding: 0; list-style: none; }
-  .plek { font-size: .72rem; font-weight: 700; letter-spacing: .04em; color: var(--text-primary); padding: .15rem .55rem; border-radius: 999px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, .06); }
-  .plek + .plek::before { content: '→'; margin-right: .35rem; color: var(--accent); }
+  .waar-rij { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .4rem; padding: 0; list-style: none; }
+  .waar-plek { font-size: .72rem; font-weight: 700; letter-spacing: .04em; color: var(--text-primary); padding: .15rem .55rem; border-radius: 999px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, .06); }
+  .waar-plek + .waar-plek { position: relative; margin-left: 1rem; }
+  .waar-plek + .waar-plek::before { content: '→'; position: absolute; left: -1.05rem; color: var(--accent); }
   .stap-hint { margin-top: 1rem; padding: .75rem 1rem; border-radius: var(--radius); border-left: 3px solid var(--accent); background: rgba(216, 254, 86, .08); color: var(--white); font-weight: 600; }
   .level-vraag { margin-top: .75rem; font-size: 1.2rem; font-weight: 700; color: var(--white); }
   .level-doel { margin-top: 1rem; padding: .9rem 1.1rem; border-radius: var(--radius); background: var(--glass-bg-strong); border: 1px solid var(--glass-border); }
   .level-doel .eyebrow { margin-bottom: .25rem; }
+  /* Zonder min-width: 0 duwt een brede tabel de kolom breder dan het scherm; nu scrolt de tabel in zijn paneel. */
+  .hoofd-grid > * { min-width: 0; }
   .paneel { margin-top: 1rem; overflow-x: auto; }
   .paneel-tabel { width: 100%; border-collapse: collapse; font-size: .85rem; }
   .paneel-tabel caption { text-align: left; font-weight: 700; color: var(--white); margin-bottom: .4rem; }

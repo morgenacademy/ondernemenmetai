@@ -31,7 +31,7 @@ export function LevelPagina({ level, state, snapshot, onSave, onDemo, onFillLeve
         <p className="eyebrow">Je doel</p>
         <p>{level.doel}</p>
       </div>
-      <p className="mijlpaal">Mijlpaal: {level.milestone}</p>
+      {level.milestone !== level.doel && <p className="mijlpaal">Mijlpaal: {level.milestone}</p>}
     </header>
   );
 

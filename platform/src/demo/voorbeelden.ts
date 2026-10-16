@@ -173,7 +173,7 @@ Zelfstandige apotheken in de binnenstad van Breda ervaren allemaal hetzelfde pro
 export const VOORBEELD_EERSTE_DOELGROEP = `---
 gevonden: ja
 doelgroep: zelfstandige apotheken in de binnenstad van Breda
-probleem: spoedbezorging rond het middaguur kost een assistent een halve dag
+probleem: spoedbezorging die hun assistent elke dag uit de apotheek haalt
 ---
 # Eerste doelgroep
 

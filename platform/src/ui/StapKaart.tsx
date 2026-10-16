@@ -37,9 +37,9 @@ export function StapKaart({ level, step, nummer, snapshot, evaluation, setup, on
         <div>
           {step.optional && <p className="eyebrow mb-1">Optioneel</p>}
           <h2 className="stap-titel">{step.title}</h2>
-          <ul className="plekken-rij" aria-label={`Waar: ${plekken.join(', daarna ')}`}>
+          <ul className="waar-rij" aria-label={`Waar: ${plekken.join(', daarna ')}`}>
             {plekken.map((plek) => (
-              <li key={plek} className="plek">
+              <li key={plek} className="waar-plek">
                 {plek}
               </li>
             ))}
