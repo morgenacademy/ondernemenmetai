@@ -63,6 +63,8 @@ Een level is klaar als alle stappen af zijn; pas dan gaat het volgende open *(Ha
 11. **Level 4 en 5 zijn een lus.** Je gaat terug naar dezelfde mensen met je MVP. Bij nee vraag je waarom, je ontwikkelt door, en je komt terug, tot je een product hebt waar je voor gaat. Onderweg ontdek je hoe je verkoopt.
 12. **De AI in de cloud vervalt.** Voor de route is hij niet nodig.
 13. **Een level is klaar als alle stappen af zijn.** Elk level heeft een kern, zoals in de tabel "Wanneer is een level klaar?". Level 6 gaat open zodra je een klant hebt.
+14. **Level 5 vraagt minstens één ronde na het doorontwikkelen.** De check wil twee resultaatkaarten zien. Akkoord voor nu.
+15. **De deelnemer leert dat de repo op twee plekken staat**: op de computer en op GitHub. Het plaatje groeit per level, en "Is alles in sync?" aan je AI vragen is altijd genoeg.
 
 ## Hoe de modellen op elkaar passen
 
@@ -126,6 +128,26 @@ In `AGENTS.md` komt één algemene regel in plaats van de lijst met skills: "Lee
 ### Een skill in één zin
 
 Op elke kaart met een AI-stap staat welke skill je AI gebruikt en wat die doet, in één zin, met een link naar het `SKILL.md` op GitHub. Bijvoorbeeld: "Je AI gebruikt hier skill `propositie-validator`: hij stelt je vijf vragen, zet je antwoorden in één zin en toetst die met twaalf kritische vragen." Wie wil, leest de skill; wie niet wil, hoeft niets te weten. Wat een skill precies is, leer je in level 6, als je er zelf een schrijft. *(Voorstel, op de vraag van Harmen hoe we de deelnemer meenemen)*
+
+### Twee plekken: je computer en GitHub
+
+Je repo staat op twee plekken. Op GitHub kijkt het platform mee; op je computer werkt je AI. Wie dat niet snapt, snapt ook niet waarom de opname wel op je computer staat en niet op GitHub, of waarom het platform een interview nog niet ziet. *(Harmen)*
+
+Het plaatje groeit per level met één ding *(Voorstel)*:
+
+| Level | Wat erbij komt | Uitleg op de kaart |
+|---|---|---|
+| 0 | clone, commit, push | Clonen zet een kopie van je repo op je computer. Commit legt een versie vast op je computer, push zet hem op GitHub. *(Bron: staat al in level 0)* |
+| 1 | pull | Wat je op het platform invult, komt op GitHub. Pull haalt het naar je computer. Je AI doet dat aan het begin van elke sessie zelf. |
+| 2 | een map die alleen op je computer staat, en merge | `opnames/` staat in `.gitignore`: git slaat hem over, dus hij komt nooit op GitHub. Bij de pull request voeg je met Merge het zijspoor samen met je repo. Ook een pull voegt samen; dat doet git meestal zelf, en lukt het niet, dan legt je AI uit wat er speelt. |
+
+Wat staat waar:
+
+| Alleen op je computer | Alleen op GitHub, tot je AI het ophaalt | Op allebei |
+|---|---|---|
+| `opnames/`, en wat je AI net maakte maar jij nog niet pushte | wat je op het platform invulde | de rest, na push en pull |
+
+Je hoeft dit niet te onthouden. Vraag je AI: "Is alles in sync?" of "Staat mijn interview al in de repo?" Je AI antwoordt in één zin: wat nog alleen op je computer staat, wat nog op GitHub klaarstaat, en wat bewust op je computer blijft. Die regel komt in `AGENTS.md`. *(Harmen · regel: voorstel)*
 
 ### Drie manieren waarop iets in je repo komt
 
@@ -215,7 +237,7 @@ Level 1 blijft kort. *(Harmen)*
 - `propositie-validator`: bestaat, gebaseerd op GPT 03. Schrijft aan het eind ook `vpc.md`. De buddy-check uit de reader kan erbij: kort en zonder containerbegrippen, doelgroep afgebakend, probleem relevant, oplossing sluit aan op het probleem. *(Bron: Reader H3 §7 · toevoegingen: voorstel)*
 - `idee-generator`: nieuw, overgezet uit GPT 01. De trendtabel ("macrotrends 2025") moet bijgewerkt worden, en de doorverwijzing naar de Startup Validator vervalt. *(Bron: GPT 01)*
 
-**Nieuw begrip: ophalen (pull).** In level 1 schrijft het platform voor het eerst bestanden naar GitHub terwijl je AI op je computer werkt. Bij stap 5 zegt je AI: "Ik heb idee.md, visie.md, madlib.md en aannames.md opgehaald." De pop-up "Wat haalde mijn AI op?" legt uit: wat je op het platform invult, komt op GitHub; je AI haalt het naar je computer. *(Bron: pull-regel in `starter-repo/AGENTS.md` op branch `claude/bold-diffie-859712`, nog niet in `feat/klikbare-demo` · pop-up: voorstel)*
+**Nieuw begrip: ophalen (pull).** In level 1 schrijft het platform voor het eerst bestanden naar GitHub terwijl je AI op je computer werkt. Bij stap 5 zegt je AI: "Ik heb idee.md, visie.md, madlib.md en aannames.md opgehaald." De pop-up "Wat haalde mijn AI op?" legt uit: wat je op het platform invult, komt op GitHub; je AI haalt het naar je computer. De pop-up toont het plaatje met de twee plekken, en de vraag die altijd werkt: "Is alles in sync?" *(Bron: pull-regel in `starter-repo/AGENTS.md` op branch `claude/bold-diffie-859712`, nog niet in `feat/klikbare-demo` · pop-up: voorstel)*
 
 **Itereren:** tussen 1 en 2. In level 2 werkt je AI je canvas en je aannames bij met wat de interviews lieten zien.
 
@@ -241,7 +263,7 @@ Level 1 blijft kort. *(Harmen)*
 - **Stap 4.** Na elk interview zet je de opname of het transcript in de map `opnames/` op je computer. Je vraagt je AI: "Gebruik skill transcriberen. Zet het nieuwe interview in opnames/ om." Je AI haalt de namen eruit, deelt het in volgens vraag 5 tot en met 8 en zet het als `interviews/NN-rol.md` in je repo. Jij pusht in GitHub Desktop; daarna krijgt het vak op het platform een vinkje. *(Harmen · uitwerking: voorstel)*
   - **Heb je al tekst?** Teams en Zoom maken zelf een transcript. Dat is de snelste route. Claude Code en Codex kunnen een tekstbestand omzetten naar een interviewbestand.
   - **Heb je alleen een opname?** Je AI installeert een spraakprogramma (zoals Whisper) op je computer en draait het; Claude Code en Codex luisteren zelf niet naar audio. Dat kost niets en de opname gaat de deur niet uit. Harmen laat Claude dit al vaak doen: een opname in een map, de vraag om er een transcript van te maken, en het .md-bestand staat er. *(Harmen)* Nog testen: Codex, Windows en oudere laptops.
-  - `opnames/` staat in je repomap op je computer, maar git negeert hem. Je AI vindt de opname daar dus vanzelf, en hij komt nooit op GitHub.
+  - `opnames/` staat in je repomap op je computer, maar git negeert hem. Je AI vindt de opname daar dus vanzelf, en hij komt nooit op GitHub. Dit is het moment waarop het plaatje van de twee plekken een map krijgt die alleen op je computer staat. Twijfel je of een interview al meetelt, vraag dan je AI: "Staat het in de repo?"
   - **Vertrouwelijk.** Zegt iemand in het gesprek dat iets vertrouwelijk is, dan zet je AI dat stuk tussen `VERTROUWELIJK: BEGIN` en `VERTROUWELIJK: EINDE`, met bovenaan het bestand een waarschuwing. Je AI mag het lezen voor de context, maar citeert of gebruikt het nergens, ook niet in de analyse. *(Harmen, uit eigen praktijk · in de skill: voorstel)*
   - De uploadvakken uit de demo vervallen voor ruwe tekst: wat het platform uploadt, staat direct op GitHub, ook de namen. De vakken blijven als voortgang, met de AI-opdracht als kopieerblok.
 - **Stap 5.** Hier is je AI sterk: 5 tot 15 gesprekken naast elkaar leggen, patronen tellen en per patroon de citaten terugvinden *(Harmen)*. Het resultaat krijgt een eigen bestand, zodat het platform het als resultaat van het level kan tonen. `eerste-doelgroep.md` heeft frontmatter `gevonden: ja | nee`, `doelgroep` en `probleem`, en in de tekst het bewijs: hoeveel van de interviews, welke klachten steeds terugkomen, en de citaten. *(Voorstel)*
@@ -355,7 +377,7 @@ Je pakt de feedback van je mensen op, ontwikkelt je MVP door, en gaat weer naar 
 - **Stap 3.** `besluit: ik ga ervoor` of `nog niet`. Bij `ik ga ervoor` vul je in wat je nu doet: meer bestellen, laten produceren of echt verkopen. In de onderbouwing staat welk bewijs uit je rondes je over de streep trok; je AI vat het samen uit `feedback/` en `resultaten/`.
 - **Stap 4.** GPT 08 vraagt alle 9 bouwstenen één voor één uit. In de repo staat al veel: klantsegmenten in `doelgroep.md` en `eerste-doelgroep.md`, de waardepropositie in `vpc.md` en `waardepropositie.md`, inkomstenstromen in `prijs.md` en de feedback. De skill vult dat in en vraagt alleen naar kanalen, klantrelaties, partners, middelen, activiteiten en kosten. Hij controleert of de blokken op elkaar aansluiten, zoals GPT 08 doet. De twee extra blokken van het Sustainable Business Model Canvas (ecologische en sociale kosten en baten) zijn optioneel.
 
-**Checks:** `product.md` ingevuld, met `besluit: ik ga ervoor` (`frontmatterIs`) · minstens 2 resultaatkaarten in `level-4-marktfeedback/resultaten/`, dus minstens één ronde na het doorontwikkelen · `bmc.md` ingevuld · sectie "Over mijn onderneming" in `AGENTS.md` gevuld (`sectionFilled`). De kern: je besluit. *(Voorstel)*
+**Checks:** `product.md` ingevuld, met `besluit: ik ga ervoor` (`frontmatterIs`) · minstens 2 resultaatkaarten in `level-4-marktfeedback/resultaten/`, dus minstens één ronde na het doorontwikkelen *(Harmen: akkoord voor nu)* · `bmc.md` ingevuld · sectie "Over mijn onderneming" in `AGENTS.md` gevuld (`sectionFilled`). De kern: je besluit. *(Voorstel)*
 
 **Skills:**
 
@@ -445,7 +467,7 @@ Geen code in dit document, wel deze gevolgen voor later:
 - `levelStatus`: level 6 kan klaar zijn terwijl level 4 of 5 nog open staan. Nu gaan levels strikt op volgorde open.
 - `level1.ts`: de toets wordt stap 5 en levert ook `vpc.md`; de check wordt `madlib.md` en `vpc.md`.
 - `level2.ts`: de uploadvakken als voortgang met kopieerblok, de stap met de pull request, het resultaatbestand en de nieuwe check.
-- `starter-repo/`: templates en skills van level 1 en hoger gaan naar het platform; `AGENTS.md` krijgt de algemene skillregel en de regel over keuzes en materiaal vanaf level 2; `.gitignore` krijgt de map `opnames/`.
+- `starter-repo/`: templates en skills van level 1 en hoger gaan naar het platform; `AGENTS.md` krijgt de algemene skillregel, de regel over keuzes en materiaal vanaf level 2, en het antwoord op "Is alles in sync?"; `.gitignore` krijgt de map `opnames/`.
 - `interviewhulp` en `transcriberen`: de terugbelvraag en het veld `terugbellen`.
 - Het repo-paneel: het aantal pull requests pas vanaf level 2.
 
