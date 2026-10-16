@@ -1,6 +1,6 @@
 # Ondernemen met AI: opzet level 1 tot en met 6
 
-Datum: 16 oktober 2026 · Status: vierde versie, na drie reactierondes van Harmen · Bouwt voort op de spec van 15 oktober (`2026-10-15-klikbare-demo-design.md`)
+Datum: 16 oktober 2026 · Status: vijfde versie, na vier reactierondes van Harmen · Bouwt voort op de spec van 15 oktober (`2026-10-15-klikbare-demo-design.md`)
 
 Level 0 tot en met 2 zijn uitgewerkt in de spec van 15 oktober. Dit document zet level 1 tot en met 6 naast elkaar. Per level staat erin: de vraag, wanneer het level klaar is, de mijlpaal, de stappen en waar je ze doet, de bestanden in de repo, de skills van de AI, het ene nieuwe begrip en waar je heen en weer gaat. Platformcode zit er niet bij.
 
@@ -28,9 +28,9 @@ Bij elke keuze staat waar hij vandaan komt:
 
 ## Wanneer is een level klaar?
 
-Elk level heeft één ding dat het klaar maakt. Dat is de check die het volgende level opent. *(Klaar als: Harmen · check: voorstel)*
+Een level is klaar als alle stappen af zijn; pas dan gaat het volgende open *(Harmen)*. Elk level draait om één kern: het resultaat in de tabel hieronder *(Harmen)*. De checks van alle stappen staan verderop per level. *(Checks: voorstel)*
 
-| Level | Klaar als | Check op de repo |
+| Level | Kern | Check op de kern |
 |---|---|---|
 | 0 Werkplek | je werkplek is ingericht | `setup.md` en `werkplek.md` ingevuld (bestaat al). `werkplek.md` staat pas op GitHub als je hebt gepusht, dus de check laat ook zien dat commit en push werken. |
 | 1 Idee | je madlib staat en de eerste versie van je waardepropositie is ingevuld, zoals in GPT 03 | `madlib.md` en `vpc.md` ingevuld |
@@ -40,8 +40,8 @@ Elk level heeft één ding dat het klaar maakt. Dat is de check die het volgende
 | 5 Product-validatie | je hebt een product waarvan je zegt: hier ga ik voor. Je bestelt meer, laat produceren of gaat nu echt verkopen. | `product.md` met `besluit: ik ga ervoor` en de onderbouwing uit je rondes |
 | 6 Lancering | je blijkt een klant te hebben. Dat kan op elk moment. | minstens 1 betalende klant in `klanten.md` |
 
-- **Alleen de kern telt.** De andere stappen staan op de kaart als aanbevolen, met hun eigen vinkje, maar houden je niet tegen. Voorbeelden: je visie in level 1, de pull request in level 2, de BMC in level 5. *(Voorstel; zie open vraag 1)*
-- **Level 6 kan op elk moment.** Op het platform staat vanaf level 1 een knop "Ik heb een klant". Die zet de klant in `klanten.md`, en level 6 licht op. De levels ertussen blijven open om af te maken. *(Harmen: "elk moment" · knop: voorstel)*
+- **Alle stappen tellen.** Elke stap heeft een eigen check. Een stap die buiten gebeurt, zoals interviewen of de markt op gaan, telt via het bestand dat eruit komt. Alleen de kaart "Nog geen idee?" in level 1 en de losse kaarten zijn vrij. *(Harmen)*
+- **Level 6 is de uitzondering.** Op het platform staat vanaf level 1 een knop "Ik heb een klant". Die zet de klant in `klanten.md`, en level 6 gaat open, ook als level 4 of 5 nog niet af is. Je eerste klant kan op elk moment komen. Level 6 zelf is klaar als ook de stappen daarin af zijn. *(Harmen: "elk moment" · knop: voorstel)*
 - **Gekocht is de beste feedback**, maar in de eerste ronde van level 4 gebeurt dat zelden. Gebeurt het wel, dan was je misschien te laat met de markt op. *(Harmen)*
 
 ## Besloten op 16 oktober
@@ -62,7 +62,7 @@ Elk level heeft één ding dat het klaar maakt. Dat is de check die het volgende
 10. **Brainwriting in level 3 doe je in een training met medecursisten.** Wie alleen werkt, bedenkt zelf en laat de AI aanvullen.
 11. **Level 4 en 5 zijn een lus.** Je gaat terug naar dezelfde mensen met je MVP. Bij nee vraag je waarom, je ontwikkelt door, en je komt terug, tot je een product hebt waar je voor gaat. Onderweg ontdek je hoe je verkoopt.
 12. **De AI in de cloud vervalt.** Voor de route is hij niet nodig.
-13. **Per level staat wanneer het klaar is**, zoals in de tabel hierboven.
+13. **Een level is klaar als alle stappen af zijn.** Elk level heeft een kern, zoals in de tabel "Wanneer is een level klaar?". Level 6 gaat open zodra je een klant hebt.
 
 ## Hoe de modellen op elkaar passen
 
@@ -180,16 +180,18 @@ De checks kijken naar de inhoud van de repo. Werk je na de interviews je madlib 
 
 ### Nieuwe checktypes
 
-Naast `fileFilled`, `minListItems`, `minFilledFiles` en `minMergedPullRequests` zijn er drie nodig *(Voorstel)*:
+Naast `fileFilled`, `minListItems`, `minFilledFiles` en `minMergedPullRequests` zijn er vijf nodig *(Voorstel)*:
 
 - `frontmatterIs`: dit veld heeft deze waarde. Voor `gevonden: ja` en `besluit: ik ga ervoor`.
-- `frontmatterFilled`: in minstens zoveel bestanden in een map heeft dit veld een waarde. Voor de feedback in level 4.
+- `frontmatterFilled`: deze velden hebben een waarde, eventueel in minstens zoveel bestanden in een map. Voor de testkaart, de resultaatkaart en de feedback in level 4.
 - `anyFileIn`: de map bevat minstens één bestand, van welk type ook. Voor je MVP (html, pdf, foto).
+- `fileExists`: het bestand staat er. Voor `feedback-propositie.md` en je eigen skill.
+- `sectionFilled`: onder deze kop staat tekst. Voor de sectie "Over mijn onderneming" in `AGENTS.md`.
 
 ## Level 1: Idee
 
 **Vraag:** wat is mijn idee, en wat neem ik daarbij aan?
-**Klaar als:** je madlib staat en de eerste versie van je waardepropositie is ingevuld, zoals in GPT 03. *(Harmen)*
+**Kern:** je madlib staat en de eerste versie van je waardepropositie is ingevuld, zoals in GPT 03. *(Harmen)*
 **Doel:** idee, visie en een eerste versie van je waardepropositie. *(Bron: Stappenplan)*
 **Mijlpaal:** start: jouw idee, jouw passie, "ik wil ondernemen". *(Bron: Levensfasemodel)*
 
@@ -206,7 +208,7 @@ Level 1 blijft kort. *(Harmen)*
 
 - **Stap 5.** Je AI volgt GPT 03: vijf vragen (naam, aanbod, doelgroep, probleem, USP), je antwoorden in de madlib, daarna twaalf reflectievragen over je oplossing, het probleem en je klant. Jij scherpt aan. De actiepunten komen in `feedback-propositie.md`. Je AI sluit af met je canvas in `vpc.md`: klantkant (jobs, pains, gains) en aanbodkant (producten, pain relievers, gain creators), met bij elke regel "(aanname)". Die aannames toets je in level 2. *(Bron: GPT 03 · canvas aan het eind: voorstel)*
 
-**Check:** `madlib.md` en `vpc.md` ingevuld. *(Voorstel)*
+**Checks:** `idee.md`, `visie.md`, `madlib.md` en `vpc.md` ingevuld · `aannames.md` minstens 3 aannames · `feedback-propositie.md` bestaat (`fileExists`). De kern: `madlib.md` en `vpc.md`. *(Voorstel)*
 
 **Skills:**
 
@@ -220,7 +222,7 @@ Level 1 blijft kort. *(Harmen)*
 ## Level 2: Probleem-validatie
 
 **Vraag:** wie is mijn eerste klant, en welk probleem hebben ze allemaal? *(Bron: Bijlage, stap 1)*
-**Klaar als:** je je 'eerste' doelgroep hebt ontdekt die allemaal hetzelfde probleem ervaart. Daarvoor heb je je interviews gedaan, geanalyseerd en er een conclusie uit getrokken. *(Harmen; Bron: Bijlage, stap 2 "gevalideerde probleemstelling")*
+**Kern:** je je 'eerste' doelgroep hebt ontdekt die allemaal hetzelfde probleem ervaart. Daarvoor heb je je interviews gedaan, geanalyseerd en er een conclusie uit getrokken. *(Harmen; Bron: Bijlage, stap 2 "gevalideerde probleemstelling")*
 **Doel:** je doelgroep en hun klantprobleem ontdekken. *(Bron: Stappenplan)*
 **Mijlpaal 1:** een eerste doelgroep die allemaal hetzelfde probleem ervaart. *(Bron: Levensfasemodel)*
 
@@ -233,7 +235,7 @@ Level 1 blijft kort. *(Harmen)*
 | 3 | Interview je doelgroep | Buiten | — | Spec |
 | 4 | Zet je interviews in je repo | AI-app, daarna GitHub Desktop | `interviews/NN-rol.md` | Spec; per interview, met je eigen AI: Harmen |
 | 5 | Analyseer je interviews | AI-app | `analyse.md`, `eerste-doelgroep.md` | Spec; `eerste-doelgroep.md`: Harmen, voorstel |
-| 6 | Werk je canvas bij (aanbevolen) | AI-app, daarna GitHub Desktop en GitHub | wijzigingen in `level-1-idee/vpc.md` en `aannames.md`, via een pull request | Harmen |
+| 6 | Werk je canvas bij | AI-app, daarna GitHub Desktop en GitHub | wijzigingen in `level-1-idee/vpc.md` en `aannames.md`, via een pull request | Harmen |
 
 - **Stap 3.** Het interview sluit af met de terugbelvraag (zie "Dezelfde mensen door de route").
 - **Stap 4.** Na elk interview zet je de opname of het transcript in de map `opnames/` op je computer. Je vraagt je AI: "Gebruik skill transcriberen. Zet het nieuwe interview in opnames/ om." Je AI haalt de namen eruit, deelt het in volgens vraag 5 tot en met 8 en zet het als `interviews/NN-rol.md` in je repo. Jij pusht in GitHub Desktop; daarna krijgt het vak op het platform een vinkje. *(Harmen · uitwerking: voorstel)*
@@ -245,7 +247,7 @@ Level 1 blijft kort. *(Harmen)*
 - **Stap 5.** Hier is je AI sterk: 5 tot 15 gesprekken naast elkaar leggen, patronen tellen en per patroon de citaten terugvinden *(Harmen)*. Het resultaat krijgt een eigen bestand, zodat het platform het als resultaat van het level kan tonen. `eerste-doelgroep.md` heeft frontmatter `gevonden: ja | nee`, `doelgroep` en `probleem`, en in de tekst het bewijs: hoeveel van de interviews, welke klachten steeds terugkomen, en de citaten. *(Voorstel)*
 - **Stap 6.** Je AI zet bij elke regel in je canvas en bij elke aanname wat de interviews zeiden: bevestigd, ontkracht of open. Hij doet dat op een branch. In GitHub Desktop klik je Publish branch en Create Pull Request. Op GitHub zie je onder Files changed in rood wat sneuvelde en in groen wat erbij kwam. Daarna klik je Merge pull request. *(Harmen: besloten · uitwerking: voorstel)*
 
-**Check:** minstens 5 (B2B) of 15 (B2C) interviews in `interviews/`, `analyse.md` ingevuld, en `gevonden: ja` in `eerste-doelgroep.md`. *(Voorstel)*
+**Checks:** `doelgroep.md` en `interviewvragen.md` ingevuld · minstens 5 (B2B) of 15 (B2C) interviews in `interviews/` · `analyse.md` ingevuld · `gevonden: ja` in `eerste-doelgroep.md` (`frontmatterIs`) · minstens 1 gemergde pull request (`minMergedPullRequests`, bestaat al). De kern: je eerste doelgroep. *(Voorstel)*
 
 **Skills:**
 
@@ -262,7 +264,7 @@ Het repo-paneel toont het aantal pull requests pas vanaf level 2. Nu staat er al
 ## Level 3: Prototype
 
 **Vraag:** welke oplossing past het best bij dat probleem? *(Bron: Bijlage, stap 3)*
-**Klaar als:** je een MVP hebt die je kunt laten zien. *(Harmen)*
+**Kern:** je een MVP hebt die je kunt laten zien. *(Harmen)*
 **Doel:** ideeën genereren en een eerste demo of MVP maken. *(Bron: Stappenplan, Launch path)*
 **Mijlpaal 2:** product/solution fit: de beste oplossing voor het probleem van je eerste doelgroep. *(Bron: Levensfasemodel)*
 
@@ -272,7 +274,7 @@ Eerst breed, dan kiezen *(Harmen: divergeren en convergeren)*. Daarna de vraag: 
 |---|---|---|---|---|
 | 1 | Bedenk oplossingen | Buiten (met medecursisten) of zelf, daarna Platform | `oplossingen.md`: minstens 10 ideeën | Harmen; Bron: Reader H3 §2 en §3 (How Might We, brainwriting 6-3-5, SCAMPER); Workshop Creatieve brainstormtechnieken · aantal: voorstel |
 | 2 | Waardeer en kies je oplossing | AI-app | `oplossing.md`: de gekozen oplossing, waarom, en wat afviel | Harmen; Bron: Reader H3 §6 en Bijlage stap 3 (wenselijk, haalbaar, levensvatbaar; impact/effort-matrix) |
-| 3 | Verwoord je oplossing (aanbevolen) | AI-app, via een pull request | `madlib.md` en `vpc.md` bijgewerkt, `waardepropositie.md` nieuw | Bron: Bijlage ("Mad Lib als value proposition"), Reader H3 §7 (value proposition fit), GPT 05 |
+| 3 | Verwoord je oplossing | AI-app, via een pull request | `madlib.md` en `vpc.md` bijgewerkt, `waardepropositie.md` nieuw | Bron: Bijlage ("Mad Lib als value proposition"), Reader H3 §7 (value proposition fit), GPT 05 |
 | 4 | Kies je MVP | AI-app | `mvp.md`: je drie grootste bezwaren, de riskantste aanname, het MVP-type en waarom | Bron: Workshop MVP-ontwikkeling (opdracht 2: "minimaal je 3 grootste bezwaren"), GPT 06, `Types MVP Guide.pdf`, Reader H4 (prototype-ladder) |
 | 5 | Bouw je MVP | AI-app en zelf | `mvp/`: de MVP zelf, of foto's en een link | Bron: Workshop MVP-ontwikkeling ("Bouw een MVP en verkoop 'm") · taakverdeling: voorstel |
 
@@ -284,7 +286,7 @@ Eerst breed, dan kiezen *(Harmen: divergeren en convergeren)*. Daarna de vraag: 
 
 Een MVP maken is de grootste stap van de route. Hoe we dat ondersteunen, vullen we nog in. Er is al materiaal: de workshop MVP-ontwikkeling, `Types MVP Guide.pdf`, *Businessideeën testen*, en rapid prototyping met AI. *(Harmen)*
 
-**Check:** `oplossing.md` ingevuld en minstens één bestand in `mvp/` (`anyFileIn`). *(Voorstel)*
+**Checks:** `oplossingen.md` minstens 10 ideeën · `oplossing.md`, `waardepropositie.md` en `mvp.md` ingevuld · minstens één bestand in `mvp/` (`anyFileIn`). De kern: je MVP. *(Voorstel)*
 
 **Skills:**
 
@@ -299,7 +301,7 @@ Een MVP maken is de grootste stap van de route. Hoe we dat ondersteunen, vullen 
 ## Level 4: Markt feedback
 
 **Vraag:** wat vinden ze van mijn MVP, en willen ze het tegen mijn prijs?
-**Klaar als:** je van genoeg mensen feedback hebt op je MVP. *(Harmen)*
+**Kern:** je van genoeg mensen feedback hebt op je MVP. *(Harmen)*
 **Doel:** feedback van je doelgroep ophalen. *(Bron: Stappenplan)*
 **Mijlpaal 3:** commitment: je doelgroep wil kopen, en voor dezelfde prijs. *(Bron: Levensfasemodel)* Je haalt hem in de lus met level 5. *(Harmen)*
 
@@ -308,10 +310,10 @@ Je gaat met je MVP terug naar de mensen die je interviewde: "Weet je nog, je zei
 | # | Stap | Waar | In je repo (`level-4-marktfeedback/`) | Herkomst |
 |---|---|---|---|---|
 | 1 | Bepaal je prijs | Platform | `prijs.md`: prijs, per wat, geschatte kostprijs | Bron: mijlpaal 3; Workshop Financiële haalbaarheid, vraag 1 en 2 · formulier: voorstel |
-| 2 | Maak je testkaart (aanbevolen) | AI-app | `testkaarten/ronde-1.md`: wat verwacht je van deze ronde, bijvoorbeeld "3 van de 5 zeggen ja tegen €40 per maand" | Bron: GPT 06 (Test Card-wizard), Workshop Experiment design (testbaar, nauwkeurig, discreet), Reader H5 (actionable metrics) |
+| 2 | Maak je testkaart | AI-app | `testkaarten/ronde-1.md`: wat verwacht je van deze ronde, bijvoorbeeld "3 van de 5 zeggen ja tegen €40 per maand" | Bron: GPT 06 (Test Card-wizard), Workshop Experiment design (testbaar, nauwkeurig, discreet), Reader H5 (actionable metrics) |
 | 3 | Bereid je terugbelgesprekken voor | AI-app | per persoon een spiekbriefje bovenaan `feedback/NN-rol.md` | Harmen · voorstel |
 | 4 | Laat proberen en doe je voorstel | Buiten, daarna Platform | `feedback/NN-rol.md`: wat iemand probeerde en hoe lang, je voorstel, `antwoord: ja \| nee \| twijfel`, en waarom | Harmen; Bron: GPT 06 (gedrag boven intentie) |
-| 5 | Lees je ronde (aanbevolen) | AI-app | `resultaten/ronde-1.md`: hoeveel ja, de redenen van nee op een rij, en je besluit | Bron: GPT 07 (Result Card, persevere/pivot/kill); Workshop Onderzoek, wat heb je geleerd (bewijskracht); Bijlage (learning card) |
+| 5 | Lees je ronde | AI-app | `resultaten/ronde-1.md`: hoeveel ja, de redenen van nee op een rij, en je besluit | Bron: GPT 07 (Result Card, persevere/pivot/kill); Workshop Onderzoek, wat heb je geleerd (bewijskracht); Bijlage (learning card) |
 
 - **Stap 2.** De testkaart legt vooraf vast wat je verwacht, zodat je achteraf niet goedpraat wat er gebeurde. Normen uit GPT 06: minstens 5 kwalitatieve of 50 kwantitatieve gevallen, en een succesdrempel "waarmee je durft door te bouwen". Meet wat mensen doen, zoals bestellingen of langer willen gebruiken; likes en bezoekers tellen niet. *(Bron: Reader H5)*
 - **Stap 3.** Je AI zoekt in je interviews wie `terugbellen: ja` zei. Per persoon schrijft hij op wat diegene in level 2 vertelde over het huidige alternatief en de klachten, en welk deel daarvan je MVP oplost. Nieuwe mensen mogen er ook bij.
@@ -319,7 +321,7 @@ Je gaat met je MVP terug naar de mensen die je interviewde: "Weet je nog, je zei
 - **Stap 5.** De resultaatkaart volgt de vijf blokken van GPT 07: gemeten waarde, vergelijking met de drempel, observaties, verrassingen en conclusie. Frontmatter: `besluit: doorgaan | doorontwikkelen | stoppen` en `vertrouwen` van 0 tot 100 uit het bewijskracht-werkblad.
 - Op het platform staan al je testkaarten en resultaten op één bord, zoals het experiment board uit de bijlage. *(Bron: Bijlage · voorstel)*
 
-**Check:** minstens 3 (B2B) of 10 (B2C) bestanden in `feedback/` met een `antwoord` (`frontmatterFilled`). *(Voorstel; aantal: uitgangspunt)*
+**Checks:** `prijs.md` ingevuld · `testkaarten/ronde-1.md` met alle vijf blokken (`frontmatterFilled`) · minstens 3 (B2B) of 10 (B2C) bestanden in `feedback/` met een `antwoord` · `resultaten/ronde-1.md` met een besluit. De kern: feedback van genoeg mensen. *(Voorstel; aantal: uitgangspunt)*
 
 **Skills:**
 
@@ -334,7 +336,7 @@ Je gaat met je MVP terug naar de mensen die je interviewde: "Weet je nog, je zei
 ## Level 5: Product-validatie
 
 **Vraag:** wat moet er beter, tot ik er echt voor ga?
-**Klaar als:** je een product hebt waarvan je zegt: hier ga ik voor. Je bestelt meer, laat produceren of gaat nu echt verkopen. *(Harmen)*
+**Kern:** je een product hebt waarvan je zegt: hier ga ik voor. Je bestelt meer, laat produceren of gaat nu echt verkopen. *(Harmen)*
 **Doel:** een basisproduct ontwikkelen voor je eerste klanten. *(Bron: Stappenplan)*
 **Mijlpalen 3 en 4:** commitment tegen dezelfde prijs, en product/market fit: een basisproduct waar je eerste klanten fan van zijn. *(Bron: Levensfasemodel · beide in de lus met level 4: Harmen)*
 
@@ -345,15 +347,15 @@ Je pakt de feedback van je mensen op, ontwikkelt je MVP door, en gaat weer naar 
 | 1 | Ontwikkel door op de feedback | AI-app, via een pull request | wijzigingen in je MVP; `product.md`: wat erin zit en welk bewijs ervoor pleit, en wat er bewust niet in zit | Harmen; Bron: Stappenplan, GPT 07 (minstens drie opties, jij kiest) |
 | 2 | Ga terug naar de markt | Buiten, daarna Platform | een nieuwe ronde in level 4: testkaart, sectie in `feedback/NN-rol.md`, resultaatkaart | Harmen |
 | 3 | Kies: ga je ervoor? | Platform | `besluit`, `volgende_stap` en onderbouwing in `product.md` | Harmen · formulier: voorstel |
-| 4 | Breng je businessmodel in kaart (aanbevolen) | AI-app | `bmc.md`: 9 bouwstenen, elk met het bestand waar het vandaan komt | Bron: GPT 08; `Vragen Business Model Canvas.pdf`; Workshop Businessmodel in kaart (SBMC); Bijlage (stap 6) · bronbestand per bouwsteen: voorstel |
-| 5 | Vertel je AI wie je onderneming is (aanbevolen) | AI-app, via een pull request | sectie "Over mijn onderneming" in `AGENTS.md` | Voorstel |
+| 4 | Breng je businessmodel in kaart | AI-app | `bmc.md`: 9 bouwstenen, elk met het bestand waar het vandaan komt | Bron: GPT 08; `Vragen Business Model Canvas.pdf`; Workshop Businessmodel in kaart (SBMC); Bijlage (stap 6) · bronbestand per bouwsteen: voorstel |
+| 5 | Vertel je AI wie je onderneming is | AI-app, via een pull request | sectie "Over mijn onderneming" in `AGENTS.md` | Voorstel |
 
 - **Stap 1.** Je AI zet alle redenen van nee uit je feedbackbestanden op een rij, koppelt ze aan de klachten uit level 2, en stelt per reden minstens drie aanpassingen voor. Jij kiest. Omdat het jouw product is, gaat het via een pull request.
 - **Stap 2.** Stap 1 en 2 herhaal je zo vaak als nodig. De interviews uit level 2 vertelden wat er vervelend was aan het huidige alternatief; als jouw oplossing dat echt oplost, willen mensen hem hebben. *(Harmen)*
 - **Stap 3.** `besluit: ik ga ervoor` of `nog niet`. Bij `ik ga ervoor` vul je in wat je nu doet: meer bestellen, laten produceren of echt verkopen. In de onderbouwing staat welk bewijs uit je rondes je over de streep trok; je AI vat het samen uit `feedback/` en `resultaten/`.
 - **Stap 4.** GPT 08 vraagt alle 9 bouwstenen één voor één uit. In de repo staat al veel: klantsegmenten in `doelgroep.md` en `eerste-doelgroep.md`, de waardepropositie in `vpc.md` en `waardepropositie.md`, inkomstenstromen in `prijs.md` en de feedback. De skill vult dat in en vraagt alleen naar kanalen, klantrelaties, partners, middelen, activiteiten en kosten. Hij controleert of de blokken op elkaar aansluiten, zoals GPT 08 doet. De twee extra blokken van het Sustainable Business Model Canvas (ecologische en sociale kosten en baten) zijn optioneel.
 
-**Check:** `besluit: ik ga ervoor` in `product.md` (`frontmatterIs`). *(Voorstel)*
+**Checks:** `product.md` ingevuld, met `besluit: ik ga ervoor` (`frontmatterIs`) · minstens 2 resultaatkaarten in `level-4-marktfeedback/resultaten/`, dus minstens één ronde na het doorontwikkelen · `bmc.md` ingevuld · sectie "Over mijn onderneming" in `AGENTS.md` gevuld (`sectionFilled`). De kern: je besluit. *(Voorstel)*
 
 **Skills:**
 
@@ -368,7 +370,7 @@ Je pakt de feedback van je mensen op, ontwikkelt je MVP door, en gaat weer naar 
 ## Level 6: Lancering
 
 **Vraag:** ik heb een klant. Wat nu?
-**Klaar als:** je een klant blijkt te hebben. Dat kan op elk moment. *(Harmen)*
+**Kern:** je een klant blijkt te hebben. Dat kan op elk moment. *(Harmen)*
 **Doel:** je eerste echte klanten. *(Bron: Stappenplan)* "En voor je het weet heb je betalende klanten." *(Bron: Launch path)*
 **Mijlpaal:** Proof of Concept *(Harmen; Bron: Reader H5 §4, "Van n=1 naar Proof-of-Concept")*. Je zet de eerste stap naar mijlpaal 5, een herhaalbaar verkoopproces, door vast te leggen hoe je verkocht. "Schaalbaar" en mijlpaal 6 (positieve cashflow) horen bij module 2. *(Harmen)*
 
@@ -377,16 +379,16 @@ Vaak heb je ineens per ongeluk een klant: iemand uit je interviews zag dat jouw 
 | # | Stap | Waar | In je repo (`level-6-lancering/`) | Herkomst |
 |---|---|---|---|---|
 | 1 | Ik heb een klant | Platform, op elk moment | `klanten.md`: rol, initialen, wat, bedrag, datum | Harmen · knop: voorstel |
-| 2 | Leg vast hoe je verkocht (aanbevolen) | AI-app, via een pull request | `skills/verkoopaanpak/SKILL.md` | Harmen ("gaandeweg ontdekt"); Bron: Workshop Verkoopgesprekken (VACATIO, SPIN, DMU) · skill: voorstel |
-| 3 | Zet je volgende klanten in een pijplijn (aanbevolen) | Buiten, daarna Platform | `pijplijn.md`: per klant de fase en de waarde | Bron: `Heel simple sales funnel (1).xlsx`: vijf fases van contact gelegd (10%) tot opdracht (100%) |
-| 4 | Maak je impact zichtbaar (aanbevolen) | AI-app | `impact.md`: per kapitaal doel, activiteit en resultaat | Bron: GPT 09; Workshop Inzicht in impact; Bijlage stap 6 (meervoudige waarde) |
+| 2 | Leg vast hoe je verkocht | AI-app, via een pull request | `skills/verkoopaanpak/SKILL.md` | Harmen ("gaandeweg ontdekt"); Bron: Workshop Verkoopgesprekken (VACATIO, SPIN, DMU) · skill: voorstel |
+| 3 | Zet je volgende klanten in een pijplijn | Buiten, daarna Platform | `pijplijn.md`: per klant de fase en de waarde | Bron: `Heel simple sales funnel (1).xlsx`: vijf fases van contact gelegd (10%) tot opdracht (100%) |
+| 4 | Maak je impact zichtbaar | AI-app | `impact.md`: per kapitaal doel, activiteit en resultaat | Bron: GPT 09; Workshop Inzicht in impact; Bijlage stap 6 (meervoudige waarde) |
 
 - **Stap 1.** De knop "Ik heb een klant" staat vanaf level 1 op het platform. Gebruik je hem, dan licht level 6 op, ook als je nog in level 4 of 5 zit.
 - **Stap 2.** Je AI haalt uit je feedbackbestanden wat werkte: welke opening, welk voorstel, welke bezwaren en wat je antwoordde. Hij zet dat in de volgorde van VACATIO: verkenning, analyse, confrontatie, argumentatie, tegenwerpingen, instemming, order. In de verkenning gebruik je SPIN-vragen: situatie, probleem, implicatie, nuttig effect. Daarna bereidt je AI elk gesprek met een nieuw iemand voor met je eigen skill.
 - **Stap 3.** Na elk gesprek zet je de klant een fase verder. De pijplijn rekent de gewogen waarde uit, zoals de funnel uit de bronnen.
 - **Stap 4.** Zes kapitalen: financieel, geproduceerd, intellectueel, menselijk, sociaal en natuurlijk. Per kapitaal ook de fase in de volwassenheidsmatrix.
 
-**Check:** minstens 1 betalende klant in `klanten.md` (`minListItems`, bestaat al). *(Voorstel)*
+**Checks:** minstens 1 betalende klant in `klanten.md` (`minListItems`, bestaat al) · `skills/verkoopaanpak/SKILL.md` bestaat, met `name` en `description` (`fileExists`) · `pijplijn.md` en `impact.md` ingevuld. De kern: je eerste klant. *(Voorstel)*
 
 **Skills:**
 
@@ -441,7 +443,6 @@ Geen code in dit document, wel deze gevolgen voor later:
 - `platform/src/lib/levels/lockedLevels.ts`: de mijlpaal van level 6 noemt nog "zicht op een positieve cashflow".
 - De levelstabel in de spec van 15 oktober: level 6 staat daar met mijlpaal 5 en 6.
 - `levelStatus`: level 6 kan klaar zijn terwijl level 4 of 5 nog open staan. Nu gaan levels strikt op volgorde open.
-- Stappen krijgen een kenmerk "aanbevolen": ze tonen een vinkje, maar tellen niet mee voor klaar.
 - `level1.ts`: de toets wordt stap 5 en levert ook `vpc.md`; de check wordt `madlib.md` en `vpc.md`.
 - `level2.ts`: de uploadvakken als voortgang met kopieerblok, de stap met de pull request, het resultaatbestand en de nieuwe check.
 - `starter-repo/`: templates en skills van level 1 en hoger gaan naar het platform; `AGENTS.md` krijgt de algemene skillregel en de regel over keuzes en materiaal vanaf level 2; `.gitignore` krijgt de map `opnames/`.
@@ -459,5 +460,4 @@ Geen code in dit document, wel deze gevolgen voor later:
 
 ## Open vragen voor Harmen
 
-1. **Telt alleen de kern voor klaar?** Voorstel: de andere stappen (visie, aannames, de pull request, testkaart, BMC, AGENTS.md, je eigen skill) staan als aanbevolen op de kaart, maar houden je niet tegen. Dan kan een deelnemer bijvoorbeeld level 2 afronden zonder de pull request te doen.
-2. **Hoe lang mag een proeftijd duren in een training?** Je noemde een maand. In een blok van 7 weken, zoals bij de reader, is dat krap naast level 1 tot en met 3.
+1. **Hoe lang mag een proeftijd duren in een training?** Je noemde een maand. In een blok van 7 weken, zoals bij de reader, is dat krap naast level 1 tot en met 3.
