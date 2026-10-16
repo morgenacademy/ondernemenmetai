@@ -2,7 +2,7 @@
 
 Voor docenten en trainers. Hier staat waar het platform op checkt, en wanneer een level voldaan is. De deelnemer ziet deze checks niet. Die ziet per level alleen het doel in de eerste kolom.
 
-Bron: `docs/superpowers/specs/2026-10-16-levels-1-6-opzet.md`, besloten met Harmen van Heist op 16 oktober 2026. Dit is de opzet; de checks in de code kunnen nog afwijken.
+Bron: `docs/superpowers/specs/2026-10-16-levels-1-6-opzet.md`, besloten met Harmen van Heist op 16 oktober 2026. Level 0 tot en met 2 checken in de klikbare demo precies zoals hieronder. Level 3 tot en met 6, de knop "Ik heb een klant" en de markering bij teruggaan zijn nog opzet.
 
 ## Per level
 
