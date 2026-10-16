@@ -1,0 +1,8 @@
+# Audio-opnames blijven op je eigen computer (privacy)
+*.m4a
+*.mp3
+*.wav
+*.aac
+*.ogg
+*.webm
+.DS_Store
