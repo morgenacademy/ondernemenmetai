@@ -1,11 +1,13 @@
 import { toMarkdown } from '../markdown';
-import { fileFilled, minListItems } from './checks';
+import { fileExists, fileFilled, minListItems } from './checks';
 import type { FormValues, LevelDef } from './types';
 
 export const IDEE_PATH = 'level-1-idee/idee.md';
 export const VISIE_PATH = 'level-1-idee/visie.md';
 export const MADLIB_PATH = 'level-1-idee/madlib.md';
 export const AANNAMES_PATH = 'level-1-idee/aannames.md';
+export const VPC_PATH = 'level-1-idee/vpc.md';
+export const FEEDBACK_PROPOSITIE_PATH = 'level-1-idee/feedback-propositie.md';
 
 export function madlibSentence(v: FormValues): string {
   return `Mijn bedrijf, ${v.naam.trim()}, biedt ${v.aanbod.trim()} voor ${v.doelgroep.trim()} die ${v.probleem.trim()} met ${v.usp.trim()}.`;
@@ -23,10 +25,17 @@ export function aannamesToMarkdown(text: string): string {
 export const level1: LevelDef = {
   id: 1,
   name: 'Idee',
-  summary: 'Zet je idee, je visie en een eerste waardepropositie neer, en markeer wat nog aanname is.',
-  milestone: 'Start: jouw idee in één zin, met je aannames op een rij.',
+  summary: 'Zet je idee en je visie neer, breng het terug tot één zin, en maak met je AI een eerste waardepropositie vol aannames.',
+  milestone: 'Start: jouw idee in één zin en een eerste waardepropositie, met je aannames op een rij.',
   ready: true,
   steps: [
+    {
+      id: 'l1-ideeen',
+      title: 'Nog geen idee?',
+      kind: 'action',
+      optional: true,
+      aiPrompt: 'Gebruik skill idee-generator. Help me aan drie richtingen voor een onderneming en zet ze in level-1-idee/ideeen.md. Stel je vragen één voor één.',
+    },
     {
       id: 'l1-idee',
       title: 'Zet je idee uiteen',
@@ -58,7 +67,7 @@ export const level1: LevelDef = {
     },
     {
       id: 'l1-madlib',
-      title: 'Je waardepropositie in één zin',
+      title: 'Je idee in één zin',
       kind: 'form',
       fields: [
         { kind: 'text', name: 'naam', label: 'Naam van je bedrijf' },
@@ -88,16 +97,20 @@ export const level1: LevelDef = {
       toFile: (v) => ({ path: AANNAMES_PATH, message: 'Aannames gemarkeerd', content: toMarkdown(null, aannamesToMarkdown(v.aannames)) }),
     },
     {
-      id: 'l1-toets',
-      title: 'Laat je AI je propositie toetsen',
+      id: 'l1-propositie',
+      title: 'Maak de eerste versie van je waardepropositie',
       kind: 'action',
-      aiPrompt: 'Gebruik skill propositie-validator. Lees de bestanden in level-1-idee/ en toets mijn waardepropositie kritisch. Stel je vragen één voor één.',
+      aiPrompt:
+        'Gebruik skill propositie-validator. Lees de bestanden in level-1-idee/ en toets mijn waardepropositie kritisch. Stel je vragen één voor één. Zet de actiepunten in feedback-propositie.md en sluit af met mijn canvas in vpc.md.',
+      popup: { label: 'Wat haalde mijn AI op?', title: 'Je repo staat op twee plekken', contentId: 'l1-ophalen', plaatje: 'twee-plekken' },
     },
   ],
   checks: [
     fileFilled('idee', 'l1-idee', IDEE_PATH, 'Idee uiteengezet'),
     fileFilled('visie', 'l1-visie', VISIE_PATH, 'Visie geformuleerd'),
-    fileFilled('madlib', 'l1-madlib', MADLIB_PATH, 'Waardepropositie in één zin'),
+    fileFilled('madlib', 'l1-madlib', MADLIB_PATH, 'Idee in één zin'),
     minListItems('aannames', 'l1-aannames', AANNAMES_PATH, 3, 'Minstens 3 aannames'),
+    fileFilled('vpc', 'l1-propositie', VPC_PATH, 'Canvas ingevuld'),
+    fileExists('feedback-propositie', 'l1-propositie', FEEDBACK_PROPOSITIE_PATH, 'Feedback op je propositie'),
   ],
 };

@@ -3,11 +3,13 @@ import type { Commit } from '../lib/repo/mockRepo';
 import type { RepoInfo, RepoSnapshot } from '../lib/repo/types';
 import { treeRows } from './tree';
 
-type Props = { info: RepoInfo; snapshot: RepoSnapshot; commits: Commit[]; lastWritten: string | null };
+/** showPullRequests: pull requests komen pas in level 2; daarvoor noemt het paneel ze niet. */
+type Props = { info: RepoInfo; snapshot: RepoSnapshot; commits: Commit[]; lastWritten: string | null; showPullRequests: boolean };
 
-export function RepoPaneel({ info, snapshot, commits, lastWritten }: Props) {
+export function RepoPaneel({ info, snapshot, commits, lastWritten, showPullRequests }: Props) {
   const [open, setOpen] = useState<string | null>(null);
   const prs = info.mergedPullRequests;
+  const zichtbaarheid = info.isPrivate ? 'Privé' : 'Openbaar';
   return (
     <aside className="card self-start" aria-label="Jouw repo">
       <p className="eyebrow">Jouw repo</p>
@@ -15,7 +17,7 @@ export function RepoPaneel({ info, snapshot, commits, lastWritten }: Props) {
         {info.owner}/{info.name}
       </h2>
       <p className="mt-1 text-sm text-[var(--text-secondary)]">
-        {info.isPrivate ? 'Privé' : 'Openbaar'} · {prs} gemergde pull request{prs === 1 ? '' : 's'}
+        {showPullRequests ? `${zichtbaarheid} · ${prs} gemergde pull request${prs === 1 ? '' : 's'}` : zichtbaarheid}
       </p>
       <ul className="repo-boom">
         {treeRows(Object.keys(snapshot.files)).map((row) => (

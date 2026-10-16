@@ -1,4 +1,5 @@
-# Audio-opnames blijven op je eigen computer (privacy)
+# Opnames en ruwe transcripts blijven op je eigen computer (privacy)
+opnames/
 *.m4a
 *.mp3
 *.wav

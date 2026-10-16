@@ -2,13 +2,16 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { evaluateLevel } from '../lib/levels/evaluate';
 import { level0 } from '../lib/levels/level0';
+import { level1 } from '../lib/levels/level1';
+import { level2 } from '../lib/levels/level2';
+import type { LevelDef } from '../lib/levels/types';
 import { starterFiles } from '../lib/repo/starterFiles';
 import { StapKaart } from './StapKaart';
 
 const snapshot = { files: starterFiles, mergedPullRequests: 0 };
 const step = level0.steps.find((s) => s.id === 'l0-repo')!;
 const html = renderToStaticMarkup(
-  <StapKaart level={level0} step={step} index={4} snapshot={snapshot} evaluation={evaluateLevel(level0, snapshot)} setup={{}} onSave={async () => true} />,
+  <StapKaart level={level0} step={step} nummer={5} snapshot={snapshot} evaluation={evaluateLevel(level0, snapshot)} setup={{}} onSave={async () => true} />,
 );
 
 describe('pop-up "Waarom een repo?"', () => {
@@ -33,5 +36,48 @@ describe('pop-up "Waarom een repo?"', () => {
     for (const kop of ['Het platform kan niet in je map meekijken', 'Je ziet niet terug wat je AI deed', 'Je kunt niet eerst nakijken', 'Je AI kan er niet in de cloud in werken']) {
       expect(html).toContain(`<h3>${kop}</h3>`);
     }
+  });
+});
+
+const popupVan = (level: LevelDef, stepId: string) => {
+  const stap = level.steps.find((s) => s.id === stepId)!;
+  const kaart = renderToStaticMarkup(
+    <StapKaart level={level} step={stap} nummer={5} snapshot={snapshot} evaluation={evaluateLevel(level, snapshot)} setup={{}} onSave={async () => true} />,
+  );
+  return kaart.slice(kaart.indexOf('<dialog'));
+};
+
+describe('pop-up "Wat haalde mijn AI op?" (level 1)', () => {
+  const popup = popupVan(level1, 'l1-propositie');
+  const plaatje = popup.match(/<figure[\s\S]*?<\/figure>/)?.[0] ?? '';
+
+  it('toont het plaatje met je computer en GitHub', () => {
+    expect(plaatje).toContain('Je computer');
+    expect(plaatje).toContain('GitHub');
+  });
+
+  it('het plaatje heeft in level 1 pull erbij, maar nog geen map die alleen op je computer staat', () => {
+    expect(plaatje).toMatch(/commit en push/i);
+    expect(plaatje).toMatch(/pull/i);
+    expect(plaatje).not.toContain('opnames/');
+  });
+
+  it('noemt de vraag die altijd werkt', () => {
+    expect(popup).toContain('Is alles in sync?');
+  });
+});
+
+describe('pop-up "Wat is een pull request?" (level 2)', () => {
+  const popup = popupVan(level2, 'l2-canvas');
+  const plaatje = popup.match(/<figure[\s\S]*?<\/figure>/)?.[0] ?? '';
+
+  it('het plaatje krijgt een map die alleen op je computer staat, en merge', () => {
+    expect(plaatje).toContain('opnames/');
+    expect(plaatje).toMatch(/merge/i);
+    expect(plaatje).toMatch(/pull/i);
+  });
+
+  it('legt uit waar je klikt: Publish branch, Create Pull Request en Merge pull request', () => {
+    for (const knop of ['Publish branch', 'Create Pull Request', 'Merge pull request']) expect(popup).toContain(knop);
   });
 });

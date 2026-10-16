@@ -13,23 +13,28 @@ export type Field =
 export type FormValues = Record<string, string>;
 export type FileWrite = { path: string; content: string; message: string };
 
-/** Een knop die extra uitleg in een pop-up opent. De tekst staat in content/levels/level-N/<contentId>.md. */
-export type StepPopup = { label: string; title: string; contentId: string };
-type StepBase = { id: string; title: string; aiPrompt?: string; popup?: StepPopup };
+/**
+ * Een knop die extra uitleg in een pop-up opent. De tekst staat in content/levels/level-N/<contentId>.md.
+ * plaatje 'twee-plekken' toont je computer en GitHub, met wat er in dit level bij komt.
+ */
+export type StepPopup = { label: string; title: string; contentId: string; plaatje?: 'twee-plekken' };
+/** optional = een vrije kaart zonder check, zoals "Nog geen idee?". Die krijgt geen nummer. */
+type StepBase = { id: string; title: string; aiPrompt?: string; popup?: StepPopup; optional?: boolean };
 export type FormStep = StepBase & {
   kind: 'form';
   fields: Field[];
   toFile: (values: FormValues, s: RepoSnapshot) => FileWrite;
 };
 export type ActionStep = StepBase & { kind: 'action' };
-export type UploadStep = StepBase & {
-  kind: 'uploads';
+/** Vakken die afvinken zodra er een bestand in de map staat. Het platform uploadt zelf niets. */
+export type VoortgangStep = StepBase & {
+  kind: 'voortgang';
   folder: string;
   required: (s: RepoSnapshot) => number;
 };
 /** Downloadpagina voor de AI-app die bij de gekozen setup hoort. */
 export type DownloadStep = StepBase & { kind: 'download' };
-export type Step = FormStep | ActionStep | UploadStep | DownloadStep;
+export type Step = FormStep | ActionStep | VoortgangStep | DownloadStep;
 
 export type LevelDef = {
   id: number;
