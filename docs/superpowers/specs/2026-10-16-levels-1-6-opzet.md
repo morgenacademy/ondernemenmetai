@@ -44,6 +44,8 @@ Een level is klaar als alle stappen af zijn; pas dan gaat het volgende open *(Ha
 - **Level 6 is de uitzondering.** Op het platform staat vanaf level 1 een knop "Ik heb een klant". Die zet de klant in `klanten.md`, en level 6 gaat open, ook als level 4 of 5 nog niet af is. Je eerste klant kan op elk moment komen. Level 6 zelf is klaar als ook de stappen daarin af zijn. *(Harmen: "elk moment" · knop: voorstel)*
 - **Gekocht is de beste feedback**, maar in de eerste ronde van level 4 gebeurt dat zelden. Gebeurt het wel, dan was je misschien te laat met de markt op. *(Harmen)*
 
+**Twee weergaven.** De deelnemer ziet per level het doel in gewone taal, bijvoorbeeld "Je hebt een MVP die je aan je doelgroep kunt laten zien." De checks en bestandsnamen ziet de deelnemer niet. Docenten en trainers zien de hele tabel, zodat ze kunnen uitleggen en verantwoorden wanneer een level voldaan is. *(Harmen)* De tabel voor docenten staat in `content/docenten/wanneer-is-een-level-klaar.md`, met het doel voor de deelnemer erbij. In de docentenmodule kan het platform hem later uit de checks zelf opbouwen, zodat tabel en code niet uit elkaar lopen. *(Voorstel)*
+
 ## Besloten op 16 oktober
 
 1. **Het platform zet templates en skills in de repo als een level opengaat.** Hoe we de deelnemer daarin meenemen, staat nog open; zie "Een skill in één zin".
@@ -66,6 +68,7 @@ Een level is klaar als alle stappen af zijn; pas dan gaat het volgende open *(Ha
 14. **Level 5 vraagt minstens één ronde na het doorontwikkelen.** De check wil twee resultaatkaarten zien. Akkoord voor nu.
 15. **De deelnemer leert dat de repo op twee plekken staat**: op de computer en op GitHub. Het plaatje groeit per level, en "Is alles in sync?" aan je AI vragen is altijd genoeg.
 16. **Het platform kent geen termijnen.** Een level gaat open als je eraan toe bent. Na een dag is prima, na zes maanden ook. Een proeftijd duurt dus zo lang als je MVP vraagt.
+17. **De checktabel is voor docenten, het doel voor de deelnemer.** De tabel "Wanneer is een level klaar?" blijft bewaard voor verantwoording en komt in een docentenmodule. De deelnemer ziet per level alleen het doel om het uit te spelen.
 
 ## Hoe de modellen op elkaar passen
 
@@ -479,6 +482,7 @@ Geen code in dit document, wel deze gevolgen voor later:
 - Vorm en beeld van de losse kaarten. *(Harmen)*
 - Hoe we het maken van een MVP ondersteunen: rapid prototyping met AI, *Businessideeën testen*, de workshop MVP-ontwikkeling. *(Harmen)*
 - Lokale spraakherkenning testen met Codex en op Windows: installatie zonder terminal voor de deelnemer, duur per interview, kwaliteit in het Nederlands. Met Claude op de Mac werkt het al. *(Harmen)*
+- De docentenmodule: de checktabel per level, opgebouwd uit de checks in de code, en per deelnemer welke checks groen zijn. *(Harmen)*
 - Module 2: schaalbaar verkopen, positieve cashflow, stap 7 tot en met 12.
 
 ## Open vragen voor Harmen
