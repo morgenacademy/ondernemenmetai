@@ -2,6 +2,7 @@ import { filterVariants, stepContent, type Setup } from '../lib/content';
 import type { FileWrite, LevelDef, LevelEvaluation, Step } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
 import { FormStap } from './FormStap';
+import { DownloadStap } from './DownloadStap';
 import { CheckIcon, CircleIcon } from './icons';
 import { KopieerBlok } from './KopieerBlok';
 import { Markdown } from './Markdown';
@@ -31,6 +32,7 @@ export function StapKaart({ level, step, index, snapshot, evaluation, setup, onS
       {content && <Markdown text={filterVariants(content, setup)} />}
       {step.kind === 'form' && <FormStap step={step} snapshot={snapshot} alreadyDone={done} onSave={onSave} />}
       {step.kind === 'uploads' && <UploadStap step={step} snapshot={snapshot} onSave={onSave} />}
+      {step.kind === 'download' && <DownloadStap setup={setup} />}
       {step.aiPrompt && <KopieerBlok prompt={step.aiPrompt} />}
       {checks.length > 0 && (
         <ul className="checks" aria-label="Checks op je repo">
