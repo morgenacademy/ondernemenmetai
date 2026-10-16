@@ -52,6 +52,14 @@ describe('huisstijl-tokens', () => {
     }
   });
 
+  it('de pop-up staat in het midden, ook al zet de reset van Tailwind margin op 0', () => {
+    expect(css).toMatch(/\.popup\s*\{[^}]*margin:\s*auto/);
+  });
+
+  it('de hoofdknop krijgt zichtbare focus', () => {
+    expect(css).toMatch(/\.btn-p:focus-visible\s*\{[^}]*outline:/);
+  });
+
   it('het uploadlabel krijgt zichtbare focus als de verborgen bestandskiezer focus heeft', () => {
     expect(css).toMatch(/\.btn-o:focus-within\s*\{[^}]*outline:\s*2px solid var\(--accent\)/);
   });

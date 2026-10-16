@@ -25,6 +25,10 @@ describe('pop-up "Waarom een repo?"', () => {
     expect(html).toMatch(/<dialog[\s\S]*<button[^>]*>Sluiten<\/button>[\s\S]*<\/dialog>/);
   });
 
+  it('de titel kan de focus krijgen, zodat je bij openen bovenaan begint', () => {
+    expect(html).toMatch(/<h2[^>]*tabindex="-1"[^>]*>Wat een gedeelde map niet kan<\/h2>/);
+  });
+
   it('bevat de vier redenen', () => {
     for (const kop of ['Het platform kan niet in je map meekijken', 'Je ziet niet terug wat je AI deed', 'Je kunt niet eerst nakijken', 'Je AI kan er niet in de cloud in werken']) {
       expect(html).toContain(`<h3>${kop}</h3>`);

@@ -10,6 +10,7 @@ import { Markdown } from './Markdown';
 export function InfoPopup({ levelId, popup }: { levelId: number; popup: StepPopup }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
+  const title = useRef<HTMLHeadingElement>(null);
   const id = `popup-${popup.contentId}`;
   return (
     <>
@@ -19,7 +20,11 @@ export function InfoPopup({ levelId, popup }: { levelId: number; popup: StepPopu
         className="btn-o btn-klein mt-4"
         aria-haspopup="dialog"
         aria-controls={id}
-        onClick={() => dialog.current?.showModal()}
+        onClick={() => {
+          dialog.current?.showModal();
+          // Begin bovenaan: anders springt de focus naar Sluiten en scrolt de pop-up op een telefoon naar beneden.
+          title.current?.focus();
+        }}
       >
         {popup.label}
       </button>
@@ -34,7 +39,7 @@ export function InfoPopup({ levelId, popup }: { levelId: number; popup: StepPopu
         }}
       >
         <div className="popup-inhoud">
-          <h2 id={`${id}-titel`} className="popup-titel">
+          <h2 id={`${id}-titel`} ref={title} tabIndex={-1} className="popup-titel">
             {popup.title}
           </h2>
           <Markdown text={stepContent(levelId, popup.contentId) ?? ''} />
