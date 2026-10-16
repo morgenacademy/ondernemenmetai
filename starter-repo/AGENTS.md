@@ -5,9 +5,10 @@ Deze repo is de werkmap van een startende onderneming. De eigenaar volgt het pro
 ## Hoe deze repo in elkaar zit
 
 - `level-0-werkplek/`: setup en de git-oefening.
-- `level-1-idee/`: idee, visie, waardepropositie (madlib) en aannames.
-- `level-2-probleemvalidatie/`: doelgroep, interviewvragen, interviews en analyse.
+- `level-1-idee/`: idee, visie, waardepropositie (madlib), aannames, de feedback op de propositie (`feedback-propositie.md`) en het Value Proposition Canvas (`vpc.md`). Soms ook `ideeen.md`, met drie richtingen voor wie nog geen idee had.
+- `level-2-probleemvalidatie/`: doelgroep, interviewvragen, interviews, analyse en de eerste doelgroep (`eerste-doelgroep.md`).
 - `skills/`: werkwijzen die je volgt als de eigenaar erom vraagt.
+- `opnames/`: opnames en ruwe transcripts van interviews. Deze map staat alleen op de computer van de eigenaar: hij staat in `.gitignore` en komt nooit op GitHub.
 
 Elk level bouwt voort op het vorige. Lees eerst de bestanden van eerdere levels voordat je aan een nieuw level werkt.
 
@@ -17,12 +18,7 @@ Templatebestanden beginnen met een HTML-commentaar met het woord "invullen". Het
 
 ## Skills
 
-Vraagt de eigenaar om een skill, of past een skill duidelijk bij de vraag, lees dan het bijbehorende bestand en volg het:
-
-- `skills/propositie-validator/SKILL.md`: waardepropositie kritisch toetsen (level 1).
-- `skills/interviewhulp/SKILL.md`: interviewvragen formuleren en een interview voorbereiden (level 2).
-- `skills/transcriberen/SKILL.md`: een gesprek omzetten naar een interviewbestand (level 2).
-- `skills/interview-analyse/SKILL.md`: interviews analyseren en `analyse.md` vullen (level 2).
+In `skills/` staat per skill een map met een `SKILL.md`. Lees aan het begin van een sessie de frontmatter van elk `SKILL.md`: `name` is de naam van de skill, `description` zegt wanneer je hem gebruikt. Vraagt de eigenaar om een skill, of past een skill duidelijk bij de vraag, lees dan het hele bestand en volg het.
 
 ## Werkwijze
 
@@ -30,11 +26,21 @@ Vraagt de eigenaar om een skill, of past een skill duidelijk bij de vraag, lees 
 - Werk in het Nederlands, tenzij de eigenaar iets anders vraagt.
 - Stel vragen één voor één en wacht op antwoord.
 - Verzin geen marktinformatie. Wat niet uit de repo of van de eigenaar komt, benoem je als aanname.
-- Leg wijzigingen vast met een duidelijke commit; de eigenaar pusht via GitHub Desktop. Branches en pull requests komen in een later level.
+- Leg wijzigingen vast met een duidelijke commit; de eigenaar pusht via GitHub Desktop.
+- Vraagt de eigenaar "Is alles in sync?" of "Staat mijn interview al in de repo?", kijk dan met `git fetch` en `git status` en antwoord in één zin: wat nog alleen op de computer staat (niet vastgelegd of niet gepusht), wat nog op GitHub klaarstaat om op te halen, en wat bewust op de computer blijft, zoals `opnames/`.
 - Schrijf kort en concreet, zonder vage claims.
+
+## Keuzes en materiaal
+
+Zodra `level-2-probleemvalidatie/doelgroep.md` is ingevuld, maak je onderscheid tussen keuzes van de eigenaar en materiaal:
+
+- **Keuzes van de eigenaar, via een pull request:** idee, visie, madlib, canvas (`vpc.md`), aannames, doelgroep (`doelgroep.md`), gekozen oplossing, prijs, MVP, product en `AGENTS.md`. Zet zo'n wijziging op een nieuwe branch, leg hem daar vast en vraag de eigenaar om in GitHub Desktop op Publish branch en Create Pull Request te klikken. Is de pull request gemerged, ga dan terug naar `main` en haal de nieuwste versie op.
+- **Materiaal en uitwerkingen, direct:** interviews, feedback, analyses (zoals `analyse.md` en `eerste-doelgroep.md`), testkaarten, resultaatkaarten, BMC, klanten en pijplijn. Die leg je vast op `main`; de eigenaar pusht.
+
+Tot die tijd leg je alles direct vast op `main`, zonder branches.
 
 ## Privacy
 
 - De repo hoort privé te zijn. Is hij openbaar, waarschuw dan voordat je interviews toevoegt.
 - Gebruik in transcripts en analyses nooit volledige namen van geïnterviewden. Een rol en initialen zijn genoeg.
-- Audiobestanden horen niet in de repo (zie `.gitignore`).
+- Opnames en ruwe transcripts horen in `opnames/`. Die map staat in `.gitignore`, dus git ziet hem niet. Lees daaruit en zet alleen het interview zonder namen in `interviews/`.

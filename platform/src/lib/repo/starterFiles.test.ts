@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { MARKER, parseMarkdown } from '../markdown';
+import gitignore from '../../../../starter-repo/.gitignore?raw';
 import { starterFiles } from './starterFiles';
+
+const sectie = (kop: string) => starterFiles['AGENTS.md'].split(`## ${kop}`)[1]?.split('\n## ')[0] ?? '';
 
 const TEMPLATES = [
   'level-0-werkplek/werkplek.md',
@@ -8,9 +11,11 @@ const TEMPLATES = [
   'level-1-idee/visie.md',
   'level-1-idee/madlib.md',
   'level-1-idee/aannames.md',
+  'level-1-idee/vpc.md',
   'level-2-probleemvalidatie/doelgroep.md',
   'level-2-probleemvalidatie/interviewvragen.md',
   'level-2-probleemvalidatie/analyse.md',
+  'level-2-probleemvalidatie/eerste-doelgroep.md',
 ];
 
 describe('starter-repo', () => {
@@ -32,10 +37,55 @@ describe('starter-repo', () => {
     }
   });
 
-  it('AGENTS.md laat de eigenaar via GitHub Desktop pushen, zonder branches of pull requests', () => {
-    const agents = starterFiles['AGENTS.md'];
-    expect(agents).toContain('Leg wijzigingen vast met een duidelijke commit; de eigenaar pusht via GitHub Desktop. Branches en pull requests komen in een later level.');
-    expect(agents).not.toContain('Wijzigingen gaan via een branch en een pull request');
+  it('AGENTS.md laat de eigenaar via GitHub Desktop pushen', () => {
+    expect(sectie('Werkwijze')).toContain('Leg wijzigingen vast met een duidelijke commit; de eigenaar pusht via GitHub Desktop.');
+    expect(starterFiles['AGENTS.md']).not.toContain('Branches en pull requests komen in een later level.');
+  });
+
+  it('AGENTS.md: vanaf level 2 gaan keuzes via een pull request en komt materiaal direct in de repo', () => {
+    const regel = sectie('Keuzes en materiaal');
+    expect(regel).toContain('level-2-probleemvalidatie/doelgroep.md');
+    expect(regel).toMatch(/Keuzes van de eigenaar, via een pull request:[^\n]*madlib[^\n]*canvas[^\n]*aannames[^\n]*doelgroep/);
+    expect(regel).toMatch(/Materiaal en uitwerkingen, direct:[^\n]*interviews[^\n]*analyses/);
+    expect(regel).toMatch(/branch/);
+    expect(regel).toMatch(/Tot die tijd[^\n]*direct/);
+  });
+
+  it('AGENTS.md beantwoordt "Is alles in sync?" in één zin, met opnames/ als map die bewust lokaal blijft', () => {
+    const regel = sectie('Werkwijze').split('\n').find((r) => r.includes('Is alles in sync?')) ?? '';
+    expect(regel).toMatch(/in één zin/);
+    expect(regel).toMatch(/alleen op (de|je) computer/);
+    expect(regel).toMatch(/GitHub/);
+    expect(regel).toContain('`opnames/`');
+  });
+
+  it('AGENTS.md laat de AI de frontmatter van elk SKILL.md lezen, zonder lijst met losse skills', () => {
+    const skills = sectie('Skills');
+    expect(skills).toMatch(/frontmatter van elk `SKILL\.md`/);
+    expect(skills).not.toMatch(/skills\/[a-z-]+\/SKILL\.md/);
+  });
+
+  it('AGENTS.md beschrijft vpc.md, eerste-doelgroep.md en de lokale map opnames/', () => {
+    const opbouw = sectie('Hoe deze repo in elkaar zit');
+    for (const deel of ['vpc.md', 'eerste-doelgroep.md', '`opnames/`']) expect(opbouw, deel).toContain(deel);
+  });
+
+  it('.gitignore houdt de map opnames/ buiten git', () => {
+    expect(gitignore.split('\n').map((r) => r.trim())).toContain('opnames/');
+  });
+
+  it('vpc.md heeft een klantkant en een aanbodkant, met aannames', () => {
+    const vpc = starterFiles['level-1-idee/vpc.md'];
+    for (const kop of ['Klantkant', 'Jobs', 'Pains', 'Gains', 'Aanbodkant', 'Producten en diensten', 'Pain relievers', 'Gain creators']) {
+      expect(vpc, kop).toMatch(new RegExp(`^#+ ${kop}$`, 'm'));
+    }
+    expect(vpc).toContain('(aanname)');
+  });
+
+  it('eerste-doelgroep.md heeft lege velden gevonden, doelgroep en probleem', () => {
+    const parsed = parseMarkdown(starterFiles['level-2-probleemvalidatie/eerste-doelgroep.md']);
+    expect(parsed.error).toBeUndefined();
+    expect(parsed.frontmatter).toEqual({ gevonden: null, doelgroep: null, probleem: null });
   });
 
   it('AGENTS.md laat de AI elke sessie eerst de nieuwste versie ophalen', () => {
