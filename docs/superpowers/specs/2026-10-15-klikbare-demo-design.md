@@ -6,7 +6,7 @@ Datum: 15 oktober 2026 · Status: goedgekeurd ontwerp, basis voor het implementa
 
 Morgen geeft ondernemerschapstrainingen. Deelnemers gebruiken steeds vaker AI, maar weten niet hoe ze die goed inrichten. De waarde van AI zit in drie dingen: context verzamelen, de AI in een repo laten werken met overzicht, en de AI de uitvoer laten doen (BMC, VPC). Zelf blijf je doen wat AI niet kan: echt de markt op, met interviews, tests en verkoop.
 
-Dit platform leidt deelnemers door levels. Level 0 is de werkplek inrichten: GitHub, een repo, een AI-tool en git. Daarna volgen de ondernemerschapslevels. Een level gaat pas open als het vorige af is. Het platform werkt samen met de repo en de AI van de deelnemer.
+Dit platform leidt deelnemers door levels. Level 0 is de werkplek inrichten: een AI-app, GitHub, een repo en GitHub Desktop. Daarna volgen de ondernemerschapslevels. Een level gaat pas open als het vorige af is. Het platform werkt samen met de repo en de AI van de deelnemer.
 
 ## Besluiten
 
@@ -33,19 +33,20 @@ Dit platform leidt deelnemers door levels. Level 0 is de werkplek inrichten: Git
 
 ### Level 0: Werkplek
 
-De route past zich aan op de gekozen setup: Mac of Windows, en Claude Code of Codex.
+De route past zich aan op de gekozen setup: Mac of Windows, en Claude Code of Codex. Er komt geen terminal aan te pas: geen Homebrew, winget of `gh`.
 
-1. **Kies je setup.** Het platform schrijft `level-0-werkplek/setup.md` met frontmatter `os` en `ai`.
-2. **Maak een GitHub-account.**
-3. **Maak je repo** via "Use this template" op de starter-repo. Geef hem de naam van je onderneming en zet hem op Private.
-4. **Koppel het platform aan je repo.** In de pilot log je in met GitHub en kies je de repo. In de demo is dit nagebootst.
-5. **Installeer git en je AI-tool.** Op Mac via Homebrew, op Windows via winget of Git for Windows. Daarna de Claude desktop-app (Code) of Codex.
-6. **Clone je repo en open hem in je AI.** De AI leest `AGENTS.md` en stelt zich voor.
-7. **Git-basics als oefening.** Je laat je AI een branch maken, `werkplek.md` invullen, een PR openen en mergen.
+1. **Kies je setup.** Je kiest je computer en waar je een abonnement hebt: "Claude (Pro of hoger)" geeft `ai: claude-code`, "ChatGPT (Plus of hoger)" geeft `ai: codex`. Het platform schrijft `level-0-werkplek/setup.md` met frontmatter `os` en `ai`. Heb je nog geen abonnement, dan sluit je er eerst een af.
+2. **Download je AI-app.** Een downloadpagina met één grote kaart voor de gekozen tool (zonder geldige keuze allebei): Claude Code via claude.com/product/claude-code, Codex via openai.com/codex. Downloaden, installeren, inloggen met je Claude- of ChatGPT-account; bij Claude daarna het tabblad Code.
+3. **Maak een GitHub-account.**
+4. **Installeer GitHub Desktop** via github.com/apps/desktop en log in met GitHub. Alleen bij Windows met Claude Code staat er een regel bij: vraagt de Claude-app om Git, installeer dan Git for Windows.
+5. **Maak je repo** via "Use this template" op de starter-repo. Geef hem de naam van je onderneming en zet hem op Private. Een knop "Waarom een repo en geen gedeelde map?" opent een pop-up met vier redenen: het platform kan meekijken, git bewaart elke versie, je went aan nakijken voor je iets overneemt, en je AI kan in de cloud op de repo werken.
+6. **Koppel het platform aan je repo.** In de pilot log je in met GitHub en kies je de repo. In de demo is dit nagebootst.
+7. **Zet je repo op je computer en open hem in je AI.** In GitHub Desktop: File › Clone repository, je repo, een map in Documenten. Daarna open je die map in je AI-app (bij Claude het tabblad Code). De AI leest `AGENTS.md` en stelt zich voor.
+8. **Je eerste opdracht.** Je AI vult `werkplek.md` met je in en haalt de markering weg. Jij legt het vast in GitHub Desktop met Commit to main en zet het online met Push origin.
 
-Je AI koppelen aan de repo komt na het installeren en clonen, omdat Claude Code en Codex op de lokale clone werken. Wat eerst moet, is de koppeling tussen platform en repo (stap 4).
+Branches en pull requests komen in een later level terug; de gewoonte "de AI stelt voor, ik keur goed" hoort daar.
 
-**Check:** `setup.md` bestaat, `werkplek.md` is ingevuld, en er is minstens één gemergde PR.
+**Check:** `setup.md` bestaat en `werkplek.md` is ingevuld. **Mijlpaal:** je AI werkt in je eigen repo en je eerste wijziging staat online.
 
 ### Level 1: Idee
 
@@ -93,7 +94,7 @@ level-2-probleemvalidatie/interviews/
 - **Levelkaart.** Genummerde bollen op een stippellijn, zoals het stappenplan-beeld. Elk level heeft een status: af, actief of op slot. Bij een level op slot zie je de beschrijving en de mijlpaal.
 - **Levelpagina.** Een lijst met stappen. Elke stap heeft korte uitleg, een actie (formulier, checklist of uploadvakken), een kopieerblok "Vraag je AI" met een kant-en-klare prompt, en een live check.
 - **Paneel "Jouw repo".** Een bestandsboom van de repo. Een nieuw bestand licht kort op en is aan te klikken om te lezen.
-- **Demobalk.** Alleen in demomodus. Bevat een resetknop en per stap een knop "Doe alsof je AI dit deed" voor wat normaal buiten het platform gebeurt: een PR mergen, een transcript maken of een analyse schrijven. Die knoppen schrijven voorbeeldbestanden in de nep-repo.
+- **Demobalk.** Alleen in demomodus. Bevat een resetknop en per stap een knop "Doe alsof je AI dit deed" voor wat normaal buiten het platform gebeurt: je eerste wijziging pushen, een transcript maken of een analyse schrijven. Die knoppen schrijven voorbeeldbestanden in de nep-repo.
 
 ### Onderdelen
 
