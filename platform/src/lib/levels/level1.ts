@@ -27,12 +27,17 @@ export const level1: LevelDef = {
   name: 'Idee',
   summary: 'Zet je idee en je visie neer, breng het terug tot één zin, en maak met je AI een eerste waardepropositie vol aannames.',
   milestone: 'Start: jouw idee in één zin en een eerste waardepropositie, met je aannames op een rij.',
+  doel: 'Je idee staat in één zin, en je hebt een eerste waardepropositie vol aannames.',
+  vraag: 'Wat is mijn idee, en wat neem ik daarbij aan?',
+  begrip: 'Ophalen (pull)',
+  kern: [MADLIB_PATH, VPC_PATH],
   ready: true,
   steps: [
     {
       id: 'l1-ideeen',
       title: 'Nog geen idee?',
       kind: 'action',
+      waar: ['ai-app'],
       optional: true,
       aiPrompt: 'Gebruik skill idee-generator. Help me aan drie richtingen voor een onderneming en zet ze in level-1-idee/ideeen.md. Stel je vragen één voor één.',
     },
@@ -40,6 +45,7 @@ export const level1: LevelDef = {
       id: 'l1-idee',
       title: 'Zet je idee uiteen',
       kind: 'form',
+      waar: ['platform'],
       fields: [
         { kind: 'textarea', name: 'wat', label: 'Wat ga je doen?' },
         { kind: 'textarea', name: 'voorWie', label: 'Voor wie?' },
@@ -55,6 +61,7 @@ export const level1: LevelDef = {
       id: 'l1-visie',
       title: 'Formuleer je visie',
       kind: 'form',
+      waar: ['platform'],
       fields: [
         { kind: 'textarea', name: 'wereld', label: 'Hoe ziet de wereld eruit als jouw onderneming slaagt?' },
         { kind: 'textarea', name: 'bijdrage', label: 'Wat is jouw bijdrage daaraan?' },
@@ -69,6 +76,7 @@ export const level1: LevelDef = {
       id: 'l1-madlib',
       title: 'Je idee in één zin',
       kind: 'form',
+      waar: ['platform'],
       fields: [
         { kind: 'text', name: 'naam', label: 'Naam van je bedrijf' },
         { kind: 'text', name: 'aanbod', label: 'Aanbod: wat bied je aan?' },
@@ -86,6 +94,7 @@ export const level1: LevelDef = {
       id: 'l1-aannames',
       title: 'Markeer je aannames',
       kind: 'form',
+      waar: ['platform'],
       fields: [
         {
           kind: 'textarea',
@@ -100,6 +109,7 @@ export const level1: LevelDef = {
       id: 'l1-propositie',
       title: 'Maak de eerste versie van je waardepropositie',
       kind: 'action',
+      waar: ['ai-app', 'github-desktop'],
       aiPrompt:
         'Gebruik skill propositie-validator. Lees de bestanden in level-1-idee/ en toets mijn waardepropositie kritisch. Stel je vragen één voor één. Zet de actiepunten in feedback-propositie.md en sluit af met mijn canvas in vpc.md.',
       popup: { label: 'Wat haalde mijn AI op?', title: 'Je repo staat op twee plekken', contentId: 'l1-ophalen', plaatje: 'twee-plekken' },

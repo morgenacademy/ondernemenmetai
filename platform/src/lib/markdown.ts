@@ -52,3 +52,21 @@ export function countListItems(text: string | undefined | null): number {
     return item !== null && item[1].replace(/^\[[^\]]*\]/, '').trim().length > 0;
   }).length;
 }
+
+/** Zet velden in de frontmatter en laat de rest van het bestand staan. */
+export function withFrontmatter(text: string, fields: Frontmatter): string {
+  const { frontmatter, body } = parseMarkdown(text);
+  return toMarkdown({ ...frontmatter, ...fields }, body);
+}
+
+/** Vervangt de tekst onder "## kop" tot de volgende ##-kop, of zet de sectie onderaan als hij er nog niet is. */
+export function upsertSection(body: string, heading: string, content: string): string {
+  const lines = body.replace(/\s+$/, '').split('\n');
+  const start = lines.findIndex((line) => line.trim() === `## ${heading}`);
+  const block = [`## ${heading}`, '', content.trim()];
+  if (start === -1) return `${lines.join('\n')}\n\n${block.join('\n')}\n`;
+  const rest = lines.slice(start + 1);
+  const next = rest.findIndex((line) => /^#{1,2}\s/.test(line));
+  const after = next === -1 ? [] : ['', ...rest.slice(next)];
+  return `${[...lines.slice(0, start), ...block, ...after].join('\n')}\n`;
+}

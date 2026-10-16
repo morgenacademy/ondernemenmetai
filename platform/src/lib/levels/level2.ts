@@ -49,12 +49,17 @@ export const level2: LevelDef = {
   name: 'Probleem-validatie',
   summary: 'Bepaal je doelgroep, interview ze echt, en ontdek met je AI welke groep allemaal hetzelfde probleem ervaart. Daarna werk je je canvas bij.',
   milestone: '1. Een eerste doelgroep die allemaal hetzelfde probleem ervaart.',
+  doel: 'Je weet wie je eerste klanten zijn en welk probleem ze allemaal hebben, en je interviews bewijzen het.',
+  vraag: 'Wie is mijn eerste klant, en welk probleem hebben ze allemaal?',
+  begrip: 'Pull request',
+  kern: [EERSTE_DOELGROEP_PATH, ANALYSE_PATH],
   ready: true,
   steps: [
     {
       id: 'l2-doelgroep',
       title: 'Bepaal je doelgroep',
       kind: 'form',
+      waar: ['platform'],
       fields: [
         { kind: 'textarea', name: 'waarde', label: 'Voor wie creëer je waarde?' },
         { kind: 'textarea', name: 'gebruiker', label: 'Wie gebruikt uiteindelijk je oplossing?' },
@@ -81,13 +86,15 @@ export const level2: LevelDef = {
       id: 'l2-vragen',
       title: 'Formuleer je interviewvragen',
       kind: 'action',
+      waar: ['ai-app'],
       aiPrompt: 'Gebruik skill interviewhulp. Lees level-2-probleemvalidatie/doelgroep.md en help me vraag 5 tot en met 8 in interviewvragen.md te formuleren voor mijn doelgroep.',
     },
-    { id: 'l2-interviewen', title: 'Interview je doelgroep', kind: 'action' },
+    { id: 'l2-interviewen', title: 'Interview je doelgroep', kind: 'action', waar: ['buiten'] },
     {
       id: 'l2-interviews',
       title: 'Zet je interviews in je repo',
       kind: 'voortgang',
+      waar: ['ai-app', 'github-desktop'],
       folder: INTERVIEWS_DIR,
       required: requiredInterviews,
       aiPrompt: 'Gebruik skill transcriberen. Zet het nieuwe interview in opnames/ om.',
@@ -96,6 +103,7 @@ export const level2: LevelDef = {
       id: 'l2-analyse',
       title: 'Analyseer je interviews',
       kind: 'action',
+      waar: ['ai-app'],
       aiPrompt:
         'Gebruik skill interview-analyse. Lees alle interviews in level-2-probleemvalidatie/interviews/, vul analyse.md met mij in en schrijf onze conclusie in eerste-doelgroep.md.',
     },
@@ -103,6 +111,7 @@ export const level2: LevelDef = {
       id: 'l2-canvas',
       title: 'Werk je canvas bij',
       kind: 'action',
+      waar: ['ai-app', 'github-desktop', 'github'],
       aiPrompt:
         'Gebruik skill interview-analyse. Zet bij elke regel in level-1-idee/vpc.md en bij elke aanname in aannames.md wat de interviews zeiden: bevestigd, ontkracht of open. Doe dat op een nieuwe branch, zodat ik een pull request kan maken.',
       popup: { label: 'Wat is een pull request?', title: 'Je AI stelt voor, jij beslist', contentId: 'l2-pull-request', plaatje: 'twee-plekken' },

@@ -16,11 +16,28 @@ const TEMPLATES = [
   'level-2-probleemvalidatie/interviewvragen.md',
   'level-2-probleemvalidatie/analyse.md',
   'level-2-probleemvalidatie/eerste-doelgroep.md',
+  'level-3-prototype/oplossingen.md',
+  'level-3-prototype/oplossing.md',
+  'level-3-prototype/waardepropositie.md',
+  'level-3-prototype/mvp.md',
+  'level-4-marktfeedback/prijs.md',
+  'level-5-productvalidatie/product.md',
+  'level-5-productvalidatie/bmc.md',
+  'level-6-lancering/klanten.md',
+  'level-6-lancering/pijplijn.md',
+  'level-6-lancering/impact.md',
+];
+
+const MAPPEN = [
+  'level-3-prototype/mvp/README.md',
+  'level-4-marktfeedback/testkaarten/README.md',
+  'level-4-marktfeedback/feedback/README.md',
+  'level-4-marktfeedback/resultaten/README.md',
 ];
 
 describe('starter-repo', () => {
   it('bevat README, AGENTS.md, CLAUDE.md en alle templates', () => {
-    for (const path of ['README.md', 'AGENTS.md', 'CLAUDE.md', 'level-2-probleemvalidatie/interviews/README.md', ...TEMPLATES]) {
+    for (const path of ['README.md', 'AGENTS.md', 'CLAUDE.md', 'level-2-probleemvalidatie/interviews/README.md', ...MAPPEN, ...TEMPLATES]) {
       expect(starterFiles[path], path).toBeDefined();
     }
   });
@@ -68,6 +85,21 @@ describe('starter-repo', () => {
   it('AGENTS.md beschrijft vpc.md, eerste-doelgroep.md en de lokale map opnames/', () => {
     const opbouw = sectie('Hoe deze repo in elkaar zit');
     for (const deel of ['vpc.md', 'eerste-doelgroep.md', '`opnames/`']) expect(opbouw, deel).toContain(deel);
+  });
+
+  it('AGENTS.md heeft een lege sectie "Over mijn onderneming" voor level 5', () => {
+    const over = sectie('Over mijn onderneming');
+    expect(over).toMatch(/<!--[^>]*level 5[^>]*-->/);
+    expect(over.replace(/<!--[\s\S]*?-->/g, '').trim()).toBe('');
+  });
+
+  it('AGENTS.md beschrijft de mappen van level 3 tot en met 6', () => {
+    const opbouw = sectie('Hoe deze repo in elkaar zit');
+    for (const map of ['level-3-prototype/', 'level-4-marktfeedback/', 'level-5-productvalidatie/', 'level-6-lancering/']) expect(opbouw, map).toContain(map);
+  });
+
+  it('product.md heeft lege velden besluit en volgende_stap', () => {
+    expect(parseMarkdown(starterFiles['level-5-productvalidatie/product.md']).frontmatter).toEqual({ besluit: null, volgende_stap: null });
   });
 
   it('.gitignore houdt de map opnames/ buiten git', () => {
