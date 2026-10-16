@@ -25,6 +25,15 @@ describe('content', () => {
     expect(filterVariants(md, { os: 'Linux', ai: 'gemini' })).toBe('Intro\nMac-tekst\nWindows-tekst\nCodex-tekst\nSlot');
   });
 
+  it('filterVariants toont een gecombineerd blok alleen als alle keuzes kloppen', () => {
+    const gecombineerd = 'Start\n<!-- alleen:windows+claude-code -->\nGit for Windows\n<!-- /alleen -->\nEind';
+    expect(filterVariants(gecombineerd, { os: 'windows', ai: 'claude-code' })).toBe('Start\nGit for Windows\nEind');
+    expect(filterVariants(gecombineerd, { os: 'mac', ai: 'claude-code' })).toBe('Start\nEind');
+    expect(filterVariants(gecombineerd, { os: 'windows', ai: 'codex' })).toBe('Start\nEind');
+    expect(filterVariants(gecombineerd, { os: 'windows' })).toBe('Start\nGit for Windows\nEind');
+    expect(filterVariants(gecombineerd, {})).toBe('Start\nGit for Windows\nEind');
+  });
+
   it('filterVariants toont alles zolang er geen setup is', () => {
     expect(filterVariants(md, {})).toBe('Intro\nMac-tekst\nWindows-tekst\nCodex-tekst\nSlot');
   });

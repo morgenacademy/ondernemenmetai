@@ -31,15 +31,19 @@ function chosen(values: string[], value: string | undefined): string | undefined
 /**
  * Houdt alleen de blokken over die bij de gekozen computer en AI-tool horen.
  * Is de computer of de AI-tool niet (geldig) gekozen, dan blijven alle blokken daarvoor staan.
+ * "alleen:windows+claude-code" verschijnt alleen als beide kloppen.
  */
 export function filterVariants(md: string, setup: Setup): string {
   const os = chosen(OS_VALUES, setup.os);
   const ai = chosen(AI_VALUES, setup.ai);
-  return md.replace(/<!-- alleen:([a-z-]+) -->\n?([\s\S]*?)<!-- \/alleen -->\n?/g, (_match, tag: string, inner: string) => {
-    if (OS_VALUES.includes(tag)) return !os || tag === os ? inner : '';
-    if (AI_VALUES.includes(tag)) return !ai || tag === ai ? inner : '';
-    return os || ai ? '' : inner;
-  });
+  const matches = (tag: string): boolean => {
+    if (OS_VALUES.includes(tag)) return !os || tag === os;
+    if (AI_VALUES.includes(tag)) return !ai || tag === ai;
+    return !os && !ai;
+  };
+  return md.replace(/<!-- alleen:([a-z+-]+) -->\n?([\s\S]*?)<!-- \/alleen -->\n?/g, (_match, tags: string, inner: string) =>
+    tags.split('+').every(matches) ? inner : '',
+  );
 }
 
 export function setupFrom(s: RepoSnapshot): Setup {
