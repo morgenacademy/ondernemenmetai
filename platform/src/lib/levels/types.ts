@@ -13,7 +13,9 @@ export type Field =
 export type FormValues = Record<string, string>;
 export type FileWrite = { path: string; content: string; message: string };
 
-type StepBase = { id: string; title: string; aiPrompt?: string };
+/** Een knop die extra uitleg in een pop-up opent. De tekst staat in content/levels/level-N/<contentId>.md. */
+export type StepPopup = { label: string; title: string; contentId: string };
+type StepBase = { id: string; title: string; aiPrompt?: string; popup?: StepPopup };
 export type FormStep = StepBase & {
   kind: 'form';
   fields: Field[];
@@ -25,7 +27,9 @@ export type UploadStep = StepBase & {
   folder: string;
   required: (s: RepoSnapshot) => number;
 };
-export type Step = FormStep | ActionStep | UploadStep;
+/** Downloadpagina voor de AI-app die bij de gekozen setup hoort. */
+export type DownloadStep = StepBase & { kind: 'download' };
+export type Step = FormStep | ActionStep | UploadStep | DownloadStep;
 
 export type LevelDef = {
   id: number;

@@ -75,9 +75,48 @@ describe('levelStatus', () => {
 });
 
 describe('level 0', () => {
-  it('is pas af met een gemergde pull request', () => {
-    expect(evaluateLevel(level0, snap(LEVEL0_DONE, 0)).done).toBe(false);
-    expect(evaluateLevel(level0, snap(LEVEL0_DONE, 1)).done).toBe(true);
+  it('loopt van setup via de AI-app en GitHub Desktop naar je eerste opdracht', () => {
+    expect(level0.steps.map((s) => s.id)).toEqual([
+      'l0-setup',
+      'l0-download',
+      'l0-account',
+      'l0-github-desktop',
+      'l0-repo',
+      'l0-koppelen',
+      'l0-clonen',
+      'l0-eerste-opdracht',
+    ]);
+  });
+
+  it('is af zodra setup en werkplek.md zijn ingevuld, zonder pull request', () => {
+    expect(evaluateLevel(level0, snap(LEVEL0_DONE, 0)).done).toBe(true);
+    expect(evaluateLevel(level0, snap({ [SETUP_PATH]: LEVEL0_DONE[SETUP_PATH] }, 0)).done).toBe(false);
+    expect(level0.checks.map((c) => c.stepId)).toEqual(['l0-setup', 'l0-eerste-opdracht']);
+  });
+
+  it('heeft als mijlpaal dat je eerste wijziging online staat', () => {
+    expect(level0.milestone).toBe('Je AI werkt in je eigen repo en je eerste wijziging staat online.');
+  });
+
+  it('setup vraagt waar je een abonnement hebt en bewaart de AI-tool', () => {
+    const ai = formStep(level0, 'l0-setup').fields.find((f) => f.name === 'ai');
+    expect(ai?.label).toBe('Waar heb je een abonnement?');
+    expect(ai?.kind === 'select' && ai.options).toEqual([
+      { value: 'claude-code', label: 'Claude (Pro of hoger)' },
+      { value: 'codex', label: 'ChatGPT (Plus of hoger)' },
+    ]);
+  });
+
+  it('de downloadstap en de repo-uitleg hebben hun eigen onderdelen', () => {
+    expect(level0.steps.find((s) => s.id === 'l0-download')?.kind).toBe('download');
+    expect(level0.steps.find((s) => s.id === 'l0-repo')?.popup?.label).toBe('Waarom een repo en geen gedeelde map?');
+  });
+
+  it('de AI-opdrachten gaan niet meer over branches of pull requests', () => {
+    expect(level0.steps.find((s) => s.id === 'l0-clonen')?.aiPrompt).toMatch(/^Lees AGENTS\.md/);
+    const opdracht = level0.steps.find((s) => s.id === 'l0-eerste-opdracht')?.aiPrompt ?? '';
+    expect(opdracht).toContain('level-0-werkplek/werkplek.md');
+    expect(opdracht).not.toMatch(/branch|pull request/i);
   });
 
   it('setup-formulier schrijft frontmatter', () => {
