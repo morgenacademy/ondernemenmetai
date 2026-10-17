@@ -54,6 +54,17 @@ describe('Routekaart', () => {
   });
 });
 
+describe('Routekaart als alles af is', () => {
+  it('zegt dat je Proof of Concept hebt, en wijst naar module 2', () => {
+    const alles = Object.fromEntries(LEVELS.map((l) => [l.id, 'done' as const]));
+    const html = renderToStaticMarkup(
+      <Routekaart status={alles} van={null} snapshot={snapshot} onOpen={niets} onDemoVoortgang={niets} onReset={niets} onKlant={async () => true} bezig={false} />,
+    );
+    expect(html).toContain('Je hebt alle levels afgerond');
+    expect(html).toContain('module 2');
+  });
+});
+
 describe('LevelScherm', () => {
   const render = (id: number, actief = id) => {
     const l = level(id);

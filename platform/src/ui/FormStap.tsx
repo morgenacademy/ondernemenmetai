@@ -57,6 +57,20 @@ export function FormStap({ step, snapshot, alreadyDone, onSave, demoWaarden }: P
     <form onSubmit={submit} className="mt-4 space-y-3">
       {step.fields.map((field) => {
         const id = `${step.id}-${field.name}`;
+        // Weinig keuzes, zoals bij de setup: knoppen, zoals in de schets van level 0.
+        if (field.kind === 'select' && field.knoppen)
+          return (
+            <div key={field.name}>
+              <span className="veld-label">{field.label}</span>
+              <div role="group" aria-label={field.label} className="keuzes">
+                {optionsOf(field, snapshot).map((o) => (
+                  <button key={o.value} type="button" className="keuze-knop" aria-pressed={values[field.name] === o.value} onClick={() => set(field.name, o.value)}>
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
         return (
           <div key={field.name}>
             <label htmlFor={id} className="veld-label">

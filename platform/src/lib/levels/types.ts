@@ -10,7 +10,7 @@ export type Field =
   | { kind: 'text'; name: string; label: string; placeholder?: string; optional?: boolean }
   | { kind: 'textarea'; name: string; label: string; placeholder?: string; optional?: boolean }
   /** optionsFrom: keuzes uit de repo, zoals de mensen in feedback/. Zonder keuzes kan het formulier niet worden opgeslagen. */
-  | { kind: 'select'; name: string; label: string; options: Option[]; optionsFrom?: (s: RepoSnapshot) => Option[] }
+  | { kind: 'select'; name: string; label: string; options: Option[]; optionsFrom?: (s: RepoSnapshot) => Option[]; knoppen?: boolean }
   | { kind: 'number'; name: string; label: string; placeholder?: string; optional?: boolean; max?: number };
 
 export type FormValues = Record<string, string>;

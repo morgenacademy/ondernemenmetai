@@ -56,3 +56,11 @@ describe('FormStap met keuzes uit de repo en demo-content', () => {
     expect(html).toMatch(/<button type="button" class="btn-demo[^"]*">Vul met demo content<\/button>/);
   });
 });
+
+describe('FormStap met keuzeknoppen', () => {
+  it('de setup kiest met knoppen, zoals in de schets', () => {
+    const html = render(formStep(level0, 'l0-setup'));
+    expect(html).toMatch(/<div role="group" aria-label="Mijn computer" class="keuzes"><button type="button" class="keuze-knop" aria-pressed="true">Mac<\/button><button type="button" class="keuze-knop" aria-pressed="false">Windows<\/button>/);
+    expect(html).not.toContain('<select');
+  });
+});

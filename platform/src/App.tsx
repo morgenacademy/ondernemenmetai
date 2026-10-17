@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { HANDMATIG_KEY, INTRO_KEY, leesHandmatig, leesVlag, schrijfHandmatig, zetVlag } from './beleving/handmatig';
 import { LevelScherm } from './beleving/LevelScherm';
 import { parseRoute, routeHash, type Route } from './beleving/route';
@@ -24,10 +24,7 @@ export default function App({ repo, storage = null }: Props) {
   const { snapshot, status, info } = r;
 
   useEffect(() => {
-    const wissel = () => {
-      setRoute(parseRoute(window.location.hash, leesVlag(storage, INTRO_KEY)));
-      window.scrollTo({ top: 0 });
-    };
+    const wissel = () => setRoute(parseRoute(window.location.hash, leesVlag(storage, INTRO_KEY)));
     window.addEventListener('hashchange', wissel);
     return () => window.removeEventListener('hashchange', wissel);
   }, [storage]);
@@ -35,8 +32,13 @@ export default function App({ repo, storage = null }: Props) {
   const navigeer = useCallback((naar: Route) => {
     window.location.hash = routeHash(naar);
     setRoute(naar);
-    window.scrollTo({ top: 0 });
   }, []);
+
+  // Elk nieuw scherm begint bovenaan. Pas na het tekenen: anders springt de oude, kortere pagina terug.
+  const schermSleutel = routeHash(route);
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [schermSleutel]);
 
   if (!snapshot || !status || !info) return <p className="p-6">Laden…</p>;
 

@@ -39,6 +39,7 @@ export function Routekaart({ status, van, snapshot, onOpen, onDemoVoortgang, onR
   useEffect(() => {
     if (!komtAan) {
       setJijBij(huidig);
+      if (van !== null) onAangekomen?.();
       return;
     }
     const timers = [
@@ -54,13 +55,13 @@ export function Routekaart({ status, van, snapshot, onOpen, onDemoVoortgang, onR
     ];
     return () => timers.forEach((t) => window.clearTimeout(t));
     // Alleen bij aankomst; daarna volgt de kaart de stand van je repo.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [komtAan, huidig]);
 
   const jij = HALTES[jijBij];
   const level = LEVELS.find((l) => l.id === gekozen) ?? LEVELS[0];
   const staat = STAAT[status[level.id]];
   const b = BELEVING[level.id];
+  const allesAf = LEVELS.every((l) => status[l.id] === 'done');
 
   return (
     <div className="bl-route">
@@ -129,7 +130,12 @@ export function Routekaart({ status, van, snapshot, onOpen, onDemoVoortgang, onR
         )}
         {staat.kort === 'af' && (
           <>
-            {level.id !== huidig && (
+            {allesAf && (
+              <p className="bl-volgende-hint">
+                ✓ <b>Je hebt alle levels afgerond:</b> Proof of Concept, met je eerste betalende klant. Schaalbaar verkopen en positieve cashflow komen in module 2.
+              </p>
+            )}
+            {!allesAf && level.id !== huidig && (
               <p className="bl-volgende-hint">
                 ✓ Afgerond. <b>Klik op de kaart op het lichtje van level {huidig}</b> om verder te gaan.
               </p>

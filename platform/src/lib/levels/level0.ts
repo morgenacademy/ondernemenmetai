@@ -52,8 +52,8 @@ export const level0: LevelDef = {
       kind: 'form',
       waar: ['platform'],
       fields: [
-        { kind: 'select', name: 'os', label: 'Mijn computer', options: OS_OPTIONS },
-        { kind: 'select', name: 'ai', label: 'Waar heb je een abonnement?', options: AI_OPTIONS },
+        { kind: 'select', name: 'os', label: 'Mijn computer', options: OS_OPTIONS, knoppen: true },
+        { kind: 'select', name: 'ai', label: 'Waar heb je een abonnement?', options: AI_OPTIONS, knoppen: true },
       ],
       toFile: (v) => ({
         path: SETUP_PATH,
