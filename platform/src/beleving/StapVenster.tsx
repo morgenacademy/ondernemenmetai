@@ -106,6 +106,7 @@ function Koppelen({ af, onKlaar }: { af: boolean; onKlaar: () => void }) {
 
 export function StapVenster({ level, step, nummer, totaal, status, snapshot, evaluation, licht, onSave, onDemo, onKlaar, onVorige, onVolgende, onSluit }: Props) {
   const titel = useRef<HTMLHeadingElement>(null);
+  const dialog = useRef<HTMLDialogElement>(null);
   const vel = useRef<HTMLDivElement>(null);
   const groot = useRef<HTMLDivElement>(null);
   const setup = setupFrom(snapshot);
@@ -126,13 +127,12 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
     if (groot.current) groot.current.scrollTop = 0;
     titel.current?.focus({ preventScroll: true });
   }, [step.id]);
+  // Een echte modale dialog: de browser houdt de focus erin, Esc sluit hem, en daarna gaat de focus terug naar de kaart.
   useEffect(() => {
-    const toets = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !document.querySelector('dialog[open]')) onSluit();
-    };
-    document.addEventListener('keydown', toets);
-    return () => document.removeEventListener('keydown', toets);
-  }, [onSluit]);
+    const d = dialog.current;
+    if (d && !d.open) d.showModal?.();
+    titel.current?.focus({ preventScroll: true });
+  }, []);
 
   const links = (() => {
     if (step.id === 'l0-koppelen') return <Koppelen af={af} onKlaar={onKlaar} />;
@@ -179,17 +179,17 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
   })();
 
   return (
-    <div
+    <dialog
+      ref={dialog}
       className={`bl-open${licht ? ' licht' : ''}`}
-      role="dialog"
-      aria-modal="true"
       aria-labelledby="bl-venster-titel"
+      onClose={onSluit}
       onClick={(e) => {
-        if (e.target === e.currentTarget) onSluit();
+        if (e.target === e.currentTarget) dialog.current?.close();
       }}
     >
       <div className="bl-vel" ref={vel}>
-        <button type="button" className="bl-sluit" aria-label="Sluiten" onClick={onSluit}>
+        <button type="button" className="bl-sluit" aria-label="Sluiten" onClick={() => dialog.current?.close()}>
           ×
         </button>
         <div className="bl-groot" ref={groot}>
@@ -239,7 +239,7 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
               </button>
             )}
             {step.optional ? (
-              <button type="button" className="bl-vknop p" onClick={onSluit}>
+              <button type="button" className="bl-vknop p" onClick={() => dialog.current?.close()}>
                 Sluiten
               </button>
             ) : handmatig && !af ? (
@@ -259,6 +259,6 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
           )}
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

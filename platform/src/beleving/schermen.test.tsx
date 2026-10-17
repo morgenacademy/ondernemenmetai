@@ -192,6 +192,12 @@ describe('StapVenster', () => {
     expect(html).toMatch(/<h3[^>]*>Werk je canvas bij<\/h3>/);
   });
 
+  it('het venster is een echte dialog: Esc en de focus regelt de browser', () => {
+    const html = venster(0, 'l0-account');
+    expect(html).toMatch(/^<dialog class="bl-open licht" aria-labelledby="bl-venster-titel"/);
+    expect(html).not.toContain('role="dialog"');
+  });
+
   it('een stap zonder check vink je zelf af', () => {
     expect(venster(0, 'l0-account')).toMatch(/<button[^>]*class="bl-vknop p"[^>]*>Klaar, ik heb een account<\/button>/);
   });
