@@ -49,4 +49,16 @@ describe('Routekaart', () => {
     expect(html).toContain('Gaat open zodra je level 2 hebt afgerond.');
     expect(html).not.toContain('href="#/level/3"');
   });
+
+  it('heeft in de demo knoppen om je voortgang te zetten, met je huidige level aan', () => {
+    const html = renderToStaticMarkup(<Routekaart status={stand(2)} van={null} demo={{ onVoortgang: () => {}, bezig: false }} />);
+    expect(html).toContain('<summary>Demo: zet je voortgang</summary>');
+    const knoppen = [...html.matchAll(/<button type="button"( class="aan")?>(\d) ([^<]+)<\/button>/g)].map((m) => [m[2], Boolean(m[1])]);
+    expect(knoppen).toHaveLength(7);
+    expect(knoppen.filter(([, aan]) => aan)).toEqual([['2', true]]);
+  });
+
+  it('zonder demo staan die knoppen er niet', () => {
+    expect(render(stand(2))).not.toContain('Demo: zet je voortgang');
+  });
 });

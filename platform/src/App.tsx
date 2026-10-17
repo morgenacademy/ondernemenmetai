@@ -3,7 +3,7 @@ import { HANDMATIG_KEY, INTRO_KEY, leesHandmatig, leesVlag, schrijfHandmatig, ze
 import { LevelScherm } from './beleving/LevelScherm';
 import { parseRoute, routeHash, type Route } from './beleving/route';
 import { Routekaart } from './beleving/Routekaart';
-import { repoZichtbaar } from './beleving/voortgang';
+import { huidigLevel, repoZichtbaar } from './beleving/voortgang';
 import { Welkom } from './beleving/Welkom';
 import { vulLevel, vulStap } from './demo/vullen';
 import { LEVELS } from './lib/levels';
@@ -29,6 +29,7 @@ export default function App({ repo, storage = null }: Props) {
   const [route, setRoute] = useState<Route>(() => parseRoute(huidigeHash(), introGezien));
   const [handmatig, setHandmatig] = useState(() => leesHandmatig(storage));
   const [lade, setLade] = useState(false);
+  const [demoBezig, setDemoBezig] = useState(false);
   const { snapshot, status, info } = r;
 
   useEffect(() => {
@@ -86,6 +87,23 @@ export default function App({ repo, storage = null }: Props) {
   const demoLevel = () => {
     if (opLevel) void r.run(() => vulLevel(opLevel, repo));
   };
+  // Demo: spring naar een level. Terug gaan begint opnieuw; daarna vult de demo alle levels ervoor.
+  const demoVoortgang = async (tot: number) => {
+    setDemoBezig(true);
+    await r.run(async () => {
+      if (tot < huidigLevel(status)) {
+        await repo.reset();
+        try {
+          storage?.removeItem(HANDMATIG_KEY);
+        } catch {
+          // Zie reset.
+        }
+        setHandmatig(new Set());
+      }
+      for (const l of LEVELS.filter((x) => x.id < tot)) await vulLevel(l, repo);
+    });
+    setDemoBezig(false);
+  };
   const klant = async (w: FileWrite) => {
     const ok = await r.write(w);
     if (ok) gaNaar({ scherm: 'level', level: 6 });
@@ -137,7 +155,7 @@ export default function App({ repo, storage = null }: Props) {
 
       {route.scherm === 'welkom' && <Welkom />}
       {route.scherm === 'route' && (
-        <Routekaart key={`route-${route.van}`} status={status} van={route.van}>
+        <Routekaart key={`route-${route.van}`} status={status} van={route.van} demo={{ onVoortgang: (id) => void demoVoortgang(id), bezig: demoBezig }}>
           {status[1] !== 'locked' && status[6] === 'locked' && (
             <div className="bl-klant">
               <KlantKnop snapshot={snapshot} onSave={klant} />

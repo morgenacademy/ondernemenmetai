@@ -23,7 +23,6 @@ Wat Harmen in de eerste versie stoorde: te veel tekst en vakjes ("ik kijk en ik 
 
 ## Niet in dit ontwerp
 
-- Het ombouwen van level 1 tot en met 6 naar stappen-kaarten met een venster. Die levels krijgen wel de nieuwe routekaart en het slotscherm, maar hun stappenlijst blijft zoals hij op dat moment is. Kaarten voor die levels volgen nadat Harmen Level 0 in het platform heeft gezien.
 - Echte schermafbeeldingen van GitHub en GitHub Desktop. Tot die er zijn, blijven de schermen nagetekend, zoals in de schetsen. Echte schermafbeeldingen vragen een testaccount en een gepubliceerde starter-repo.
 - Een echte koppeling met GitHub (fase 2). In de demo blijft koppelen nagebootst.
 
@@ -82,12 +81,30 @@ Wat Harmen in de eerste versie stoorde: te veel tekst en vakjes ("ik kijk en ik 
    - Mac of Windows doet er pas toe vanaf het downloaden.
 2. **Het welkomstscherm verschijnt bij het eerste bezoek.** Dat het al gezien is, onthoudt de browser. Op de routekaart staat "Bekijk de intro opnieuw". Dit is een gemak per bezoeker, en hoort dus niet in de repo.
 3. **De routekaart is de startpagina.** Klik je een lichtje aan, dan zie je onder de kaart het level met een knop "Begin met…" of "Ga verder met…". Die knop opent de levelpagina. Op elke levelpagina staat bovenaan "← Jouw route".
-4. **Het slotscherm is het tussenscherm van elk level.** De branch `claude/determined-noether-3a2004` heeft een tussenscherm met wat je haalde, wat je leerde en wat in je repo staat (`doel`, `begrip`, `kern`). Dat wordt het slotscherm in deze vormgeving. Level 0 krijgt de lijst "Dit heb je nu".
+4. **Het slotscherm is het tussenscherm van elk level.** De branch `claude/determined-noether-3a2004` heeft een tussenscherm met wat je haalde, wat je leerde en wat in je repo staat (`doel`, `begrip`, `kern`). Dat wordt het slotscherm in deze vormgeving, met per level de lijst "Dit heb je nu".
 5. **Stappen die je zelf afrondt** (account, repo, GitHub Desktop, clonen) vink je af met een knop als "Klaar, ik heb een account". Het platform kan die stappen niet in de repo zien. Dat vinkje bewaart het platform zelf, in de demo in de browser, en nooit in de repo. Stappen die het platform wel kan zien (setup, koppelen, eerste opdracht) gaan vanzelf op Klaar.
 6. **Plekken per stap.** De term "Hier op het platform" wordt de plek `platform` uit die branch. GitHub Desktop installeren en clonen worden `github-desktop`, de eerste opdracht `ai-app` en daarna `github-desktop`.
 7. **De beelden komen in het platform als WebP** (samen minder dan 1 MB).
 8. **Beweging:** bij `prefers-reduced-motion` lopen er geen lichtjes rond, maakt de wijzer geen hupje en loopt de hoofdpersoon niet. Ze staat dan meteen op haar plek.
 9. **Mobiel:** de routekaart zoomt in op het stuk van het pad, van 44% tot 91% van de breedte. Zo passen alle zeven lichtjes op 375 px. De labels staan dan alleen bij je huidige en je gekozen level.
+
+## Na de bouwer-check (17 oktober)
+
+Een reviewer las dit ontwerp als bouwer en stelde drie vragen. Ik heb ze zelf beantwoord, omdat geen van de antwoorden verandert wat er gebouwd wordt:
+
+1. **De schil.**
+   - "Jouw repo" is een lade, met een knop in de bovenbalk die pas verschijnt na het koppelen (of als level 0 af is). Daarvoor zou het paneel een repo laten zien die er voor het platform nog niet is.
+   - "Demo opnieuw" staat in de bovenbalk. De knop "Ik heb een klant" staat vanaf level 1 onder de routekaart.
+   - In de demo staat onder de kaart ook "Demo: zet je voortgang": daarmee spring je naar een level, en de levels ervoor vult de demo met demo-content. Die knop komt uit de versie van de andere sessie.
+2. **Level 1 tot en met 6** krijgen dezelfde opbouw als level 0:
+   - het beeld van het level en de scène met het nieuwe begrip;
+   - de stappen als kaarten met een venster;
+   - het slotscherm, altijd onderaan de pagina.
+
+   De teksten daarvoor staan in `platform/src/beleving/beleving.ts`. Ze komen uit de levels-opzet van 16 oktober en moeten nog door Harmen gelezen worden. Codex maakte voor level 1, 3, 4 en 5 beelden in dezelfde serie.
+3. **Level 6 en het einde van de route.**
+   - Gaat level 6 eerder open (je hebt een klant), dan krijgt dat lichtje ook een pulserende ring.
+   - Jij blijft bij je eerste level dat nog bezig is. Is alles af, dan sta je bij het zesde lichtje.
 
 ## Hoe het werkt
 
@@ -145,7 +162,7 @@ Wat Harmen in de eerste versie stoorde: te veel tekst en vakjes ("ik kijk en ik 
 
 ## Randvoorwaarden
 
-- **Bouw voort op de stand van `main` nadat `claude/determined-noether-3a2004` erin zit.** Die branch heeft plekken per stap, `doel`, `begrip` en `kern` per level, een tussenscherm en demo-inhoud voor elke stap. Staat hij nog niet op `main`, bouw dan op die branch of wacht. Bouw niet langs hem heen.
+- **Gebouwd op `claude/determined-noether-3a2004` tot en met 532caad.** Die branch heeft plekken per stap, `doel`, `begrip` en `kern` per level, levels 3 tot en met 6 en demo-inhoud voor elke stap. De andere sessie bouwde daarna een eigen versie van deze ombouw (3b599b6). Harmen koos op 17 oktober voor deze versie; de demoknop "zet je voortgang" is uit de andere overgenomen.
 - De repo blijft de bron: levelstatus en checks komen uit de repo-snapshot. Alleen de vinkjes van de deelnemer en "intro gezien" bewaart het platform zelf.
 - Toegankelijk:
   - het venster is een echte dialoog: Esc sluit hem, en de focus gaat terug naar de kaart;

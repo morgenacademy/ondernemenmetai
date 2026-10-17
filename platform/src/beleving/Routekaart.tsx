@@ -13,6 +13,8 @@ type Props = {
   begin?: number;
   /** Bijvoorbeeld de knop "Ik heb een klant". */
   children?: ReactNode;
+  /** Demo: spring naar een level; de levels ervoor worden met demo-content gevuld. */
+  demo?: { onVoortgang: (levelId: number) => void; bezig: boolean };
 };
 
 const KLASSE: Record<LevelState, string> = { done: 'af', active: 'nu', locked: 'dicht' };
@@ -26,7 +28,7 @@ function rustig(): boolean {
 }
 
 /** Het padbeeld als levelkaart: zeven lichtjes, jij op je huidige plek, en het level dat je kiest eronder. */
-export function Routekaart({ status, van, begin, children }: Props) {
+export function Routekaart({ status, van, begin, children, demo }: Props) {
   const huidig = huidigLevel(status);
   const naAfronden = van !== null && van !== huidig;
   const [gekozen, setGekozen] = useState(begin ?? (naAfronden ? van : huidig));
@@ -36,7 +38,9 @@ export function Routekaart({ status, van, begin, children }: Props) {
 
   useEffect(() => {
     if (!naAfronden) {
+      // Ook na een demosprong: jij en het paneel gaan mee naar je huidige level.
       setJijBij(huidig);
+      if (begin === undefined) setGekozen(huidig);
       return;
     }
     const snel = rustig();
@@ -47,7 +51,7 @@ export function Routekaart({ status, van, begin, children }: Props) {
     const wijs = setTimeout(() => setWijzer((w) => (w === 'wacht' ? 'aan' : w)), snel ? 0 : 3000);
     const stil = setTimeout(() => setMelding(false), 5200);
     return () => [lopen, wijs, stil].forEach(clearTimeout);
-  }, [naAfronden, huidig]);
+  }, [naAfronden, huidig, begin]);
 
   const kies = (id: number) => {
     setGekozen(id);
@@ -144,6 +148,19 @@ export function Routekaart({ status, van, begin, children }: Props) {
         {level.milestone !== level.doel && <p className="bl-mijlpaal">Mijlpaal: {level.milestone}</p>}
         {actie}
         {children}
+        {demo && (
+          <details className="bl-demo">
+            <summary>Demo: zet je voortgang</summary>
+            <p>Vult de levels vóór het gekozen level met demo-content, alsof jij en je AI het deden.</p>
+            <div className="rij">
+              {LEVELS.map((l) => (
+                <button key={l.id} type="button" className={l.id === huidig ? 'aan' : undefined} disabled={demo.bezig} onClick={() => demo.onVoortgang(l.id)}>
+                  {`${l.id} ${l.name}`}
+                </button>
+              ))}
+            </div>
+          </details>
+        )}
       </main>
 
       {naAfronden && (
