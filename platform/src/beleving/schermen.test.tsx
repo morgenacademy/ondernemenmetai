@@ -227,6 +227,23 @@ describe('StapVenster', () => {
     expect(html).toMatch(/<blockquote class="stap-hint">Hoe kunnen we apothekers helpen met spoedbezorging\?<\/blockquote>/);
   });
 
+  it('bij een AI-stap die af is, staat links het bestand dat je AI maakte', () => {
+    const l = level(4);
+    const kaart = '---\nronde: 1\nhypothese: Ze willen door voor €40\ntest_opzet: proef\nmetriek: ja\nsuccesdrempel: 2 van de 3\ntijd_en_sample: 3 apothekers\n---\n# Testkaart ronde 1\n\nTekst.';
+    const s = { files: { ...starterFiles, 'level-4-marktfeedback/testkaarten/ronde-1.md': kaart }, mergedPullRequests: 0 };
+    const html = renderToStaticMarkup(
+      <StapVenster level={l} step={stap(4, 'l4-testkaart')} nummer={2} totaal={5} status="af" snapshot={s} evaluation={evaluateLevel(l, s)} licht onSave={async () => true} onDemo={niets} onKlaar={niets} onVorige={niets} onVolgende={niets} onSluit={niets} />,
+    );
+    expect(html).toContain('Je AI maakte');
+    expect(html).toContain('testkaarten/ronde-1.md');
+    expect(html).toContain('hypothese: Ze willen door voor €40');
+    expect(html).not.toContain('Vul met demo content');
+  });
+
+  it('zolang het bestand er niet is, staat er alleen het gesprek', () => {
+    expect(venster(4, 'l4-testkaart')).not.toContain('Je AI maakte');
+  });
+
   it('de stap met het begrip heeft zijn pop-up', () => {
     expect(venster(1, 'l1-propositie')).toContain('Wat haalde mijn AI op?');
   });
@@ -243,6 +260,15 @@ describe('Voorbeeld', () => {
     const html = renderToStaticMarkup(<Voorbeeld step={stap(1, 'l1-propositie')} setup={{ ai: 'codex' }} />);
     expect(html).toContain('Codex');
     expect(html).toContain('propositie-validator');
+  });
+  it('elke pull request toont zijn eigen wijziging', () => {
+    expect(renderToStaticMarkup(<Voorbeeld step={stap(3, 'l3-verwoorden')} setup={{}} />)).toContain('madlib.md');
+    expect(renderToStaticMarkup(<Voorbeeld step={stap(5, 'l5-agents')} setup={{}} />)).toContain('AGENTS.md');
+    expect(renderToStaticMarkup(<Voorbeeld step={stap(6, 'l6-verkoopaanpak')} setup={{}} />)).toContain('name: verkoopaanpak');
+  });
+  it('bij Bouw je MVP zie je de MVP zelf: een landingspagina', () => {
+    const html = renderToStaticMarkup(<Voorbeeld step={stap(3, 'l3-bouwen')} setup={{}} />);
+    expect(html).toContain('Ik doe mee met de proef');
   });
   it('level 0 houdt de nagetekende schermen uit de schets', () => {
     expect(renderToStaticMarkup(<Voorbeeld step={stap(0, 'l0-account')} setup={{}} />)).toContain('Sign up for GitHub');

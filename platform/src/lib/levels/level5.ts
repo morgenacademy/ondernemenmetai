@@ -45,6 +45,7 @@ export const level5: LevelDef = {
           kind: 'select',
           name: 'besluit',
           label: 'Ga je ervoor?',
+          knoppen: true,
           options: [
             { value: 'ik ga ervoor', label: 'Ik ga ervoor' },
             { value: 'nog niet', label: 'Nog niet' },
@@ -54,6 +55,7 @@ export const level5: LevelDef = {
           kind: 'select',
           name: 'volgende_stap',
           label: 'Wat doe je nu?',
+          knoppen: true,
           options: [
             { value: 'echt verkopen', label: 'Ik ga nu echt verkopen' },
             { value: 'meer bestellen', label: 'Ik bestel meer' },

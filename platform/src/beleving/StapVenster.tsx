@@ -12,6 +12,7 @@ import { PLEK_LABEL } from '../ui/labels';
 import { Markdown } from '../ui/Markdown';
 import { Paneel } from '../ui/Paneel';
 import { VoortgangStap } from '../ui/VoortgangStap';
+import { aiResultaat } from './resultaat';
 import { Voorbeeld } from './Voorbeeld';
 import type { StapStatus } from './voortgang';
 
@@ -106,6 +107,7 @@ function Koppelen({ af, onKlaar }: { af: boolean; onKlaar: () => void }) {
 export function StapVenster({ level, step, nummer, totaal, status, snapshot, evaluation, licht, onSave, onDemo, onKlaar, onVorige, onVolgende, onSluit }: Props) {
   const titel = useRef<HTMLHeadingElement>(null);
   const vel = useRef<HTMLDivElement>(null);
+  const groot = useRef<HTMLDivElement>(null);
   const setup = setupFrom(snapshot);
   const checks = evaluation.results.filter((r) => r.stepId === step.id);
   const handmatig = checks.length === 0 && !step.optional;
@@ -114,10 +116,12 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
   const demo = demoVoorStap(step);
   const content = stepContent(level.id, step.id);
   const hint = step.hint?.(snapshot);
+  const resultaat = af ? aiResultaat(step.id, snapshot) : null;
 
   // Elke stap begint bovenaan, ook als je in de vorige stap naar beneden scrolde.
   useEffect(() => {
     if (vel.current) vel.current.scrollTop = 0;
+    if (groot.current) groot.current.scrollTop = 0;
     titel.current?.focus({ preventScroll: true });
   }, [step.id]);
   useEffect(() => {
@@ -154,6 +158,15 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
         <div className="bl-scherm-groot">
           <Voorbeeld step={step} setup={setup} />
         </div>
+        {resultaat && (
+          <div className="bl-resultaat">
+            <p className="bl-resultaat-label">Je AI maakte</p>
+            <div className="bl-bestand">
+              <div className="naam">{resultaat.pad}</div>
+              <pre className="regels">{resultaat.regels.join('\n')}</pre>
+            </div>
+          </div>
+        )}
         {step.paneel && (
           <div className="bl-paneel-echt">
             <Paneel soort={step.paneel} snapshot={snapshot} />
@@ -177,7 +190,9 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
         <button type="button" className="bl-sluit" aria-label="Sluiten" onClick={onSluit}>
           ×
         </button>
-        <div className="bl-groot">{links}</div>
+        <div className="bl-groot" ref={groot}>
+          {links}
+        </div>
         <div className="bl-uitleg">
           <div className="bl-eyebrow">
             <span>{nummer ? `Stap ${nummer} van ${totaal}` : 'Optioneel'}</span>
@@ -206,7 +221,8 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
               ))}
             </ul>
           )}
-          {demo?.soort === 'simulatie' && (
+          {/* Na afronden geen demoknop meer, behalve bij de interviewvakken: daar zet hij er telkens één bij. */}
+          {demo?.soort === 'simulatie' && (!af || step.kind === 'voortgang') && (
             <div className="bl-demo-stap">
               <button type="button" className="bl-knop-demo" onClick={onDemo}>
                 Vul met demo content

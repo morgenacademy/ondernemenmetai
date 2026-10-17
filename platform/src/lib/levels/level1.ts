@@ -100,6 +100,7 @@ export const level1: LevelDef = {
           kind: 'textarea',
           name: 'aannames',
           label: 'Eén aanname per regel. Begin met [wens], [haalbaar] of [rendabel].',
+          rijen: 5,
           placeholder: '[wens] Apotheken willen bezorging uitbesteden',
         },
       ],

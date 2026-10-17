@@ -48,6 +48,7 @@ export const level3: LevelDef = {
           kind: 'textarea',
           name: 'ideeen',
           label: 'Eén idee per regel. Minstens 10.',
+          rijen: 10,
           placeholder: 'Bezorging per bakfiets\nKluisjes bij de apotheek',
         },
       ],

@@ -85,7 +85,7 @@ export function FormStap({ step, snapshot, alreadyDone, onSave, demoWaarden }: P
                 ))}
               </select>
             ) : field.kind === 'textarea' ? (
-              <textarea id={id} className="veld" rows={3} placeholder={field.placeholder} value={values[field.name]} onChange={(e) => set(field.name, e.target.value)} />
+              <textarea id={id} className="veld" rows={field.rijen ?? 3} placeholder={field.placeholder} value={values[field.name]} onChange={(e) => set(field.name, e.target.value)} />
             ) : (
               <input
                 id={id}

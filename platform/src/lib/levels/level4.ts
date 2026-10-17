@@ -110,7 +110,7 @@ export const level4: LevelDef = {
         { kind: 'select', name: 'persoon', label: 'Met wie sprak je?', options: [], optionsFrom: mensen },
         { kind: 'textarea', name: 'geprobeerd', label: 'Wat probeerde diegene, en hoe lang?' },
         { kind: 'textarea', name: 'voorstel', label: 'Wat was je voorstel?' },
-        { kind: 'select', name: 'antwoord', label: 'Het antwoord', options: ANTWOORDEN },
+        { kind: 'select', name: 'antwoord', label: 'Het antwoord', options: ANTWOORDEN, knoppen: true },
         { kind: 'textarea', name: 'waarom', label: 'Waarom? Bij nee is dit het belangrijkste wat je meeneemt.' },
       ],
       toFile: (v, s) => {
