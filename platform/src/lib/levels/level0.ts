@@ -37,6 +37,15 @@ export const level0: LevelDef = {
   kern: [SETUP_PATH, WERKPLEK_PATH],
   ready: true,
   steps: [
+    { id: 'l0-account', title: 'Maak een GitHub-account', kind: 'action', waar: ['github'] },
+    {
+      id: 'l0-repo',
+      title: 'Maak je repo',
+      kind: 'action',
+      waar: ['github'],
+      popup: { label: 'Waarom een repo en geen gedeelde map?', title: 'Wat een gedeelde map niet kan', contentId: 'l0-repo-waarom' },
+    },
+    { id: 'l0-koppelen', title: 'Koppel het platform aan je repo', kind: 'action', waar: ['platform', 'github'] },
     {
       id: 'l0-setup',
       title: 'Kies je setup',
@@ -56,16 +65,7 @@ export const level0: LevelDef = {
       }),
     },
     { id: 'l0-download', title: 'Download je AI-app', kind: 'download', waar: ['platform', 'ai-app'] },
-    { id: 'l0-account', title: 'Maak een GitHub-account', kind: 'action', waar: ['github'] },
     { id: 'l0-github-desktop', title: 'Installeer GitHub Desktop', kind: 'action', waar: ['github-desktop'] },
-    {
-      id: 'l0-repo',
-      title: 'Maak je repo',
-      kind: 'action',
-      waar: ['github'],
-      popup: { label: 'Waarom een repo en geen gedeelde map?', title: 'Wat een gedeelde map niet kan', contentId: 'l0-repo-waarom' },
-    },
-    { id: 'l0-koppelen', title: 'Koppel het platform aan je repo', kind: 'action', waar: ['platform', 'github'] },
     {
       id: 'l0-clonen',
       title: 'Zet je repo op je computer en open hem in je AI',

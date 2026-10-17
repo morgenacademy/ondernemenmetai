@@ -1,6 +1,4 @@
-import type { LevelState, Plek } from '../lib/levels/types';
-
-export const STATE_LABEL: Record<LevelState, string> = { done: 'Af', active: 'Nu bezig', locked: 'Op slot' };
+import type { Plek } from '../lib/levels/types';
 
 export const PLEK_LABEL: Record<Plek, string> = {
   platform: 'Platform',

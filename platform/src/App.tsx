@@ -1,118 +1,169 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { HANDMATIG_KEY, INTRO_KEY, leesHandmatig, leesVlag, schrijfHandmatig, zetVlag } from './beleving/handmatig';
+import { LevelScherm } from './beleving/LevelScherm';
+import { parseRoute, routeHash, type Route } from './beleving/route';
+import { Routekaart } from './beleving/Routekaart';
+import { huidigLevel } from './beleving/voortgang';
+import { Welkom } from './beleving/Welkom';
 import { vulLevel, vulStap } from './demo/vullen';
 import { LEVELS } from './lib/levels';
-import type { FileWrite, LevelState } from './lib/levels/types';
-import type { MockRepoAdapter } from './lib/repo/mockRepo';
-import { DemoBalk } from './ui/DemoBalk';
-import { KlantKnop } from './ui/KlantKnop';
-import { LevelKaart } from './ui/LevelKaart';
-import { LevelPagina } from './ui/LevelPagina';
+import { evaluateLevel } from './lib/levels/evaluate';
+import type { FileWrite } from './lib/levels/types';
+import type { MockRepoAdapter, StorageLike } from './lib/repo/mockRepo';
 import { RepoPaneel } from './ui/RepoPaneel';
-import { Tussenscherm, afgerondLevel } from './ui/Tussenscherm';
 import { useRepo } from './ui/useRepo';
 
-export default function App({ repo }: { repo: MockRepoAdapter }) {
+type Props = { repo: MockRepoAdapter; storage?: StorageLike | null };
+
+export default function App({ repo, storage = null }: Props) {
   const r = useRepo(repo);
-  const [selected, setSelected] = useState<number | null>(null);
-  const [tussenscherm, setTussenscherm] = useState<number | null>(null);
-  const vorige = useRef<Record<number, LevelState> | null>(null);
+  const [route, setRoute] = useState<Route>(() => parseRoute(window.location.hash, leesVlag(storage, INTRO_KEY)));
+  const [handmatig, setHandmatig] = useState<Set<string>>(() => leesHandmatig(storage));
+  const [lade, setLade] = useState(false);
+  const [bezig, setBezig] = useState(false);
   const { snapshot, status, info } = r;
 
-  const activeId = status ? (LEVELS.find((l) => status[l.id] === 'active')?.id ?? LEVELS[LEVELS.length - 1].id) : 0;
-  const current = LEVELS.find((l) => l.id === (selected ?? activeId)) ?? LEVELS[0];
-
-  // Werd het level waar je aan werkt net af, dan komt het tussenscherm naar het volgende level.
   useEffect(() => {
-    if (!status) return;
-    const af = afgerondLevel(vorige.current, status, current.id);
-    vorige.current = status;
-    if (af !== null) {
-      setTussenscherm(af);
+    const wissel = () => {
+      setRoute(parseRoute(window.location.hash, leesVlag(storage, INTRO_KEY)));
       window.scrollTo({ top: 0 });
-    }
-  }, [status, current.id]);
+    };
+    window.addEventListener('hashchange', wissel);
+    return () => window.removeEventListener('hashchange', wissel);
+  }, [storage]);
+
+  const navigeer = useCallback((naar: Route) => {
+    window.location.hash = routeHash(naar);
+    setRoute(naar);
+    window.scrollTo({ top: 0 });
+  }, []);
 
   if (!snapshot || !status || !info) return <p className="p-6">Laden…</p>;
 
-  const kiesLevel = (id: number | null) => {
-    setTussenscherm(null);
-    setSelected(id);
+  const vinkAf = (stepId: string) => {
+    const nieuw = new Set(handmatig).add(stepId);
+    setHandmatig(nieuw);
+    schrijfHandmatig(storage, nieuw);
+  };
+  const demo = async (actie: () => Promise<void>) => {
+    setBezig(true);
+    await r.run(actie);
+    setBezig(false);
   };
   const reset = async () => {
+    if (!window.confirm('Alles wissen en opnieuw beginnen?')) return;
     await repo.reset();
-    vorige.current = null;
-    kiesLevel(null);
+    setHandmatig(new Set());
+    try {
+      storage?.removeItem(HANDMATIG_KEY);
+    } catch {
+      // Geblokkeerde opslag: het geheugen is al leeg.
+    }
+    zetVlag(storage, INTRO_KEY, false);
     await r.refresh();
+    navigeer({ scherm: 'welkom' });
   };
-  // Wie op een level werkt, blijft daar staan: zo ziet de deelnemer het tussenscherm
-  // in plaats van ongemerkt door te springen naar het volgende level.
-  const save = (w: FileWrite) => {
-    setSelected(current.id);
-    return r.write(w);
-  };
-  const demoStap = (stepId: string) => {
-    const step = current.steps.find((s) => s.id === stepId);
-    if (!step) return;
-    setSelected(current.id);
-    void r.run(() => vulStap(step, repo));
-  };
-  const demoLevel = () => {
-    setSelected(current.id);
-    void r.run(() => vulLevel(current, repo));
-  };
+  // Demo: vult de levels vóór het gekozen level. Wil je terug, dan begint de demo eerst opnieuw.
+  const demoVoortgang = (tot: number) =>
+    void demo(async () => {
+      if (tot < huidigLevel(status)) await repo.reset();
+      for (const level of LEVELS.filter((l) => l.id < tot)) await vulLevel(level, repo);
+    });
   const klant = async (w: FileWrite) => {
     const ok = await r.write(w);
-    if (ok) kiesLevel(6);
+    if (ok) navigeer({ scherm: 'level', level: 6 });
     return ok;
   };
-  const nextLevel = LEVELS.find((l) => l.id === current.id + 1);
-  const afLevel = LEVELS.find((l) => l.id === tussenscherm);
-  const naAf = LEVELS.find((l) => l.id === (tussenscherm ?? -1) + 1);
+
+  const balk = (
+    <div className="bl-top">
+      <button type="button" className="bl-logo" onClick={() => navigeer({ scherm: 'route', van: null })} aria-label="Naar je route">
+        MORGEN<em>.</em>
+      </button>
+      <div className="bl-top-rechts">
+        {route.scherm === 'welkom' && (
+          <button type="button" className="bl-top-knop" onClick={() => (zetVlag(storage, INTRO_KEY, true), navigeer({ scherm: 'route', van: null }))}>
+            Sla de intro over
+          </button>
+        )}
+        {route.scherm === 'route' && (
+          <button type="button" className="bl-top-knop" onClick={() => navigeer({ scherm: 'welkom' })}>
+            ↺ Bekijk de intro opnieuw
+          </button>
+        )}
+        {route.scherm === 'level' && (
+          <button type="button" className="bl-top-knop" onClick={() => navigeer({ scherm: 'route', van: null })}>
+            ← Jouw route
+          </button>
+        )}
+        {route.scherm !== 'welkom' && (
+          <button type="button" className="bl-top-knop" aria-expanded={lade} onClick={() => setLade(!lade)}>
+            Jouw repo
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  const level = route.scherm === 'level' ? LEVELS.find((l) => l.id === route.level) : undefined;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6">
-      <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div className="logo">
-          MORGEN<em>.</em>
-        </div>
-        <span className="eyebrow" style={{ marginBottom: 0 }}>
-          Ondernemen met AI
-        </span>
-      </header>
-      <DemoBalk onReset={reset} />
-      <LevelKaart levels={LEVELS} status={status} selected={current.id} onSelect={kiesLevel} />
-      {status[1] !== 'locked' && status[6] === 'locked' && <KlantKnop snapshot={snapshot} onSave={klant} />}
-      {r.error && (
-        <p role="alert" className="card mt-4 text-sm">
-          {r.error}
+    <div className="bl">
+      {balk}
+      {route.scherm === 'welkom' && (
+        <Welkom
+          onNaarRoute={() => {
+            zetVlag(storage, INTRO_KEY, true);
+            navigeer({ scherm: 'route', van: null });
+          }}
+        />
+      )}
+      {route.scherm === 'route' && (
+        <Routekaart
+          key={route.van ?? 'route'}
+          status={status}
+          van={route.van}
+          snapshot={snapshot}
+          bezig={bezig}
+          onOpen={(id) => navigeer({ scherm: 'level', level: id })}
+          onDemoVoortgang={demoVoortgang}
+          onReset={() => void reset()}
+          onKlant={klant}
+          onAangekomen={() => window.history.replaceState(null, '', routeHash({ scherm: 'route', van: null }))}
+        />
+      )}
+      {level && (
+        <LevelScherm
+          key={level.id}
+          level={level}
+          state={status[level.id]}
+          status={status}
+          snapshot={snapshot}
+          evaluation={evaluateLevel(level, snapshot)}
+          handmatig={handmatig}
+          onHandmatig={vinkAf}
+          onSave={r.write}
+          onDemoStap={(stepId) => {
+            const step = level.steps.find((s) => s.id === stepId);
+            if (step) void demo(() => vulStap(step, repo));
+          }}
+          onFillLevel={() => void demo(() => vulLevel(level, repo))}
+          onNaarRoute={(van) => navigeer({ scherm: 'route', van })}
+        />
+      )}
+      {lade && (
+        <aside className="bl-lade" aria-label="Jouw repo">
+          <button type="button" className="bl-top-knop bl-lade-sluit" onClick={() => setLade(false)}>
+            Sluiten
+          </button>
+          <RepoPaneel info={info} snapshot={snapshot} commits={r.commits} lastWritten={r.lastWritten} showPullRequests={status[2] !== 'locked'} />
+        </aside>
+      )}
+      {(r.error || r.warning) && (
+        <p role="alert" className="bl-melding">
+          {r.error ?? r.warning}
         </p>
       )}
-      {r.warning && (
-        <p role="alert" className="card mt-4 text-sm">
-          {r.warning}
-        </p>
-      )}
-      <div className="hoofd-grid mt-6 grid gap-6 lg:grid-cols-[1fr_340px]">
-        {afLevel ? (
-          <Tussenscherm
-            level={afLevel}
-            volgende={naAf}
-            onVolgende={naAf ? () => kiesLevel(naAf.id) : undefined}
-            onTerug={() => kiesLevel(afLevel.id)}
-          />
-        ) : (
-          <LevelPagina
-            level={current}
-            state={status[current.id]}
-            snapshot={snapshot}
-            onSave={save}
-            onDemo={demoStap}
-            onFillLevel={demoLevel}
-            onNext={nextLevel ? () => kiesLevel(nextLevel.id) : undefined}
-          />
-        )}
-        <RepoPaneel info={info} snapshot={snapshot} commits={r.commits} lastWritten={r.lastWritten} showPullRequests={status[2] !== 'locked'} />
-      </div>
     </div>
   );
 }

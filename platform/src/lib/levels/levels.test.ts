@@ -87,14 +87,14 @@ describe('levelStatus', () => {
 });
 
 describe('level 0', () => {
-  it('loopt van setup via de AI-app en GitHub Desktop naar je eerste opdracht', () => {
+  it('begint op GitHub, zoals in de schets: account, repo en koppelen, daarna setup, AI-app en GitHub Desktop', () => {
     expect(level0.steps.map((s) => s.id)).toEqual([
-      'l0-setup',
-      'l0-download',
       'l0-account',
-      'l0-github-desktop',
       'l0-repo',
       'l0-koppelen',
+      'l0-setup',
+      'l0-download',
+      'l0-github-desktop',
       'l0-clonen',
       'l0-eerste-opdracht',
     ]);

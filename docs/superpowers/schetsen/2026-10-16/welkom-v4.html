@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welkom · Ondernemen met AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #5B2D8E; --purple-light: #9B6FCF; --accent: #D8FE56; --bg: #0C0818;
+    --text: #F0ECF5; --text-2: #D8CCEC; --muted: #BAAED0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-snap-type: y proximity; scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Barlow', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .logo { position: fixed; top: 22px; left: 28px; z-index: 10; font-weight: 900; font-size: 22px; color: #fff; letter-spacing: .01em; }
+  .logo em { color: var(--accent); font-style: normal; }
+  .voortgang { position: fixed; right: 26px; top: 50%; transform: translateY(-50%); z-index: 10; display: grid; gap: 10px; }
+  .voortgang a { width: 9px; height: 9px; border-radius: 99px; background: rgba(255,255,255,.25); display: block; transition: .3s; }
+  .voortgang a.aan { background: var(--accent); box-shadow: 0 0 12px rgba(216,254,86,.6); }
+
+  .scene { position: relative; min-height: 100vh; display: flex; align-items: center; scroll-snap-align: start; overflow: hidden; }
+  .beeld { position: absolute; inset: 0; background-size: cover; background-position: center; transform: scale(1.06); transition: transform 6s ease-out; }
+  .scene.zichtbaar .beeld { transform: scale(1); }
+  .beeld::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(12,8,24,.92) 0%, rgba(12,8,24,.55) 38%, rgba(12,8,24,0) 65%), linear-gradient(0deg, rgba(12,8,24,.7) 0%, rgba(12,8,24,0) 30%); }
+  /* zolang de beelden er niet zijn: paarse gloed als plaatsvervanger */
+  .beeld { background-color: #1a0f30; background-image: radial-gradient(ellipse 60% 70% at 70% 40%, rgba(91,45,142,.9), transparent 70%), radial-gradient(ellipse 20% 20% at 78% 30%, rgba(216,254,86,.35), transparent 70%); }
+
+  .tekst { position: relative; z-index: 2; max-width: calc(620px + 8vw); padding: 0 0 0 8vw; }
+  .label { font-size: 13px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  h1, h2 { font-weight: 900; line-height: .95; margin: 0; color: #fff; letter-spacing: .005em; }
+  h1 { font-size: clamp(48px, 7.5vw, 104px); }
+  h2 { font-size: clamp(40px, 5.6vw, 76px); }
+  .zin { font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45; color: var(--text-2); margin: 22px 0 0; max-width: 30ch; }
+  .accent { color: var(--accent); }
+
+  .in { opacity: 0; transform: translateY(24px); transition: opacity .9s ease, transform .9s ease; }
+  .zichtbaar .in { opacity: 1; transform: none; }
+  .zichtbaar .in.d1 { transition-delay: .15s; } .zichtbaar .in.d2 { transition-delay: .35s; } .zichtbaar .in.d3 { transition-delay: .6s; }
+
+  .scroll-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 2; color: var(--muted); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .scroll-hint span { width: 2px; height: 34px; background: linear-gradient(var(--accent), transparent); animation: zak 1.8s ease-in-out infinite; }
+  @keyframes zak { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+  /* De route */
+  .route-scene { flex-direction: column; justify-content: center; padding: 12vh 6vw; background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(91,45,142,.55), transparent 65%), var(--bg); }
+  .route-scene h2 { text-align: center; }
+  .route { position: relative; display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; width: min(1180px, 100%); margin-top: 9vh; }
+  .route::before { content: ''; position: absolute; left: 7%; right: 7%; top: 46px; border-top: 3px dotted rgba(155,111,207,.55); }
+  .route .lijn { position: absolute; left: 7%; top: 45px; height: 5px; width: 0; border-radius: 9px; background: linear-gradient(90deg, var(--accent), #b8e040); box-shadow: 0 0 16px rgba(216,254,86,.5); transition: width 3.2s cubic-bezier(.4,0,.2,1) .4s; }
+  .zichtbaar .route .lijn { width: 86%; }
+  .halte { text-align: center; position: relative; opacity: .35; transform: translateY(10px); transition: opacity .6s, transform .6s; }
+  .zichtbaar .halte { opacity: 1; transform: none; }
+  .halte .blob { width: 92px; height: 92px; margin: 0 auto 16px; border-radius: 46% 54% 52% 48% / 55% 45% 55% 45%; background: var(--accent); display: grid; place-items: center; box-shadow: 0 0 0 6px var(--bg), 0 0 28px rgba(216,254,86,.25); }
+  .halte.basis .blob { background: #fff; }
+  .halte svg { width: 44px; height: 44px; stroke: var(--purple); stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .halte .nr { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: .12em; }
+  .halte .naam { font-weight: 800; font-size: 17px; color: #fff; line-height: 1.15; margin-top: 2px; }
+  .halte .wat { font-size: 14px; color: var(--muted); margin-top: 4px; line-height: 1.3; }
+  .jij { position: absolute; top: -34px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #1A1A2E; background: var(--accent); padding: 3px 8px; border-radius: 8px; white-space: nowrap; }
+  .jij::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--accent); border-bottom: 0; }
+
+  .knop { display: inline-flex; align-items: center; gap: 10px; margin-top: 34px; background: linear-gradient(135deg, var(--accent), #b8e040); color: #1A1A2E; font: 800 18px 'Barlow', sans-serif; padding: 16px 30px; border-radius: 20px; text-decoration: none; box-shadow: 0 6px 30px rgba(216,254,86,.35); }
+
+  @media (max-width: 760px) {
+    .route { grid-template-columns: 1fr; gap: 18px; margin-top: 5vh; }
+    .route::before, .route .lijn { display: none; }
+    .halte { display: grid; grid-template-columns: 64px 1fr; text-align: left; align-items: center; gap: 14px; }
+    .halte .blob { width: 60px; height: 60px; margin: 0; }
+    .halte svg { width: 30px; height: 30px; }
+    .jij { left: 32px; top: -26px; }
+    .beeld::after { background: linear-gradient(0deg, rgba(12,8,24,.95) 20%, rgba(12,8,24,.3) 70%); }
+    .scene:not(.route-scene) { align-items: flex-end; padding-bottom: 14vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="logo">MORGEN<em>.</em></div>
+<nav class="voortgang" aria-label="Hoofdstukken">
+  <a href="#start"></a><a href="#route"></a><a href="#werkplek"></a><a href="#markt"></a><a href="#klanten"></a>
+</nav>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-werkplek" viewBox="0 0 24 24"><path d="M3 19L12 4l9 15z"/><path d="M12 4v15"/><path d="M9.5 19l2.5-5 2.5 5"/></symbol>
+  <symbol id="i-idee" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z"/><path d="M9.5 19h5"/><path d="M10.5 21.5h3"/></symbol>
+  <symbol id="i-probleem" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L20 20"/></symbol>
+  <symbol id="i-prototype" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5"/><path d="M12 12v9"/><path d="M12 12L4 7.5"/></symbol>
+  <symbol id="i-feedback" viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></symbol>
+  <symbol id="i-validatie" viewBox="0 0 24 24"><path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/></symbol>
+  <symbol id="i-lancering" viewBox="0 0 24 24"><path d="M12 2c3 2 5 6 5 10l-2 4H9l-2-4c0-4 2-8 5-10z"/><circle cx="12" cy="10" r="1.8"/><path d="M9 16l-2 4 3-1"/><path d="M15 16l2 4-3-1"/></symbol>
+</svg>
+
+<section class="scene" id="start">
+  <div class="beeld" style="background-image: url('/files/start.png')"></div>
+  <div class="tekst">
+    <div class="label in">Ondernemen met AI</div>
+    <h1 class="in d1">Je start je eigen bedrijf.</h1>
+    <p class="zin in d2">Van idee tot je eerste klanten. <span class="accent">Met AI naast je.</span></p>
+  </div>
+  <div class="scroll-hint">Zo gaan we het doen<span></span></div>
+</section>
+
+<section class="scene route-scene" id="route">
+  <h2 class="in">Zes stappen naar de markt</h2>
+  <style>
+    .zigzag { width: min(1200px, 100%); margin-top: 6vh; overflow: visible; font-family: 'Barlow', sans-serif; }
+    .zigzag .pijl { fill: none; stroke: var(--purple-light); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; transition: stroke-dashoffset 1s ease, opacity .3s; }
+    .zichtbaar .zigzag .pijl { stroke-dashoffset: 0; opacity: 1; }
+    .zigzag .node { opacity: 0; transition: opacity .6s, transform .6s; transform-box: fill-box; transform-origin: center; }
+    .zichtbaar .zigzag .node { opacity: 1; }
+    .zigzag .naam { fill: #fff; font-weight: 800; font-size: 21px; text-anchor: middle; }
+    .zigzag .wat { fill: var(--muted); font-size: 16px; text-anchor: middle; }
+    .zigzag .badge { fill: var(--bg); stroke: var(--accent); stroke-width: 2; }
+    .zigzag .badge-nr { fill: var(--accent); font-weight: 900; font-size: 15px; text-anchor: middle; dominant-baseline: central; }
+    .zigzag .lus-tekst { fill: var(--accent); font-size: 15px; font-weight: 700; letter-spacing: .08em; text-anchor: middle; text-transform: uppercase; opacity: 0; transition: opacity .6s 3.4s; }
+    .zichtbaar .zigzag .lus-tekst { opacity: .9; }
+    .zigzag .lichtje { fill: var(--accent); filter: drop-shadow(0 0 6px rgba(216,254,86,.9)); opacity: 0; transition: opacity .6s 3.4s; }
+    .zichtbaar .zigzag .lichtje { opacity: 1; }
+  </style>
+  <svg class="zigzag" viewBox="0 0 1200 560" role="img" aria-label="De route: werkplek, idee, probleem-validatie, prototype, markt feedback, product-validatie en lancering. Tussen idee en probleem-validatie, en tussen markt feedback en product-validatie, ga je een paar keer heen en weer.">
+    <defs>
+      <marker id="punt" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9B6FCF"/></marker>
+    </defs>
+
+    <!-- pijlen; pathLength=1 zodat ze zich laten 'tekenen' -->
+    <path class="pijl" pathLength="1" marker-end="url(#punt)" style="transition-delay:.3s" d="M130 292 C160 230 190 200 222 188"/>
+    <path class="pijl" pathLength="1" marker-end="url(#punt)" style="transition-delay:.8s" d="M236 214 C200 300 290 385 368 396"/>
+    <path class="pijl" pathLength="1" marker-end="url(#punt)" style="transition-delay:1.2s" d="M452 352 C478 280 392 176 320 170"/>
+    <path class="pijl" pathLength="1" marker-end="url(#punt)" style="transition-delay:1.6s" d="M468 382 C522 362 542 286 568 254"/>
+    <path class="pijl" pathLength="1" marker-end="url(#punt)" style="transition-delay:2s" d="M658 204 C700 180 738 162 770 152"/>
+    <path class="pijl" pathLength="1" marker-end="url(#punt)" style="transition-delay:2.4s" d="M796 188 C770 276 818 366 880 388"/>
+    <path class="pijl" pathLength="1" marker-end="url(#punt)" style="transition-delay:2.8s" d="M962 352 C990 280 934 176 868 150"/>
+    <path class="pijl" pathLength="1" marker-end="url(#punt)" style="transition-delay:3.2s" d="M978 378 C1030 352 1052 296 1070 268"/>
+
+    <!-- lichtjes die rondjes draaien in de twee lussen -->
+    <circle class="lichtje" r="7"><animateMotion dur="3.2s" repeatCount="indefinite" path="M270 170 C200 300 290 385 420 390 C478 280 392 176 270 170"/></circle>
+    <circle class="lichtje" r="7"><animateMotion dur="3.2s" repeatCount="indefinite" path="M820 140 C770 276 818 366 930 390 C990 280 934 176 820 140"/></circle>
+    <text class="lus-tekst" x="352" y="290">↻ heen en weer</text>
+    <text class="lus-tekst" x="884" y="276">↻ heen en weer</text>
+
+    <!-- haltes -->
+    <g class="node" style="transition-delay:.1s" transform="translate(100 330)">
+      <rect x="-70" y="-98" width="140" height="28" rx="9" fill="#D8FE56"/><text x="0" y="-79" text-anchor="middle" font-size="13" font-weight="800" fill="#1A1A2E" letter-spacing="1.5">JIJ BEGINT HIER</text>
+      <ellipse rx="46" ry="44" fill="#fff"/><use href="#i-werkplek" x="-22" y="-22" width="44" height="44" stroke="#5B2D8E" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle class="badge" cx="36" cy="-34" r="15"/><text class="badge-nr" x="36" y="-34">0</text>
+      <text class="naam" y="74">Werkplek</text><text class="wat" y="96">Je basiskamp</text>
+    </g>
+    <g class="node" style="transition-delay:.6s" transform="translate(270 170)">
+      <ellipse rx="46" ry="44" fill="#D8FE56"/><use href="#i-idee" x="-22" y="-22" width="44" height="44" stroke="#5B2D8E" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle class="badge" cx="36" cy="-34" r="15"/><text class="badge-nr" x="36" y="-34">1</text>
+      <text class="naam" y="-80">Idee</text><text class="wat" y="-58">Wat ga je doen?</text>
+    </g>
+    <g class="node" style="transition-delay:1s" transform="translate(420 390)">
+      <ellipse rx="46" ry="44" fill="#D8FE56"/><use href="#i-probleem" x="-22" y="-22" width="44" height="44" stroke="#5B2D8E" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle class="badge" cx="36" cy="-34" r="15"/><text class="badge-nr" x="36" y="-34">2</text>
+      <text class="naam" y="74">Probleem-validatie</text><text class="wat" y="96">Hebben ze dit probleem?</text>
+    </g>
+    <g class="node" style="transition-delay:1.5s" transform="translate(610 220)">
+      <ellipse rx="46" ry="44" fill="#D8FE56"/><use href="#i-prototype" x="-22" y="-22" width="44" height="44" stroke="#5B2D8E" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle class="badge" cx="36" cy="-34" r="15"/><text class="badge-nr" x="36" y="-34">3</text>
+      <text class="naam" y="-80">Prototype</text><text class="wat" y="-58">Je eerste versie</text>
+    </g>
+    <g class="node" style="transition-delay:1.9s" transform="translate(820 140)">
+      <ellipse rx="46" ry="44" fill="#D8FE56"/><use href="#i-feedback" x="-22" y="-22" width="44" height="44" stroke="#5B2D8E" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle class="badge" cx="36" cy="-34" r="15"/><text class="badge-nr" x="36" y="-34">4</text>
+      <text class="naam" y="-80">Markt feedback</text><text class="wat" y="-58">Wat vinden ze ervan?</text>
+    </g>
+    <g class="node" style="transition-delay:2.3s" transform="translate(930 390)">
+      <ellipse rx="46" ry="44" fill="#D8FE56"/><use href="#i-validatie" x="-22" y="-22" width="44" height="44" stroke="#5B2D8E" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle class="badge" cx="36" cy="-34" r="15"/><text class="badge-nr" x="36" y="-34">5</text>
+      <text class="naam" y="74">Product-validatie</text><text class="wat" y="96">Willen ze ervoor betalen?</text>
+    </g>
+    <g class="node" style="transition-delay:3s" transform="translate(1110 230)">
+      <ellipse rx="46" ry="44" fill="#D8FE56"/><use href="#i-lancering" x="-22" y="-22" width="44" height="44" stroke="#5B2D8E" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle class="badge" cx="36" cy="-34" r="15"/><text class="badge-nr" x="36" y="-34">6</text>
+      <text class="naam" y="-80">Lancering</text><text class="wat" y="-58">Je eerste klanten</text>
+    </g>
+  </svg>
+</section>
+
+<section class="scene" id="werkplek">
+  <div class="beeld" style="background-image: url('/files/werkplek.png')"></div>
+  <div class="tekst">
+    <div class="label in">Level 0 · Werkplek</div>
+    <h2 class="in d1">Eerst je basiskamp.</h2>
+    <p class="zin in d2">Even pas op de plaats. Alles wat je straks ophaalt, komt op één plek. <span class="accent">Je AI leest mee.</span></p>
+  </div>
+</section>
+
+<section class="scene" id="markt">
+  <div class="beeld" style="background-image: url('/files/markt.png')"></div>
+  <div class="tekst">
+    <div class="label in">Level 1 t/m 5</div>
+    <h2 class="in d1">Dan de markt op.</h2>
+    <p class="zin in d2">Jij praat met echte mensen. <span class="accent">Je AI ordent, zoekt uit en schrijft mee.</span></p>
+  </div>
+</section>
+
+<section class="scene" id="klanten">
+  <div class="beeld" style="background-image: url('/files/klanten.png')"></div>
+  <div class="tekst">
+    <div class="label in">Level 6 · Lancering</div>
+    <h2 class="in d1">Tot je eerste klant.</h2>
+    <p class="zin in d2">En een manier van werken met AI waar je nog jaren op bouwt.</p>
+    <a class="knop in d3" href="/files/levelkaart-v2.html?voortgang=0">Bekijk je route →</a>
+  </div>
+</section>
+
+<script>
+  const scenes = [...document.querySelectorAll('.scene')];
+  const dots = [...document.querySelectorAll('.voortgang a')];
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        e.target.classList.add('zichtbaar');
+        const i = scenes.indexOf(e.target);
+        dots.forEach((d, j) => d.classList.toggle('aan', j === i));
+      }
+    }
+  }, { threshold: 0.45 });
+  scenes.forEach((s) => io.observe(s));
+</script>
+</body>
+</html>

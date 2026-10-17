@@ -1,17 +1,13 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { evaluateLevel } from '../lib/levels/evaluate';
 import { INTERVIEWS_DIR, level2 } from '../lib/levels/level2';
+import type { VoortgangStep } from '../lib/levels/types';
 import { starterFiles } from '../lib/repo/starterFiles';
-import { StapKaart } from './StapKaart';
+import { VoortgangStap } from './VoortgangStap';
 
-const step = level2.steps.find((s) => s.id === 'l2-interviews')!;
-const render = (files: Record<string, string>) => {
-  const snapshot = { files: { ...starterFiles, ...files }, mergedPullRequests: 0 };
-  return renderToStaticMarkup(
-    <StapKaart level={level2} step={step} nummer={4} snapshot={snapshot} evaluation={evaluateLevel(level2, snapshot)} setup={{}} onSave={async () => true} />,
-  );
-};
+const step = level2.steps.find((s): s is VoortgangStep => s.id === 'l2-interviews' && s.kind === 'voortgang')!;
+const render = (files: Record<string, string>) =>
+  renderToStaticMarkup(<VoortgangStap step={step} snapshot={{ files: { ...starterFiles, ...files }, mergedPullRequests: 0 }} />);
 
 describe('interviewvakken', () => {
   it('uploaden kan niet meer: wat het platform uploadt, staat direct op GitHub', () => {
@@ -28,7 +24,4 @@ describe('interviewvakken', () => {
     expect(html).toContain('Interview 5');
   });
 
-  it('geeft de opdracht voor skill transcriberen als kopieerblok', () => {
-    expect(render({})).toMatch(/<textarea[^>]*>Gebruik skill transcriberen\. Zet het nieuwe interview in opnames\/ om\.<\/textarea>/);
-  });
 });
