@@ -6,12 +6,12 @@ import { level1 } from '../lib/levels/level1';
 import { level2 } from '../lib/levels/level2';
 import type { LevelDef } from '../lib/levels/types';
 import { starterFiles } from '../lib/repo/starterFiles';
-import { StapKaart } from './StapKaart';
+import { StapVenster } from '../beleving/StapVenster';
 
 const snapshot = { files: starterFiles, mergedPullRequests: 0 };
 const step = level0.steps.find((s) => s.id === 'l0-repo')!;
 const html = renderToStaticMarkup(
-  <StapKaart level={level0} step={step} nummer={5} snapshot={snapshot} evaluation={evaluateLevel(level0, snapshot)} setup={{}} onSave={async () => true} />,
+  <StapVenster level={level0} step={step} status="nu" snapshot={snapshot} evaluation={evaluateLevel(level0, snapshot)} setup={{}} onSave={async () => true} onKlaar={() => {}} onSluit={() => {}} />,
 );
 
 describe('pop-up "Waarom een repo?"', () => {
@@ -23,7 +23,8 @@ describe('pop-up "Waarom een repo?"', () => {
   });
 
   it('de dialoog heeft een kop die de deelnemer aanspreekt en een sluitknop', () => {
-    const labelId = html.match(/<dialog[^>]*aria-labelledby="([^"]+)"/)?.[1];
+    const controls = html.match(/<button[^>]*aria-haspopup="dialog"[^>]*aria-controls="([^"]+)"/)?.[1];
+    const labelId = html.match(new RegExp(`<dialog id="${controls}"[^>]*aria-labelledby="([^"]+)"`))?.[1];
     expect(html).toMatch(new RegExp(`<h2[^>]*id="${labelId}"[^>]*>Wat een gedeelde map niet kan</h2>`));
     expect(html).toMatch(/<dialog[\s\S]*<button[^>]*>Sluiten<\/button>[\s\S]*<\/dialog>/);
   });
@@ -42,7 +43,7 @@ describe('pop-up "Waarom een repo?"', () => {
 const popupVan = (level: LevelDef, stepId: string) => {
   const stap = level.steps.find((s) => s.id === stepId)!;
   const kaart = renderToStaticMarkup(
-    <StapKaart level={level} step={stap} nummer={5} snapshot={snapshot} evaluation={evaluateLevel(level, snapshot)} setup={{}} onSave={async () => true} />,
+    <StapVenster level={level} step={stap} status="nu" snapshot={snapshot} evaluation={evaluateLevel(level, snapshot)} setup={{}} onSave={async () => true} onKlaar={() => {}} onSluit={() => {}} />,
   );
   return kaart.slice(kaart.indexOf('<dialog'));
 };

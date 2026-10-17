@@ -3,13 +3,13 @@ import { describe, expect, it } from 'vitest';
 import { evaluateLevel } from '../lib/levels/evaluate';
 import { INTERVIEWS_DIR, level2 } from '../lib/levels/level2';
 import { starterFiles } from '../lib/repo/starterFiles';
-import { StapKaart } from './StapKaart';
+import { StapVenster } from '../beleving/StapVenster';
 
 const step = level2.steps.find((s) => s.id === 'l2-interviews')!;
 const render = (files: Record<string, string>) => {
   const snapshot = { files: { ...starterFiles, ...files }, mergedPullRequests: 0 };
   return renderToStaticMarkup(
-    <StapKaart level={level2} step={step} nummer={4} snapshot={snapshot} evaluation={evaluateLevel(level2, snapshot)} setup={{}} onSave={async () => true} />,
+    <StapVenster level={level2} step={step} status="nu" snapshot={snapshot} evaluation={evaluateLevel(level2, snapshot)} setup={{}} onSave={async () => true} onKlaar={() => {}} onSluit={() => {}} />,
   );
 };
 

@@ -4,10 +4,10 @@ import { evaluateLevel } from '../lib/levels/evaluate';
 import { level0 } from '../lib/levels/level0';
 import { level1 } from '../lib/levels/level1';
 import { starterFiles } from '../lib/repo/starterFiles';
-import { HALTES } from './beleving';
+import { BELEVING, HALTES } from './beleving';
 import { leesHandmatig, schrijfHandmatig } from './handmatig';
 import { parseRoute, routeHash } from './route';
-import { huidigLevel, stapStatussen, strookUitsnede } from './voortgang';
+import { huidigLevel, repoZichtbaar, stapStatussen, strookUitsnede } from './voortgang';
 
 const snap = (files: Record<string, string> = {}) => ({ files: { ...starterFiles, ...files }, mergedPullRequests: 0 });
 
@@ -106,5 +106,31 @@ describe('handmatig afgevinkte stappen', () => {
     expect(leesHandmatig({ getItem: () => '{kapot', setItem: () => {}, removeItem: () => {} }).size).toBe(0);
     expect(leesHandmatig({ getItem: () => { throw new Error('geblokkeerd'); }, setItem: () => {}, removeItem: () => {} }).size).toBe(0);
     expect(leesHandmatig(null).size).toBe(0);
+  });
+});
+
+describe('beelden', () => {
+  const bestanden = Object.keys(import.meta.glob('../../public/beelden/*', { query: '?url', import: 'default', eager: true })).map((p) => p.replace('../../public', ''));
+
+  it('elk beeld waar de beleving naar verwijst, staat in public/beelden, als WebP', () => {
+    const gebruikt = new Set(['/beelden/start-leeg.webp', '/beelden/jij.webp', '/beelden/start.webp']);
+    for (const b of Object.values(BELEVING)) {
+      gebruikt.add(b.beeld);
+      for (const s of b.scenes) if (s.soort === 'beeld') gebruikt.add(s.beeld);
+    }
+    for (const pad of gebruikt) {
+      expect(pad, pad).toMatch(/\.webp$/);
+      expect(bestanden, pad).toContain(pad);
+    }
+  });
+});
+
+describe('repoZichtbaar', () => {
+  it('"Jouw repo" verschijnt pas als je repo gekoppeld is, of level 0 af is', () => {
+    const stand = { 0: 'active', 1: 'locked' } as const;
+    expect(repoZichtbaar(new Set(), stand)).toBe(false);
+    expect(repoZichtbaar(new Set(['l0-account', 'l0-repo']), stand)).toBe(false);
+    expect(repoZichtbaar(new Set(['l0-koppelen']), stand)).toBe(true);
+    expect(repoZichtbaar(new Set(), { 0: 'done', 1: 'active' })).toBe(true);
   });
 });

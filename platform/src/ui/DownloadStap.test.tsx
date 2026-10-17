@@ -4,7 +4,7 @@ import { evaluateLevel } from '../lib/levels/evaluate';
 import { level0 } from '../lib/levels/level0';
 import { starterFiles } from '../lib/repo/starterFiles';
 import { DownloadStap } from './DownloadStap';
-import { StapKaart } from './StapKaart';
+import { StapVenster } from '../beleving/StapVenster';
 
 const CLAUDE = 'https://claude.com/product/claude-code';
 const CODEX = 'https://openai.com/codex';
@@ -43,11 +43,11 @@ describe('DownloadStap', () => {
     }
   });
 
-  it('StapKaart toont de downloadpagina bij de downloadstap', () => {
+  it('het stapvenster toont de downloadpagina bij de downloadstap', () => {
     const snapshot = { files: starterFiles, mergedPullRequests: 0 };
     const step = level0.steps.find((s) => s.id === 'l0-download')!;
     const html = renderToStaticMarkup(
-      <StapKaart level={level0} step={step} nummer={2} snapshot={snapshot} evaluation={evaluateLevel(level0, snapshot)} setup={{ ai: 'codex' }} onSave={async () => true} />,
+      <StapVenster level={level0} step={step} status="nu" snapshot={snapshot} evaluation={evaluateLevel(level0, snapshot)} setup={{ ai: 'codex' }} onSave={async () => true} onKlaar={() => {}} onSluit={() => {}} />,
     );
     expect(html).toContain(`href="${CODEX}"`);
   });

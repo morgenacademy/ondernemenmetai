@@ -1,8 +1,8 @@
 # Beelden
 
-Gemaakt met de beeldgenerator van Codex, in één serie: dezelfde jonge oprichter met rugzak, paars en lime als accent. Hier staan ze als JPEG (kwaliteit 80); de oprichter als PNG met doorzichtige achtergrond. De HTML-schetsen waar ze voor gemaakt zijn, staan in `docs/superpowers/schetsen/2026-10-16/`.
+Gemaakt met de beeldgenerator van Codex, in één serie: dezelfde jonge oprichter met rugzak, paars en lime als accent. Hier staan ze als WebP (samen minder dan 1 MB); de oprichter met doorzichtige achtergrond. De HTML-schetsen waar ze voor gemaakt zijn, staan in `docs/ontwerp/2026-10-17-intro-route-werkplek/`.
 
-- `start.jpg`, `start-leeg.jpg`: de route, met en zonder de oprichter. `start-leeg.jpg` is de ondergrond van de routekaart.
-- `jij.png`: de oprichter, uitgesneden, voor op de route.
-- `werkplek.jpg`, `vroeger.jpg`, `samen.jpg`: level 0.
-- `idee.jpg`, `markt.jpg`, `prototype.jpg`, `feedback.jpg`, `product.jpg`, `klanten.jpg`: level 1 tot en met 6.
+- `start.webp`, `start-leeg.webp`: de route, met en zonder de oprichter. `start-leeg.webp` is de ondergrond van de routekaart.
+- `jij.webp`: de oprichter, uitgesneden, voor op de route.
+- `werkplek.webp`, `vroeger.webp`, `samen.webp`: level 0.
+- `idee.webp`, `markt.webp`, `prototype.webp`, `feedback.webp`, `product.webp`, `klanten.webp`: level 1 tot en met 6.

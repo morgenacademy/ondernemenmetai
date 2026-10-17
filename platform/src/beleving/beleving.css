@@ -342,3 +342,37 @@
 /* Jouw repo als lade */
 .bl-lade { position: fixed; inset: 0 0 0 auto; width: min(420px, 100vw); z-index: 60; background: #0C0818; border-left: 1px solid var(--bl-card-border); overflow: auto; padding: 18px; box-shadow: -20px 0 60px rgba(0,0,0,.5); }
 .bl-lade-sluit { float: right; }
+
+/* Het stapvenster is een echte dialog: de standaardrand en -maat van de browser eraf; .bl-open geeft de achtergrond */
+dialog.bl-open { width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; border: 0; padding: 4vh 4vw; color: inherit; }
+dialog.bl-open::backdrop { background: transparent; }
+@media (max-width: 860px) { dialog.bl-open { padding: 2vh 3vw; } }
+.bl-voorbeeld { width: 100%; }
+
+/* Koppelen: waar je bent */
+.bl-waar { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 15px; letter-spacing: .04em; color: var(--bl-accent); }
+.bl-waar-nr { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 99px; background: var(--bl-accent); color: #1A1A2E; font-size: 14px; }
+.bl-markeer { outline: 3px solid var(--bl-accent); outline-offset: 5px; }
+.bl-gelukt { color: var(--bl-accent); font-weight: 800; font-size: 20px; margin: 18px 0 0; }
+.bl-open.licht .bl-waar { color: #5B2D8E; } .bl-open.licht .bl-waar-nr { background: #5B2D8E; color: #fff; }
+.bl-open.licht .bl-markeer { outline-color: #5B2D8E; }
+.bl-open.licht .bl-gelukt { color: #2f7d32; }
+.bl-open.licht .bl-scherm .markeer { outline-color: #5B2D8E; box-shadow: 0 0 0 9px rgba(91,45,142,.15); }
+
+/* De uitleg loopt mee met wat je doet */
+ol.bl-meelopen { list-style: none; padding-left: 0; margin: 0; counter-reset: stap; display: grid; gap: 4px; font-size: 17px; line-height: 1.5; }
+ol.bl-meelopen li { counter-increment: stap; position: relative; padding: 6px 8px 6px 42px; border-radius: 10px; }
+ol.bl-meelopen li::before { content: counter(stap); position: absolute; left: 6px; top: 7px; width: 26px; height: 26px; border-radius: 99px; display: grid; place-items: center; font-weight: 800; font-size: 14px; border: 2px solid currentColor; }
+ol.bl-meelopen li.gedaan { opacity: .55; }
+ol.bl-meelopen li.gedaan::before { content: '✓'; background: var(--bl-accent); color: #1A1A2E; border-color: var(--bl-accent); }
+ol.bl-meelopen li.nu { font-weight: 700; background: rgba(216,254,86,.08); }
+ol.bl-meelopen li.nu::before { background: var(--bl-accent); color: #1A1A2E; border-color: var(--bl-accent); }
+ol.bl-meelopen li.later { opacity: .45; }
+.bl-open.licht ol.bl-meelopen li.nu { color: #1d1d1f; background: rgba(91,45,142,.08); }
+.bl-open.licht ol.bl-meelopen li.nu::before, .bl-open.licht ol.bl-meelopen li.gedaan::before { background: #5B2D8E; color: #fff; border-color: #5B2D8E; }
+
+/* Meldingen van de demo-opslag, onder de bovenbalk */
+.bl-meldingen { position: fixed; top: 64px; left: 50%; transform: translateX(-50%); z-index: 35; width: min(640px, calc(100vw - 32px)); display: grid; gap: 8px; }
+.bl-meldingen p { margin: 0; padding: 12px 16px; border-radius: 14px; background: #2a1748; border: 1px solid var(--bl-card-border); color: #fff; font-size: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+.bl-stappen .bl-doel { margin: 18px 0 0; }
+.bl-stappen.licht .bl-doel { color: #1d1d1f; } .bl-stappen.licht .bl-doel b { color: #5B2D8E; }
