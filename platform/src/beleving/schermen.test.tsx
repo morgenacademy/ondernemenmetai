@@ -196,6 +196,13 @@ describe('StapVenster', () => {
     expect(venster(0, 'l0-account')).toMatch(/<button[^>]*class="bl-vknop p"[^>]*>Klaar, ik heb een account<\/button>/);
   });
 
+  it('koppelen sla je niet over: verder kan pas als het koppelen gelukt is', () => {
+    const html = venster(0, 'l0-koppelen');
+    expect(html).not.toContain('Klaar, volgende stap');
+    expect(html).toMatch(/<button[^>]*class="bl-vknop p"[^>]*disabled=""[^>]*>Volgende stap<\/button>/);
+    expect(html).toContain('Rond eerst de stappen links af; daarna gaat dit vanzelf door.');
+  });
+
   it('een stap met een check gaat vanzelf door zodra de repo het laat zien', () => {
     const html = venster(2, 'l2-analyse');
     expect(html).toMatch(/<button[^>]*class="bl-vknop p"[^>]*disabled=""[^>]*>Volgende stap<\/button>/);

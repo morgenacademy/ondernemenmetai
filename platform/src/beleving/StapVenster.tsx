@@ -110,7 +110,9 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
   const groot = useRef<HTMLDivElement>(null);
   const setup = setupFrom(snapshot);
   const checks = evaluation.results.filter((r) => r.stepId === step.id);
-  const handmatig = checks.length === 0 && !step.optional;
+  // Koppelen vink je niet zelf af: die stap is pas klaar als het koppelen gelukt is.
+  const isKoppel = step.id === 'l0-koppelen';
+  const handmatig = checks.length === 0 && !step.optional && !isKoppel;
   const af = status === 'af';
   const laatste = nummer === totaal;
   const demo = demoVoorStap(step);
@@ -252,7 +254,7 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
           </div>
           {!af && !handmatig && !step.optional && (
             <p className="bl-hint" id="bl-waarom-niet">
-              Dit gaat vanzelf door zodra je repo het laat zien.
+              {isKoppel ? 'Rond eerst de stappen links af; daarna gaat dit vanzelf door.' : 'Dit gaat vanzelf door zodra je repo het laat zien.'}
             </p>
           )}
         </div>
