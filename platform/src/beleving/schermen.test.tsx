@@ -27,6 +27,12 @@ describe('Welkom', () => {
     for (const kop of ['Eerst je basiskamp.', 'Dan de markt op.', 'Tot je eerste klant.']) expect(html).toContain(kop);
     for (const l of LEVELS) expect(html, l.name).toContain(l.name);
   });
+  it('op een telefoon staat de route als lijst, met de twee lussen erbij', () => {
+    const lijst = html.match(/<ol class="bl-route-lijst[^"]*"[\s\S]*?<\/ol>/)?.[0] ?? '';
+    for (const l of LEVELS) expect(lijst, l.name).toContain(l.name);
+    expect(lijst.match(/heen en weer/g)).toHaveLength(2);
+  });
+
   it('eindigt met een knop naar je route', () => {
     expect(html).toMatch(/<button[^>]*class="bl-knop[^"]*"[^>]*>Bekijk je route →<\/button>/);
   });

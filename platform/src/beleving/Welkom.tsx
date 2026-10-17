@@ -124,6 +124,23 @@ export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
             </g>
           ))}
         </svg>
+        <ol className="bl-route-lijst bl-in d1">
+          {HALTES.map((h) => (
+            <li key={h.nr} className={h.basis ? 'basis' : ''}>
+              <span className="blob" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <use href={`#bl-i-${h.icoon}`} />
+                </svg>
+              </span>
+              <span>
+                <span className="nr">Level {h.nr}</span>
+                <span className="naam">{h.naam}</span>
+                <span className="wat">{h.wat}</span>
+              </span>
+              {(h.nr === 1 || h.nr === 4) && <span className="lus">↻ heen en weer met level {h.nr + 1}</span>}
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="bl-scene" id="bl-welkom-werkplek">

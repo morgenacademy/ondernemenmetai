@@ -85,17 +85,20 @@ export default function App({ repo, storage = null }: Props) {
       <div className="bl-top-rechts">
         {route.scherm === 'welkom' && (
           <button type="button" className="bl-top-knop" onClick={() => (zetVlag(storage, INTRO_KEY, true), navigeer({ scherm: 'route', van: null }))}>
-            Sla de intro over
+            <span className="bl-lang">Sla de intro over</span>
+            <span className="bl-kort">Overslaan</span>
           </button>
         )}
         {route.scherm === 'route' && (
           <button type="button" className="bl-top-knop" onClick={() => navigeer({ scherm: 'welkom' })}>
-            ↺ Bekijk de intro opnieuw
+            ↺ <span className="bl-lang">Bekijk de intro opnieuw</span>
+            <span className="bl-kort">Intro</span>
           </button>
         )}
         {route.scherm === 'level' && (
           <button type="button" className="bl-top-knop" onClick={() => navigeer({ scherm: 'route', van: null })}>
-            ← Jouw route
+            ← <span className="bl-lang">Jouw route</span>
+            <span className="bl-kort">Route</span>
           </button>
         )}
         {route.scherm !== 'welkom' && (
