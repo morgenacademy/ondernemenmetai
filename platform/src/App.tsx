@@ -3,7 +3,7 @@ import { HANDMATIG_KEY, INTRO_KEY, leesHandmatig, leesVlag, schrijfHandmatig, ze
 import { LevelScherm } from './beleving/LevelScherm';
 import { parseRoute, routeHash, type Route } from './beleving/route';
 import { Routekaart } from './beleving/Routekaart';
-import { huidigLevel } from './beleving/voortgang';
+import { huidigLevel, repoZichtbaar } from './beleving/voortgang';
 import { Welkom } from './beleving/Welkom';
 import { vulLevel, vulStap } from './demo/vullen';
 import { LEVELS } from './lib/levels';
@@ -101,7 +101,7 @@ export default function App({ repo, storage = null }: Props) {
             <span className="bl-kort">Route</span>
           </button>
         )}
-        {route.scherm !== 'welkom' && (
+        {route.scherm !== 'welkom' && repoZichtbaar(handmatig, status) && (
           <button type="button" className="bl-top-knop" aria-expanded={lade} onClick={() => setLade(!lade)}>
             Jouw repo
           </button>
@@ -156,7 +156,7 @@ export default function App({ repo, storage = null }: Props) {
           onNaarRoute={(van) => navigeer({ scherm: 'route', van })}
         />
       )}
-      {lade && (
+      {lade && repoZichtbaar(handmatig, status) && (
         <aside className="bl-lade" aria-label="Jouw repo">
           <button type="button" className="bl-top-knop bl-lade-sluit" onClick={() => setLade(false)}>
             Sluiten

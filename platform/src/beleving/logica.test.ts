@@ -7,7 +7,7 @@ import { starterFiles } from '../lib/repo/starterFiles';
 import { HALTES } from './beleving';
 import { leesHandmatig, schrijfHandmatig } from './handmatig';
 import { parseRoute, routeHash } from './route';
-import { huidigLevel, stapStatussen, strookUitsnede } from './voortgang';
+import { huidigLevel, repoZichtbaar, stapStatussen, strookUitsnede } from './voortgang';
 
 const snap = (files: Record<string, string> = {}) => ({ files: { ...starterFiles, ...files }, mergedPullRequests: 0 });
 
@@ -106,5 +106,15 @@ describe('handmatig afgevinkte stappen', () => {
     expect(leesHandmatig({ getItem: () => '{kapot', setItem: () => {}, removeItem: () => {} }).size).toBe(0);
     expect(leesHandmatig({ getItem: () => { throw new Error('geblokkeerd'); }, setItem: () => {}, removeItem: () => {} }).size).toBe(0);
     expect(leesHandmatig(null).size).toBe(0);
+  });
+});
+
+describe('repoZichtbaar', () => {
+  it('"Jouw repo" verschijnt pas als je repo gekoppeld is, of level 0 af is', () => {
+    const stand = { 0: 'active', 1: 'locked' } as const;
+    expect(repoZichtbaar(new Set(), stand)).toBe(false);
+    expect(repoZichtbaar(new Set(['l0-account', 'l0-repo']), stand)).toBe(false);
+    expect(repoZichtbaar(new Set(['l0-koppelen']), stand)).toBe(true);
+    expect(repoZichtbaar(new Set(), { 0: 'done', 1: 'active' })).toBe(true);
   });
 });

@@ -45,3 +45,11 @@ export function strookUitsnede(van: Halte, naar: Halte): { left: number; top: nu
   // De plaat is 1536 x 1024: zijn hoogte is zoom * 2/3 van de strookbreedte, en de strook is half zo hoog als breed.
   return { left: 50 - midX * zoom, top: 50 - (midY * zoom * 4) / 3, zoom };
 }
+
+/**
+ * "Jouw repo" laat de repo pas zien als het platform hem kent: na het koppelen, of zodra level 0 af is.
+ * Daarvoor zou het paneel iets beweren dat nog niet waar is.
+ */
+export function repoZichtbaar(handmatig: Set<string>, status: Record<number, LevelState>): boolean {
+  return handmatig.has('l0-koppelen') || status[0] === 'done';
+}
