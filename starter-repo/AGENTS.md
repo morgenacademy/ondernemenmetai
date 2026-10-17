@@ -7,10 +7,18 @@ Deze repo is de werkmap van een startende onderneming. De eigenaar volgt het pro
 - `level-0-werkplek/`: setup en de git-oefening.
 - `level-1-idee/`: idee, visie, waardepropositie (madlib), aannames, de feedback op de propositie (`feedback-propositie.md`) en het Value Proposition Canvas (`vpc.md`). Soms ook `ideeen.md`, met drie richtingen voor wie nog geen idee had.
 - `level-2-probleemvalidatie/`: doelgroep, interviewvragen, interviews, analyse en de eerste doelgroep (`eerste-doelgroep.md`).
+- `level-3-prototype/`: oplossingen, de gekozen oplossing, de waardepropositie, de MVP-keuze (`mvp.md`) en de MVP zelf in `mvp/`.
+- `level-4-marktfeedback/`: prijs, testkaarten per ronde, feedback per persoon (`feedback/NN-rol.md`) en resultaatkaarten per ronde.
+- `level-5-productvalidatie/`: het product met het besluit van de eigenaar (`product.md`) en het Business Model Canvas (`bmc.md`).
+- `level-6-lancering/`: klanten, pijplijn en impact. De eigen verkoopaanpak staat als skill in `skills/verkoopaanpak/`.
 - `skills/`: werkwijzen die je volgt als de eigenaar erom vraagt.
 - `opnames/`: opnames en ruwe transcripts van interviews. Deze map staat alleen op de computer van de eigenaar: hij staat in `.gitignore` en komt nooit op GitHub.
 
 Elk level bouwt voort op het vorige. Lees eerst de bestanden van eerdere levels voordat je aan een nieuw level werkt.
+
+## Over mijn onderneming
+
+<!-- Deze sectie vul je in level 5 met je AI: wie je klanten zijn, wat je verkoopt en voor welke prijs. -->
 
 ## Templates en de markering
 

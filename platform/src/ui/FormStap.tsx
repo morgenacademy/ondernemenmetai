@@ -1,15 +1,31 @@
 import { useState, type FormEvent } from 'react';
-import type { Field, FileWrite, FormStep, FormValues } from '../lib/levels/types';
+import type { Field, FileWrite, FormStep, FormValues, Option } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
 
-type Props = { step: FormStep; snapshot: RepoSnapshot; alreadyDone: boolean; onSave: (w: FileWrite) => Promise<boolean> };
+/** demoWaarden: in de demo vult een knop het formulier, zodat je daarna zelf op "Zet in je repo" klikt. */
+type Props = { step: FormStep; snapshot: RepoSnapshot; alreadyDone: boolean; onSave: (w: FileWrite) => Promise<boolean>; demoWaarden?: FormValues };
+
+function optionsOf(field: Field, snapshot: RepoSnapshot): Option[] {
+  return field.kind === 'select' ? (field.optionsFrom?.(snapshot) ?? field.options) : [];
+}
 
 function initialValues(fields: Field[]): FormValues {
-  return Object.fromEntries(fields.map((f) => [f.name, f.kind === 'select' ? f.options[0].value : '']));
+  return Object.fromEntries(fields.map((f) => [f.name, f.kind === 'select' ? (f.options[0]?.value ?? '') : '']));
 }
 
 function isRequired(field: Field): boolean {
   return (field.kind === 'text' || field.kind === 'textarea') && !field.optional;
+}
+
+/** Een keuzelijst die zijn keuzes uit de repo haalt, kiest de eerste als de huidige waarde er niet (meer) tussen staat. */
+function resolve(fields: Field[], values: FormValues, snapshot: RepoSnapshot): FormValues {
+  const resolved = { ...values };
+  for (const field of fields) {
+    if (field.kind !== 'select') continue;
+    const options = optionsOf(field, snapshot);
+    if (!options.some((o) => o.value === values[field.name])) resolved[field.name] = options[0]?.value ?? '';
+  }
+  return resolved;
 }
 
 /** Uitleg bij een uitgeschakelde knop: het eerste lege veld, plus hoeveel er nog meer leeg zijn. */
@@ -19,10 +35,12 @@ export function missingFieldsHint(labels: string[]): string | null {
   return rest === 0 ? `Nog leeg: ${labels[0]}` : `Nog leeg: ${labels[0]} en nog ${rest} ${rest === 1 ? 'veld' : 'velden'}`;
 }
 
-export function FormStap({ step, snapshot, alreadyDone, onSave }: Props) {
-  const [values, setValues] = useState<FormValues>(() => initialValues(step.fields));
+export function FormStap({ step, snapshot, alreadyDone, onSave, demoWaarden }: Props) {
+  const [raw, setValues] = useState<FormValues>(() => initialValues(step.fields));
   const [saving, setSaving] = useState(false);
-  const hint = missingFieldsHint(step.fields.filter((f) => isRequired(f) && values[f.name].trim() === '').map((f) => f.label));
+  const values = resolve(step.fields, raw, snapshot);
+  const empty = step.fields.filter((f) => (isRequired(f) && values[f.name].trim() === '') || (f.kind === 'select' && optionsOf(f, snapshot).length === 0));
+  const hint = missingFieldsHint(empty.map((f) => f.label));
   const missing = hint !== null;
   const hintId = `${step.id}-leeg`;
   const set = (name: string, value: string) => setValues((prev) => ({ ...prev, [name]: value }));
@@ -39,6 +57,20 @@ export function FormStap({ step, snapshot, alreadyDone, onSave }: Props) {
     <form onSubmit={submit} className="mt-4 space-y-3">
       {step.fields.map((field) => {
         const id = `${step.id}-${field.name}`;
+        // Weinig keuzes, zoals bij de setup: knoppen, zoals in de schets van level 0.
+        if (field.kind === 'select' && field.knoppen)
+          return (
+            <div key={field.name}>
+              <span className="veld-label">{field.label}</span>
+              <div role="group" aria-label={field.label} className="keuzes">
+                {optionsOf(field, snapshot).map((o) => (
+                  <button key={o.value} type="button" className="keuze-knop" aria-pressed={values[field.name] === o.value} onClick={() => set(field.name, o.value)}>
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
         return (
           <div key={field.name}>
             <label htmlFor={id} className="veld-label">
@@ -46,14 +78,14 @@ export function FormStap({ step, snapshot, alreadyDone, onSave }: Props) {
             </label>
             {field.kind === 'select' ? (
               <select id={id} className="veld" value={values[field.name]} onChange={(e) => set(field.name, e.target.value)}>
-                {field.options.map((o) => (
+                {optionsOf(field, snapshot).map((o) => (
                   <option key={o.value} value={o.value}>
                     {o.label}
                   </option>
                 ))}
               </select>
             ) : field.kind === 'textarea' ? (
-              <textarea id={id} className="veld" rows={3} placeholder={field.placeholder} value={values[field.name]} onChange={(e) => set(field.name, e.target.value)} />
+              <textarea id={id} className="veld" rows={field.rijen ?? 3} placeholder={field.placeholder} value={values[field.name]} onChange={(e) => set(field.name, e.target.value)} />
             ) : (
               <input
                 id={id}
@@ -80,6 +112,11 @@ export function FormStap({ step, snapshot, alreadyDone, onSave }: Props) {
         )}
         {alreadyDone && <span className="text-sm text-[var(--text-secondary)]">Staat al in je repo. Opnieuw opslaan overschrijft het.</span>}
       </div>
+      {demoWaarden && (
+        <button type="button" className="btn-demo" onClick={() => setValues((prev) => ({ ...prev, ...demoWaarden }))}>
+          Vul met demo content
+        </button>
+      )}
     </form>
   );
 }

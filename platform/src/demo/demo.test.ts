@@ -58,7 +58,7 @@ it('de demo-interviews hebben een nummer, een rol en het antwoord op de terugbel
 
 it('de canvasstap in de demo werkt canvas en aannames bij via een gemergde pull request', async () => {
   const repo = new MockRepoAdapter(null, starterFiles);
-  expect(SIMULATIONS['l2-canvas'].label).toBe('doe alsof je AI je canvas bijwerkte en jij de pull request mergde');
+  expect(SIMULATIONS['l2-canvas'].label).toBe('doet alsof je AI je canvas bijwerkte en jij de pull request mergde');
   await simulate(repo, 'l2-canvas');
   const snapshot = await buildSnapshot(repo);
   expect(snapshot.mergedPullRequests).toBe(1);
@@ -70,7 +70,7 @@ it('je eerste opdracht in de demo zet werkplek.md online zonder pull request', a
   const repo = new MockRepoAdapter(null, starterFiles);
   await saveForm(repo, level0, 'l0-setup', { os: 'windows', ai: 'codex' });
   expect(SIMULATIONS['l0-git']).toBeUndefined();
-  expect(SIMULATIONS['l0-eerste-opdracht'].label).toBe('doe alsof je AI werkplek.md invulde en jij hem pushte');
+  expect(SIMULATIONS['l0-eerste-opdracht'].label).toBe('doet alsof je AI werkplek.md invulde en jij hem pushte');
   await simulate(repo, 'l0-eerste-opdracht');
   const snapshot = await buildSnapshot(repo);
   expect(snapshot.mergedPullRequests).toBe(0);

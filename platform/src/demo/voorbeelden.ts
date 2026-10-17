@@ -122,12 +122,14 @@ export const VOORBEELD_AANNAMES_NA_INTERVIEWS = `# Aannames
 
 export function voorbeeldInterview(path: string): string {
   const nummer = path.split('/').pop()?.slice(0, 2) ?? '01';
+  // In de demo zeggen 03 en 05 nee op de terugbelvraag, zodat level 4 met drie mensen verdergaat.
+  const terugbellen = ['03', '05'].includes(nummer) ? 'nee' : 'ja';
   return `---
 rol: apotheker
 segment: zelfstandige apotheken
 locatie: Breda
 dmu: ja
-terugbellen: ja
+terugbellen: ${terugbellen}
 ---
 # Interview ${nummer}: apotheker
 
@@ -149,7 +151,7 @@ Parkeren in de binnenstad kost veel tijd, en de assistent is dan niet in de apot
 
 ## Terugbellen
 
-Mag ik je bellen als ik iets heb wat hierbij helpt? Ja.
+Mag ik je bellen als ik iets heb wat hierbij helpt? ${terugbellen === 'ja' ? 'Ja.' : 'Liever niet.'}
 `;
 }
 
@@ -171,7 +173,7 @@ Zelfstandige apotheken in de binnenstad van Breda ervaren allemaal hetzelfde pro
 export const VOORBEELD_EERSTE_DOELGROEP = `---
 gevonden: ja
 doelgroep: zelfstandige apotheken in de binnenstad van Breda
-probleem: spoedbezorging rond het middaguur kost een assistent een halve dag
+probleem: spoedbezorging die hun assistent elke dag uit de apotheek haalt
 ---
 # Eerste doelgroep
 

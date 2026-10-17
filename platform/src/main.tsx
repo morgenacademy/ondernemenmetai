@@ -5,6 +5,7 @@ import { MockRepoAdapter, clearDemoStorage } from './lib/repo/mockRepo';
 import { starterFiles } from './lib/repo/starterFiles';
 import { Foutgrens } from './ui/Foutgrens';
 import './styles.css';
+import './beleving/beleving.css';
 
 function browserStorage(): Storage | null {
   try {
@@ -25,7 +26,7 @@ const clearAndReload = () => {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Foutgrens onClear={clearAndReload}>
-      <App repo={repo} />
+      <App repo={repo} storage={storage} />
     </Foutgrens>
   </StrictMode>,
 );

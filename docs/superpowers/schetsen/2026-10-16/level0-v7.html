@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Level 0 · Werkplek</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root { --purple: #5B2D8E; --purple-light: #9B6FCF; --accent: #D8FE56; --bg: #0C0818; --text: #F0ECF5; --text-2: #D8CCEC; --muted: #BAAED0; --card: rgba(155,111,207,.2); --card-border: rgba(180,145,230,.38); }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Barlow', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .top { position: fixed; top: 0; left: 0; right: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; padding: 16px 28px; background: linear-gradient(180deg, rgba(12,8,24,.85), rgba(12,8,24,0)); }
+  .logo { font-weight: 900; font-size: 22px; color: #fff; } .logo em { color: var(--accent); font-style: normal; }
+  .top a { color: var(--text-2); font-size: 14px; font-weight: 600; text-decoration: none; background: rgba(12,8,24,.55); border: 1px solid rgba(255,255,255,.16); padding: 7px 12px; border-radius: 12px; backdrop-filter: blur(8px); }
+  .top a:hover { color: #fff; border-color: rgba(255,255,255,.35); }
+  .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  h1, h2 { font-weight: 900; line-height: .95; margin: 0; color: #fff; }
+  h1 { font-size: clamp(48px, 7vw, 100px); } h2 { font-size: clamp(40px, 5.4vw, 76px); }
+  .zin { font-size: clamp(18px, 1.6vw, 23px); line-height: 1.5; color: var(--text-2); margin: 24px 0 0; max-width: 32ch; }
+  .accent { color: var(--accent); }
+  .in { opacity: 0; transform: translateY(24px); transition: opacity .9s, transform .9s; }
+  .zichtbaar .in, .zichtbaar.in { opacity: 1; transform: none; }
+  .zichtbaar .in.d1 { transition-delay: .15s; } .zichtbaar .in.d2 { transition-delay: .35s; }
+  .scroll-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 2; color: var(--muted); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; }
+  .scroll-hint:hover { color: #fff; }
+
+  .scene { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+  .beeld { position: absolute; inset: 0; background-size: cover; background-position: center; transform: scale(1.06); transition: transform 6s ease-out; }
+  .zichtbaar .beeld { transform: scale(1); }
+  .beeld::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(12,8,24,.94) 0%, rgba(12,8,24,.6) 36%, rgba(12,8,24,0) 62%), linear-gradient(0deg, rgba(12,8,24,.85) 0%, rgba(12,8,24,0) 28%); }
+  .tekst { position: relative; z-index: 2; padding-left: 8vw; max-width: calc(640px + 8vw); }
+
+  .repo { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: center; padding: 14vh 8vw; background: radial-gradient(ellipse 60% 60% at 75% 50%, rgba(91,45,142,.45), transparent 70%), var(--bg); }
+  .woord { display: inline-flex; align-items: baseline; gap: 12px; margin-top: 30px; padding: 14px 18px; border-radius: 16px; background: rgba(216,254,86,.07); border: 1px dashed rgba(216,254,86,.5); font-size: 17px; color: var(--text-2); }
+  .woord b { color: var(--accent); font-size: 22px; }
+  .map-scene { position: relative; aspect-ratio: 1 / .85; max-width: 640px; width: 100%; justify-self: center; }
+  .map-scene svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .chip { position: absolute; font-size: clamp(14px, 1.2vw, 18px); font-weight: 700; color: #1A1A2E; background: #F0ECF5; border-radius: 12px; padding: 8px 14px; box-shadow: 0 8px 22px rgba(0,0,0,.4); white-space: nowrap; opacity: 0; }
+  .zichtbaar .chip { animation: invliegen 1.2s cubic-bezier(.3,.7,.2,1) forwards; }
+  @keyframes invliegen { 0% { opacity: 0; transform: translate(var(--vx), var(--vy)) rotate(var(--r)); } 25% { opacity: 1; } 100% { opacity: 1; transform: none; } }
+  .orb { position: absolute; width: 92px; height: 92px; right: 2%; top: 2%; border-radius: 99px; background: radial-gradient(circle at 35% 30%, #f4ffc4, #D8FE56 45%, #9fc72a); box-shadow: 0 0 50px rgba(216,254,86,.7); animation: zweef 4s ease-in-out infinite; }
+  @keyframes zweef { 50% { transform: translateY(-12px); } }
+
+  .stappen { padding: 16vh 8vw 18vh; }
+  .stappen .kop { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; }
+  .voortgang { font-size: 17px; color: var(--text-2); }
+  .voortgang b { color: var(--accent); }
+  .balk-voortgang { height: 6px; border-radius: 9px; background: rgba(255,255,255,.1); margin-top: 22px; overflow: hidden; }
+  .balk-voortgang span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), #b8e040); transition: width .6s; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px; margin-top: 6vh; }
+  .kaart { text-align: left; font: inherit; color: inherit; cursor: pointer; padding: 0; border-radius: 26px; overflow: hidden; background: var(--card); border: 1px solid var(--card-border); transition: transform .3s, border-color .3s, box-shadow .3s; display: flex; flex-direction: column; }
+  .kaart:hover, .kaart:focus-visible { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 16px 40px rgba(0,0,0,.4); outline: none; }
+  .kaart.nu { border-color: var(--accent); }
+  .kaart .voorbeeld { aspect-ratio: 16 / 10; background: #120b24; padding: 18px; overflow: hidden; }
+  .kaart .tekstvak { padding: 22px 24px 26px; }
+  .kaart .rij { display: flex; justify-content: space-between; align-items: center; }
+  .kaart .nr { font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .kaart h3 { font-weight: 800; font-size: 24px; line-height: 1.15; margin: 8px 0 8px; color: #fff; }
+  .kaart p { margin: 0; color: var(--text-2); font-size: 17px; line-height: 1.45; }
+  .status { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 4px 9px; border-radius: 8px; }
+  .status.af { background: var(--accent); color: #1A1A2E; }
+  .status.nu { border: 1px solid var(--accent); color: var(--accent); }
+  .status.straks { color: var(--muted); border: 1px solid rgba(255,255,255,.18); }
+  .kaart.af .voorbeeld { opacity: .6; }
+
+  .open { position: fixed; inset: 0; z-index: 20; background: rgba(6,4,14,.82); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; padding: 4vh 4vw; }
+  .open.aan { display: flex; }
+  .open .vel { position: relative; width: min(1240px, 100%); max-height: 92vh; overflow: auto; border-radius: 30px; background: #160d2b; border: 1px solid var(--card-border); display: grid; grid-template-columns: 1.3fr 1fr; }
+  .open .groot { background: #0f0820; padding: 36px; display: flex; align-items: center; }
+  .open .groot .scherm { width: 100%; font-size: 15px; }
+  .open .uitleg { padding: 40px 40px 34px; }
+  .open h3 { font-weight: 900; font-size: 40px; line-height: 1.02; margin: 8px 0 18px; color: #fff; }
+  .open ol { margin: 0; padding-left: 22px; color: var(--text-2); font-size: 18px; line-height: 1.55; }
+  .open ol li + li { margin-top: 8px; }
+  .open b { color: #fff; }
+  .open code { font-size: 15px; background: rgba(255,255,255,.08); border-radius: 6px; padding: 2px 6px; color: #fff; }
+  .extra { margin-top: 20px; }
+  .acties { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+  .knop { font: 800 17px 'Barlow'; border-radius: 18px; padding: 14px 22px; cursor: pointer; border: 0; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .knop.p { background: linear-gradient(135deg, var(--accent), #b8e040); color: #1A1A2E; }
+  .knop.o { background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.2); }
+  .knop:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .sluit { position: absolute; top: 14px; right: 18px; font-size: 30px; color: #fff; background: none; border: 0; cursor: pointer; z-index: 2; }
+
+  dialog.popup { margin: auto; width: min(40rem, calc(100vw - 2rem)); max-height: calc(100vh - 2rem); padding: 0; color: var(--text); background: #1a1030; border: 1px solid var(--card-border); border-radius: 28px; }
+  dialog.popup::backdrop { background: rgba(6,4,14,.75); backdrop-filter: blur(4px); }
+  .popup-inhoud { padding: 30px; }
+  .popup-inhoud h2 { font-size: 28px; line-height: 1.1; outline: none; }
+  .popup-inhoud h4 { font-size: 18px; font-weight: 800; color: #fff; margin: 22px 0 6px; }
+  .popup-inhoud p { margin: 0; color: var(--text-2); line-height: 1.5; }
+
+
+  /* Nagetekende schermen; in het platform worden dit schermafbeeldingen met dezelfde groene markering */
+  .scherm { border-radius: 14px; overflow: hidden; background: #0d1117; border: 1px solid #30363d; box-shadow: 0 18px 44px rgba(0,0,0,.5); font-family: -apple-system, system-ui, sans-serif; color: #e6edf3; font-size: 12px; }
+  .balk { display: flex; align-items: center; gap: 6px; padding: 8px 11px; background: #161b22; border-bottom: 1px solid #30363d; }
+  .balk i { width: 9px; height: 9px; border-radius: 99px; background: #3d444d; display: inline-block; }
+  .balk .url { margin-left: 8px; flex: 1; background: #0d1117; border: 1px solid #30363d; border-radius: 7px; padding: 3px 9px; color: #9198a1; font-size: .9em; white-space: nowrap; overflow: hidden; }
+  .balk .app { margin-left: 8px; color: #9198a1; font-weight: 600; }
+  .inhoud { padding: 1.4em; min-height: 13em; }
+  .gh-knop { display: inline-block; background: #238636; color: #fff; font-weight: 600; border-radius: 6px; padding: .45em .9em; }
+  .gh-knop.blauw { background: #1f6feb; }
+  .gh-knop.grijs { background: #21262d; border: 1px solid #30363d; }
+  .gh-veld { border: 1px solid #30363d; border-radius: 6px; padding: .5em .8em; background: #010409; color: #9198a1; margin: .4em 0 .9em; }
+  .gh-radio { display: flex; gap: .7em; align-items: center; padding: .55em .8em; border-radius: 6px; margin-top: .45em; border: 1px solid #30363d; }
+  .gh-radio .r { width: 1em; height: 1em; border-radius: 99px; border: 2px solid #9198a1; flex: none; }
+  .gh-radio.on .r { border-color: #2f81f7; background: radial-gradient(#2f81f7 40%, transparent 45%); }
+  .markeer { outline: 3px solid var(--accent); outline-offset: 4px; border-radius: 8px; box-shadow: 0 0 0 9px rgba(216,254,86,.15); }
+  .gd { display: grid; grid-template-columns: 38% 1fr; min-height: 15em; }
+  .gd .links { border-right: 1px solid #30363d; display: flex; flex-direction: column; }
+  .gd .tab { padding: .6em .9em; border-bottom: 1px solid #30363d; font-weight: 600; }
+  .gd .bestand { padding: .5em .9em; display: flex; gap: .5em; align-items: center; background: #1f2937; }
+  .gd .onder { margin-top: auto; padding: .8em; border-top: 1px solid #30363d; }
+  .gd .rechts { padding: 1em; font-family: ui-monospace, Menlo, monospace; font-size: .92em; color: #7ee787; line-height: 1.6; }
+  .platform-mini { font-family: 'Barlow', sans-serif; background: #0C0818; color: var(--text); }
+  .platform-mini .keuze { display: flex; gap: .6em; margin: .4em 0 1em; flex-wrap: wrap; }
+  .platform-mini .keuze span { padding: .55em 1em; border-radius: 10px; border: 1px solid rgba(255,255,255,.2); font-weight: 700; }
+  .platform-mini .keuze span.on { border-color: var(--accent); background: rgba(216,254,86,.12); }
+  .platform-mini .label { color: var(--text-2); font-weight: 600; }
+
+  @media (max-width: 860px) { .repo { grid-template-columns: 1fr; } .open .vel { grid-template-columns: 1fr; } .open .uitleg { padding: 28px; } .open h3 { font-size: 30px; } .beeld::after { background: linear-gradient(0deg, rgba(12,8,24,.96) 25%, rgba(12,8,24,.3) 70%); } .scene { align-items: flex-end; padding-bottom: 12vh; } .grid { grid-template-columns: 1fr; } }
+
+  /* Waar doe je de stap */
+  .plek { display: inline-flex; margin-top: 14px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 4px 9px; border-radius: 8px; background: rgba(255,255,255,.08); color: var(--text-2); }
+  .plek.hier { background: rgba(216,254,86,.14); color: var(--accent); }
+  .open .eyebrow .plek { margin: 0 0 0 6px; }
+  /* Echte bediening in de stap (wat in het platform gebeurt) */
+  .paneel-echt { width: 100%; background: #0C0818; border: 1px solid var(--card-border); border-radius: 22px; padding: 30px; }
+  .veldlabel { font-weight: 700; color: var(--text-2); font-size: 17px; }
+  .keuzes { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 22px; }
+  .keuze-knop { font: 700 17px 'Barlow'; padding: 12px 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #fff; cursor: pointer; }
+  .keuze-knop:hover { border-color: rgba(255,255,255,.45); }
+  .keuze-knop[aria-pressed="true"] { border-color: var(--accent); background: rgba(216,254,86,.14); }
+  .keuze-knop:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .knop:disabled { opacity: .45; cursor: not-allowed; }
+  .knop.klein { padding: 9px 14px; font-size: 15px; }
+  .gelukt { color: var(--accent); font-weight: 800; margin: 16px 0 0; }
+  .hint, .zacht { color: var(--muted); margin: 12px 0 0; }
+  .dl-rij { width: 100%; display: grid; gap: 16px; }
+  .dl-kaart { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 22px; padding: 26px; }
+  .dl-naam { font-weight: 900; font-size: 38px; line-height: 1; color: #fff; margin: 6px 0 18px; }
+  .kopieer { background: rgba(12,8,24,.6); border: 1px solid rgba(255,255,255,.18); border-radius: 16px; padding: 16px; margin-top: 4px; }
+  .kopieer p { margin: 0 0 12px; color: var(--text); line-height: 1.45; }
+  .check { margin: 16px 0 0; color: var(--text-2); font-weight: 700; } .check.ok { color: var(--accent); }
+  .btn-demo { margin-top: 14px; font: 600 15px 'Barlow'; color: var(--accent); background: transparent; border: 1px dashed rgba(216,254,86,.5); border-radius: 14px; padding: 9px 14px; cursor: pointer; }
+  .open .uitleg a { color: var(--accent); }
+  .open h3:focus { outline: none; }
+
+  /* Opzet zoals het overzicht: groot beeld boven, rustige tekst eronder */
+  .grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 26px; }
+  .kaart { border-radius: 20px; background: #1a1030; border: 1px solid rgba(255,255,255,.12); }
+  .kaart .voorbeeld { position: relative; aspect-ratio: 16 / 9; padding: 16px; background: #120b24; }
+  .kaart .tekstvak { padding: 20px 22px 24px; }
+  .kaart .nr { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .kaart .nu-label { color: var(--accent); }
+  .kaart h3 { font-size: 24px; margin: 6px 0 8px; }
+  .kaart p { font-size: 16px; color: var(--text-2); }
+  .kaart .plek { margin-top: 12px; }
+  .kaart.nu { border: 2px solid var(--accent); box-shadow: 0 0 0 6px rgba(216,254,86,.08), 0 18px 50px rgba(0,0,0,.45); transform: translateY(-4px); }
+  .kaart.af { opacity: .78; }
+  .kaart.af .voorbeeld { opacity: 1; }
+  .kaart.straks { opacity: .32; filter: grayscale(1); cursor: not-allowed; }
+  .kaart.straks:hover { transform: none; border-color: rgba(255,255,255,.12); box-shadow: none; }
+  .vinkje { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 99px; display: grid; place-items: center; background: var(--accent); color: #1A1A2E; font-weight: 900; font-size: 18px; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
+  .slotje { position: absolute; top: 12px; right: 12px; font-size: 18px; }
+  .thema { display: inline-flex; border: 1px solid rgba(255,255,255,.2); border-radius: 12px; overflow: hidden; margin-top: 18px; }
+  .thema button { font: 700 14px 'Barlow'; padding: 7px 14px; border: 0; background: transparent; color: var(--text-2); cursor: pointer; }
+  .thema button[aria-pressed="true"] { background: var(--accent); color: #1A1A2E; }
+
+  /* Lichte variant van het stappenblok, om te vergelijken */
+  .stappen.licht { background: #f5f5f7; color: #1d1d1f; }
+  .stappen.licht h2 { color: #1d1d1f; }
+  .stappen.licht .eyebrow { color: #5B2D8E; }
+  .stappen.licht .voortgang { color: #6e6e73; } .stappen.licht .voortgang b { color: #5B2D8E; }
+  .stappen.licht .balk-voortgang { background: #e5e5ea; } .stappen.licht .balk-voortgang span { background: #5B2D8E; }
+  .stappen.licht .kaart { background: #fff; border-color: #e5e5ea; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .stappen.licht .kaart h3 { color: #1d1d1f; } .stappen.licht .kaart p { color: #6e6e73; } .stappen.licht .kaart .nr { color: #86868b; }
+  .stappen.licht .kaart .nu-label { color: #5B2D8E; }
+  .stappen.licht .kaart.nu { border-color: #5B2D8E; box-shadow: 0 0 0 6px rgba(91,45,142,.1), 0 18px 40px rgba(0,0,0,.12); }
+  .stappen.licht .kaart.straks { opacity: .4; }
+  .stappen.licht .plek { background: #f0f0f3; color: #48484a; } .stappen.licht .plek.hier { background: rgba(91,45,142,.12); color: #5B2D8E; }
+  .stappen.licht .vinkje { background: #5B2D8E; color: #fff; }
+  .stappen.licht .thema { border-color: #d1d1d6; } .stappen.licht .thema button { color: #48484a; } .stappen.licht .thema button[aria-pressed="true"] { background: #5B2D8E; color: #fff; }
+
+  /* Waar ben je in een stap */
+  .waar { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 15px; letter-spacing: .04em; color: var(--accent); }
+  .waar-nr { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 99px; background: var(--accent); color: #1A1A2E; font-size: 14px; }
+  .markeer-knop { outline: 3px solid var(--accent); outline-offset: 5px; }
+  ol.meelopen { list-style: none; padding-left: 0; counter-reset: stap; }
+  ol.meelopen li { counter-increment: stap; position: relative; padding: 6px 0 6px 40px; border-radius: 10px; }
+  ol.meelopen li::before { content: counter(stap); position: absolute; left: 4px; top: 7px; width: 26px; height: 26px; border-radius: 99px; display: grid; place-items: center; font-weight: 800; font-size: 14px; border: 2px solid currentColor; }
+  ol.meelopen li.gedaan { opacity: .55; }
+  ol.meelopen li.gedaan::before { content: '✓'; background: var(--accent); color: #1A1A2E; border-color: var(--accent); }
+  ol.meelopen li.nu { font-weight: 700; color: #fff; background: rgba(216,254,86,.08); }
+  ol.meelopen li.nu::before { background: var(--accent); color: #1A1A2E; border-color: var(--accent); }
+  ol.meelopen li.later { opacity: .45; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Licht venster */
+  .open.licht { background: rgba(29,29,31,.45); }
+  .open.licht .vel { background: #fff; border-color: #e5e5ea; color: #1d1d1f; box-shadow: 0 30px 80px rgba(0,0,0,.25); }
+  .open.licht .groot { background: #f5f5f7; }
+  .open.licht h3, .open.licht b { color: #1d1d1f; }
+  .open.licht ol { color: #3a3a3c; }
+  .open.licht .eyebrow { color: #5B2D8E; }
+  .open.licht .plek { background: #f0f0f3; color: #48484a; } .open.licht .plek.hier { background: rgba(91,45,142,.12); color: #5B2D8E; }
+  .open.licht .hint, .open.licht .zacht { color: #6e6e73; }
+  .open.licht .knop.o { background: #fff; color: #1d1d1f; border-color: #d1d1d6; }
+  .open.licht .knop.p { background: #5B2D8E; color: #fff; }
+  .open.licht .knop:focus-visible { outline-color: #5B2D8E; }
+  .open.licht .sluit { color: #1d1d1f; }
+  .open.licht .paneel-echt { background: #fff; border-color: #e5e5ea; }
+  .open.licht .veldlabel { color: #3a3a3c; }
+  .open.licht .keuze-knop { background: #fff; color: #1d1d1f; border-color: #d1d1d6; }
+  .open.licht .keuze-knop[aria-pressed="true"] { border-color: #5B2D8E; background: rgba(91,45,142,.1); }
+  .open.licht .gelukt, .open.licht .check.ok { color: #2f7d32; }
+  .open.licht .dl-kaart { background: #fff; border-color: #e5e5ea; } .open.licht .dl-naam { color: #1d1d1f; }
+  .open.licht .kopieer { background: #f5f5f7; border-color: #e5e5ea; } .open.licht .kopieer p { color: #1d1d1f; }
+  .open.licht .waar { color: #5B2D8E; } .open.licht .waar-nr { background: #5B2D8E; color: #fff; }
+  .open.licht .markeer-knop { outline-color: #5B2D8E; }
+  .open.licht .markeer { outline-color: #5B2D8E; box-shadow: 0 0 0 9px rgba(91,45,142,.15); }
+  .open.licht ol.meelopen li.nu { color: #1d1d1f; background: rgba(91,45,142,.08); }
+  .open.licht ol.meelopen li.nu::before, .open.licht ol.meelopen li.gedaan::before { background: #5B2D8E; color: #fff; border-color: #5B2D8E; }
+  .open.licht .btn-demo { color: #5B2D8E; border-color: rgba(91,45,142,.5); }
+  .open.licht .uitleg a { color: #5B2D8E; }
+  .open.licht code { background: #f0f0f3; color: #1d1d1f; }
+
+  /* Slotscherm: wat je nu hebt en waar je staat */
+  .afronding { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 14vh 8vw; background: radial-gradient(ellipse 60% 55% at 78% 45%, rgba(91,45,142,.5), transparent 70%), var(--bg); }
+  .af-inhoud { width: 100%; display: grid; grid-template-columns: 1fr 1.1fr; gap: 6vw; align-items: center; }
+  .heb { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 14px; }
+  .heb li { display: flex; gap: 14px; align-items: flex-start; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.4; color: var(--muted); transition: color .4s; }
+  .heb li b { color: inherit; }
+  .heb li .bol { flex: none; width: 30px; height: 30px; border-radius: 99px; border: 2px solid rgba(255,255,255,.25); display: grid; place-items: center; font-weight: 900; font-size: 16px; color: #1A1A2E; transition: .4s; }
+  .heb li.ja { color: var(--text); } .heb li.ja b { color: #fff; }
+  .heb li.ja .bol { background: var(--accent); border-color: var(--accent); }
+  .heb code { font-size: .85em; background: rgba(255,255,255,.08); border-radius: 6px; padding: 1px 6px; }
+  .strook { position: relative; width: 100%; aspect-ratio: 2 / 1; border-radius: 26px; overflow: hidden; border: 1px solid var(--card-border); }
+  .strook-laag { position: absolute; left: -34%; width: 168%; aspect-ratio: 1536 / 1024; top: -105%; }
+  .strook-laag img:first-child { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .strook-jij { position: absolute; left: 47%; top: 86%; height: 30%; transform: translate(-50%, -100%); filter: drop-shadow(0 0 6px rgba(216,254,86,.5)); }
+  .strook-af { position: absolute; transform: translate(-50%, -50%); width: 30px; height: 30px; border-radius: 99px; background: var(--accent); color: #1A1A2E; font-weight: 900; display: grid; place-items: center; box-shadow: 0 0 18px rgba(216,254,86,.6); }
+  .strook-volgende { position: absolute; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 99px; border: 3px solid var(--accent); animation: puls 1.8s ease-out infinite; }
+  .strook-label { position: absolute; transform: translate(-115%, -50%); white-space: nowrap; font-weight: 800; font-size: 15px; color: #fff; background: rgba(12,8,24,.75); border: 1px solid var(--accent); padding: 4px 10px; border-radius: 10px; }
+  @keyframes puls { 0% { box-shadow: 0 0 0 0 rgba(216,254,86,.7); } 100% { box-shadow: 0 0 0 18px rgba(216,254,86,0); } }
+  .af-volgende { font-size: clamp(38px, 4.6vw, 64px); margin-top: 6px; }
+  .knop-groot { display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; background: linear-gradient(135deg, var(--accent), #b8e040); color: #1A1A2E; font: 800 19px 'Barlow', sans-serif; padding: 17px 30px; border-radius: 20px; text-decoration: none; box-shadow: 0 6px 30px rgba(216,254,86,.35); transition: .4s; }
+  .knop-groot:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+  .knop-groot[aria-disabled="true"] { opacity: .35; box-shadow: none; cursor: not-allowed; filter: grayscale(.6); }
+  .af-hint { color: var(--muted); margin: 14px 0 0; }
+  .afronding:not(.is-af) .strook { filter: grayscale(.5) brightness(.75); }
+  .afronding.gevierd .af-links h2 { animation: oplichten 1.2s ease-out; }
+  @keyframes oplichten { 0% { color: var(--accent); transform: scale(1.04); } 100% { color: #fff; transform: none; } }
+  @media (max-width: 860px) { .af-inhoud { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="top"><span class="logo">MORGEN<em>.</em></span><a href="levelkaart-v2.html?voortgang=0">← Jouw route</a></div>
+
+<section class="scene">
+  <div class="beeld" style="background-image:url('../../../../platform/public/beelden/werkplek.webp')"></div>
+  <div class="tekst">
+    <div class="eyebrow in">Level 0 · Werkplek</div>
+    <h1 class="in d1">Eerst je basiskamp.</h1>
+    <p class="zin in d2">Voordat je met je idee begint, richt je de plek in waar al je werk komt te staan.</p>
+  </div>
+  <a class="scroll-hint" href="#stappen">Meteen naar de stappen ↓</a>
+</section>
+
+<section class="scene">
+  <div class="beeld" style="background-image:url('../../../../platform/public/beelden/vroeger.webp')"></div>
+  <div class="tekst">
+    <div class="eyebrow in">Zo deed je het altijd</div>
+    <h2 class="in d1">De patronen ontstonden in je hoofd.</h2>
+    <p class="zin in d2">Je verzamelde gesprekken, aantekeningen en ideeën, en zag zelf wat ze verbond. Dat blijft waardevol.</p>
+  </div>
+</section>
+
+<section class="scene">
+  <div class="beeld" style="background-image:url('../../../../platform/public/beelden/samen.webp')"></div>
+  <div class="tekst">
+    <div class="eyebrow in">Nu</div>
+    <h2 class="in d1">Je AI kijkt mee.</h2>
+    <p class="zin in d2">Dan moet alles wat je verzamelt op één plek staan, <span class="accent">waar je AI bij kan.</span></p>
+  </div>
+</section>
+
+<section class="repo">
+  <div>
+    <div class="eyebrow in">Nieuw woord</div>
+    <h2 class="in d1">Die plek heet een repo.</h2>
+    <p class="zin in d2">Eén map voor je onderneming. Online bewaard en alleen voor jou. Je AI leest erin en werkt erin mee, als een assistent die bij je werk kan.</p>
+    <div class="woord in d2"><b>repo</b> kort voor repository, Engels voor bewaarplaats</div>
+  </div>
+  <div class="map-scene in">
+    <svg viewBox="0 0 500 420" aria-hidden="true">
+      <defs><linearGradient id="mapkleur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9B6FCF"/><stop offset="1" stop-color="#5B2D8E"/></linearGradient></defs>
+      <path d="M60 140 h120 l28 30 h232 a18 18 0 0 1 18 18 v190 a18 18 0 0 1 -18 18 H60 a18 18 0 0 1 -18 -18 V158 a18 18 0 0 1 18 -18z" fill="url(#mapkleur)"/>
+      <path d="M42 206 h416 v172 a18 18 0 0 1 -18 18 H60 a18 18 0 0 1 -18 -18z" fill="#7B4DAE" opacity=".92"/>
+      <text x="250" y="312" text-anchor="middle" font-family="Barlow" font-weight="900" font-size="36" fill="#fff">mijn-onderneming</text>
+      <text x="250" y="346" text-anchor="middle" font-family="Barlow" font-weight="600" font-size="17" fill="#D8CCEC">privé · alleen jij en je AI</text>
+    </svg>
+    <span class="chip" style="left:6%; top:30%; --vx:-140px; --vy:-110px; --r:-14deg; animation-delay:.3s">💡 idee.md</span>
+    <span class="chip" style="left:29%; top:21%; --vx:-40px; --vy:-180px; --r:10deg; animation-delay:.6s">🎯 doelgroep.md</span>
+    <span class="chip" style="left:56%; top:27%; --vx:110px; --vy:-170px; --r:-8deg; animation-delay:.9s">🎙️ interviews/</span>
+    <span class="chip" style="left:34%; top:37%; --vx:180px; --vy:-70px; --r:12deg; animation-delay:1.2s">📊 analyse.md</span>
+    <span class="orb" aria-hidden="true"></span>
+  </div>
+</section>
+
+<section class="stappen licht" id="stappen">
+  <div class="kop in">
+    <div><div class="eyebrow">Stap voor stap</div><h2>Zo richt je je werkplek in.</h2></div>
+    <div style="text-align:right"><p class="voortgang" id="voortgang" style="margin:0"></p>
+      <div class="thema" role="group" aria-label="Weergave van de stappen"><button aria-pressed="false" data-thema="donker">Donker</button><button aria-pressed="true" data-thema="licht">Licht</button></div></div>
+  </div>
+  <div class="balk-voortgang in"><span id="balk"></span></div>
+  <div class="grid" id="grid"></div>
+</section>
+
+
+<section class="afronding" id="afronding" aria-labelledby="afronding-titel">
+  <div class="af-inhoud">
+    <div class="af-links">
+      <div class="eyebrow" id="af-label">Level 0 · Werkplek</div>
+      <h2 id="afronding-titel">Je basiskamp staat.</h2>
+      <p class="zin" style="max-width:36ch">Dit heb je nu:</p>
+      <ul class="heb" id="heb"></ul>
+    </div>
+    <div class="af-rechts">
+      <div class="strook" aria-hidden="true">
+        <div class="strook-laag">
+          <img src="../../../../platform/public/beelden/start-leeg.webp" alt="">
+          <img class="strook-jij" src="../../../../platform/public/beelden/jij.webp" alt="">
+          <span class="strook-af" style="left:49.9%;top:76.7%">✓</span>
+          <span class="strook-volgende" style="left:73.4%;top:69.4%"></span>
+          <span class="strook-label" style="left:73.4%;top:69.4%">1 · Idee</span>
+        </div>
+      </div>
+      <div class="eyebrow" style="margin-top:28px">Volgende stop</div>
+      <h2 class="af-volgende">Tijd voor je idee.</h2>
+      <p class="zin" style="max-width:40ch">In level 1 zet je samen met je AI je idee, je visie en een eerste waardepropositie op papier. Alles komt meteen in je repo.</p>
+      <a class="knop-groot" id="naar-idee" href="levelkaart-v2.html?voortgang=1&van=0" aria-disabled="true">Op naar je idee →</a>
+      <p class="af-hint" id="af-hint"></p>
+    </div>
+  </div>
+</section>
+
+<div class="open licht" id="open" role="dialog" aria-modal="true" aria-labelledby="open-titel">
+  <div class="vel">
+    <button class="sluit" id="sluit" aria-label="Sluiten">×</button>
+    <div class="groot" id="open-scherm"></div>
+    <div class="uitleg">
+      <div class="eyebrow" id="open-nr"></div>
+      <h3 id="open-titel" tabindex="-1"></h3>
+      <ol id="open-stappen"></ol>
+      <div class="extra" id="open-extra"></div>
+      <div class="acties"><button class="knop o" id="vorige">Vorige</button><button class="knop p" id="volgende">Klaar, volgende stap</button></div>
+      <p class="hint" id="waarom-niet" style="margin-top:12px"></p>
+    </div>
+  </div>
+</div>
+
+<dialog class="popup" id="waarom" aria-labelledby="waarom-titel">
+  <div class="popup-inhoud">
+    <h2 id="waarom-titel" tabindex="-1">Wat een gedeelde map niet kan</h2>
+    <h4>Het platform kan niet in je map meekijken</h4>
+    <p>Het hele level-mechanisme (stap af → volgend level open) leest de bestanden in de repo. Bij een Drive-map moet je per deelnemer een Drive-koppeling bouwen, en dat is rommeliger.</p>
+    <h4>Je ziet niet terug wat je AI deed</h4>
+    <p>Herschrijft de AI je analyse slecht, dan wil je terug kunnen. Git bewaart elke versie, met wie en waarom. Drive heeft wel versies per bestand, maar niet per wijziging aan het hele project.</p>
+    <h4>Je kunt niet eerst nakijken</h4>
+    <p>De gewoonte "de AI stelt voor, ik keur goed" (pull request) is misschien wel de belangrijkste AI-vaardigheid die je ze meegeeft.</p>
+    <h4>Je AI kan er niet in de cloud in werken</h4>
+    <p>Claude Code op het web en Codex cloud werken direct op een GitHub-repo, zonder iets te installeren. Op een Drive-map kan dat niet.</p>
+    <button class="knop p" style="margin-top:26px" onclick="document.getElementById('waarom').close()">Sluiten</button>
+  </div>
+</dialog>
+
+
+
+<script>
+  const SCHERMEN = {
+    setup: `<div class="scherm platform-mini"><div class="balk"><i></i><i></i><i></i><span class="url">ondernemenmetai.nl</span></div><div class="inhoud">
+      <div class="label">Mijn computer</div><div class="keuze"><span class="on">Mac</span><span>Windows</span></div>
+      <div class="label">Waar heb je een abonnement?</div><div class="keuze"><span class="on">Claude (Pro of hoger)</span><span>ChatGPT (Plus of hoger)</span></div>
+      <span style="display:inline-block;background:linear-gradient(135deg,#D8FE56,#b8e040);color:#1A1A2E;font-weight:800;border-radius:10px;padding:.6em 1.1em">Zet in je repo</span></div></div>`,
+    download: `<div class="scherm platform-mini"><div class="balk"><i></i><i></i><i></i><span class="url">ondernemenmetai.nl</span></div><div class="inhoud">
+      <div style="border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);border-radius:14px;padding:1.1em">
+      <div style="color:#D8FE56;font-weight:700;font-size:.85em;letter-spacing:.14em">BIJ JE CLAUDE-ABONNEMENT</div>
+      <div style="font-weight:900;font-size:2em;color:#fff;margin:.2em 0 .4em">Claude Code</div>
+      <span style="display:inline-block;margin-top:.4em;background:linear-gradient(135deg,#D8FE56,#b8e040);color:#1A1A2E;font-weight:800;border-radius:10px;padding:.6em 1.1em">Download Claude Code ↗</span></div></div></div>`,
+    account: `<div class="scherm"><div class="balk"><i></i><i></i><i></i><span class="url">github.com/signup</span></div><div class="inhoud">
+      <div style="font-size:1.5em;font-weight:600;margin-bottom:.7em">Sign up for GitHub</div>
+      <div>Email</div><div class="gh-veld markeer">jouw@mailadres.nl</div><div>Password</div><div class="gh-veld">••••••••••</div><span class="gh-knop">Continue</span></div></div>`,
+    desktop: `<div class="scherm"><div class="balk"><i></i><i></i><i></i><span class="app">GitHub Desktop</span></div><div class="inhoud" style="text-align:center;padding-top:2.2em">
+      <div style="font-size:1.6em;font-weight:600">Welcome to GitHub Desktop</div>
+      <div style="color:#9198a1;margin:.6em auto 1.4em;max-width:26em">GitHub Desktop is a seamless way to contribute to projects on GitHub.</div>
+      <div><span class="gh-knop blauw markeer">Sign in to GitHub.com</span></div><div style="margin-top:.9em;color:#9198a1">Skip this step</div></div></div>`,
+    repo: `<div class="scherm"><div class="balk"><i></i><i></i><i></i><span class="url">github.com/new?template=starter-repo</span></div><div class="inhoud">
+      <div style="font-size:1.35em;font-weight:600;margin-bottom:.6em">Create a new repository</div>
+      <div>Repository name</div><div class="gh-veld" style="color:#e6edf3">fietskoerier-apotheken</div>
+      <div class="gh-radio"><span class="r"></span>Public</div><div class="gh-radio on markeer"><span class="r"></span><b>Private</b>&nbsp;· only you can see this</div>
+      <div style="margin-top:1em"><span class="gh-knop">Create repository</span></div></div></div>`,
+    koppelen: `<div class="scherm platform-mini"><div class="balk"><i></i><i></i><i></i><span class="url">ondernemenmetai.nl</span></div><div class="inhoud" style="text-align:center;padding-top:2.4em">
+      <div style="font-weight:800;font-size:1.4em;color:#fff;margin-bottom:1em">Koppel je repo</div>
+      <span style="display:inline-block;background:#fff;color:#1A1A2E;font-weight:800;border-radius:10px;padding:.7em 1.2em">Verbind met GitHub</span></div></div>`,
+    clonen: `<div class="scherm"><div class="balk"><i></i><i></i><i></i><span class="app">GitHub Desktop · Clone a repository</span></div><div class="inhoud">
+      <div style="display:flex;gap:1.4em;border-bottom:1px solid #30363d;padding-bottom:.5em;margin-bottom:.8em"><b style="border-bottom:2px solid #f78166;padding-bottom:.4em">GitHub.com</b><span style="color:#9198a1">URL</span></div>
+      <div class="gh-radio on" style="background:#1f2937">📁 jij/fietskoerier-apotheken</div>
+      <div style="margin-top:1em">Local path</div><div class="gh-veld" style="color:#e6edf3">~/Documents/fietskoerier-apotheken</div>
+      <div style="text-align:right"><span class="gh-knop grijs">Cancel</span> <span class="gh-knop blauw markeer">Clone</span></div></div></div>`,
+    opdracht: `<div class="scherm"><div class="balk"><i></i><i></i><i></i><span class="app">GitHub Desktop</span><span style="margin-left:auto" class="gh-knop grijs markeer">↑ Push origin</span></div>
+      <div class="gd"><div class="links"><div class="tab">Changes 1</div><div class="bestand">☑ level-0-werkplek/werkplek.md</div>
+      <div class="onder"><div class="gh-veld" style="color:#e6edf3;margin-top:0">Werkplek ingevuld</div><span class="gh-knop blauw" style="display:block;text-align:center">Commit to main</span></div></div>
+      <div class="rechts">- &lt;!-- invullen --&gt;<br>+ - Mijn AI-tool: Claude Code<br>+ - Mijn computer: Mac</div></div></div>`,
+  };
+
+  const PLEK = { hier: 'Hier op het platform', github: 'Op GitHub', pc: 'Op je computer', desktop: 'In GitHub Desktop', app: 'In je AI-app' };
+  const DOWNLOADS = {
+    'claude-code': { naam: 'Claude Code', url: 'https://claude.com/product/claude-code', account: 'Claude' },
+    codex: { naam: 'Codex', url: 'https://openai.com/codex', account: 'ChatGPT' },
+  };
+  const setup = { os: null, ai: null };
+  let gekoppeld = false;
+  let gekozenRepo = false;
+  const af = new Set();
+  const isAf = (id) => af.has(id);
+
+  const opMac = () => setup.os !== 'windows';
+  const opWindows = () => setup.os !== 'mac';
+  const installeren = () => [opMac() && 'Op je Mac: sleep de app naar je map <b>Programma\'s</b>.', opWindows() && 'Op Windows: open het installatiebestand en volg de stappen.'].filter(Boolean);
+  const inloggen = () => setup.ai === 'codex' ? ['Log in met je ChatGPT-account.'] : setup.ai === 'claude-code' ? ['Log in met je Claude-account en open het tabblad <b>Code</b>.'] : ['Log in met je Claude- of ChatGPT-account. Bij Claude open je daarna het tabblad <b>Code</b>.'];
+  const appOpenen = () => setup.ai === 'codex' ? 'Open Codex en open die map.' : setup.ai === 'claude-code' ? 'Open de Claude-app, ga naar <b>Code</b> en kies die map.' : 'Open die map in je AI-app (bij Claude via het tabblad <b>Code</b>).';
+  const extern = (url, tekst) => `<a class="knop o" href="${url}" target="_blank" rel="noopener noreferrer">${tekst} ↗</a>`;
+  const kopieer = (prompt) => `<div class="kopieer"><div class="eyebrow" style="margin-bottom:8px">Vraag je AI</div><p>${prompt}</p><button class="knop o klein" data-kopieer="${prompt.replace(/"/g, '&quot;')}">Kopieer</button></div>`;
+
+  const ALLE_STAPPEN = [
+    { id: 'setup', plek: 'hier', scherm: 'setup', titel: 'Kies je setup', kort: 'Je computer en waar je een abonnement hebt. De uitleg past zich daarop aan.', handmatig: false,
+      links: () => `<div class="paneel-echt">
+        <div class="veldlabel">Mijn computer</div>
+        <div class="keuzes" data-groep="os"><button class="keuze-knop" data-waarde="mac" aria-pressed="${setup.os === 'mac'}">Mac</button><button class="keuze-knop" data-waarde="windows" aria-pressed="${setup.os === 'windows'}">Windows</button></div>
+        <div class="veldlabel">Waar heb je een abonnement?</div>
+        <div class="keuzes" data-groep="ai"><button class="keuze-knop" data-waarde="claude-code" aria-pressed="${setup.ai === 'claude-code'}">Claude (Pro of hoger)</button><button class="keuze-knop" data-waarde="codex" aria-pressed="${setup.ai === 'codex'}">ChatGPT (Plus of hoger)</button></div>
+        <button class="knop p" id="setup-opslaan" ${setup.os && setup.ai ? '' : 'disabled aria-describedby="setup-hint"'}>Zet in je repo</button>
+        ${isAf('setup') ? '<p class="gelukt">✓ Staat in je repo: level-0-werkplek/setup.md. De volgende stappen passen zich hierop aan.</p>' : setup.os && setup.ai ? '' : '<p class="hint" id="setup-hint">Kies eerst je computer en je abonnement.</p>'}
+      </div>`,
+      stappen: () => ['Kies links op welke computer je werkt.', 'Kies waar je een abonnement hebt.', 'Klik op <b>Zet in je repo</b>. Het platform zet je keuze in je repo, en de stap is meteen af.'],
+      extra: () => '<p class="zacht">Heb je nog geen abonnement? Sluit er dan eerst een af.</p>',
+      bijStap: () => isAf('setup') ? 3 : !setup.os ? 0 : !setup.ai ? 1 : 2 },
+    { id: 'download', plek: 'hier', scherm: 'download', titel: 'Download je AI-app', kort: 'De app die bij je abonnement hoort: Claude Code of Codex.', handmatig: true,
+      links: () => `<div class="dl-rij">${(setup.ai ? [setup.ai] : ['claude-code', 'codex']).map((k) => { const d = DOWNLOADS[k]; return `<div class="dl-kaart">
+        <div class="eyebrow">Bij je ${d.account}-abonnement</div><div class="dl-naam">${d.naam}</div>
+        <a class="knop p" href="${d.url}" target="_blank" rel="noopener noreferrer">Download ${d.naam} ↗</a></div>`; }).join('')}</div>`,
+      stappen: () => ['Klik links op de downloadknop. De downloadpagina opent in een nieuw tabblad.', ...installeren(), ...inloggen()],
+      klaarTekst: 'Klaar, de app werkt' },
+    { id: 'account', plek: 'github', scherm: 'account', titel: 'Maak een GitHub-account', kort: 'Op GitHub komt je repo te staan. Een gratis account is genoeg.', handmatig: true,
+      links: () => SCHERMEN.account,
+      stappen: () => ['Kies <b>Sign up</b> op GitHub.', 'Gebruik een e-mailadres dat je blijft gebruiken, ook na dit programma.', 'Kies een gebruikersnaam die je ook zakelijk zou laten zien.'],
+      extra: () => extern('https://github.com/signup', 'Open GitHub'), klaarTekst: 'Klaar, ik heb een account' },
+    { id: 'desktop', plek: 'pc', scherm: 'desktop', titel: 'Installeer GitHub Desktop', kort: 'Daarmee zet je je repo op je computer en je wijzigingen online, zonder iets te typen.', handmatig: true,
+      links: () => SCHERMEN.desktop,
+      stappen: () => ['Download GitHub Desktop.', ...installeren(), 'Kies <b>Sign in to GitHub.com</b> en log in.', ...(setup.os === 'windows' && setup.ai === 'claude-code' ? ['Vraagt de Claude-app om Git? Installeer dan <a href="https://git-scm.com/download/win" target="_blank" rel="noopener noreferrer">Git for Windows</a>.'] : [])],
+      extra: () => extern('https://github.com/apps/desktop', 'Download GitHub Desktop'), klaarTekst: 'Klaar, ik ben ingelogd' },
+    { id: 'repo', plek: 'github', scherm: 'repo', titel: 'Maak je repo', kort: 'Kopieer de starter-repo, geef hem de naam van je onderneming en zet hem op Private.', handmatig: true,
+      links: () => SCHERMEN.repo,
+      stappen: () => ['Open de starter-repo; de link krijg je van je trainer.', 'Kies <b>Use this template</b> › <b>Create a new repository</b>.', 'Geef hem de naam van je onderneming, bijvoorbeeld <code>fietskoerier-apotheken</code>.', 'Zet hem op <b>Private</b>: straks komen er interviews met echte mensen in.'],
+      extra: () => '<button class="knop o" id="waarom-knop" aria-haspopup="dialog" aria-controls="waarom">Waarom een repo en geen gedeelde map?</button>', klaarTekst: 'Klaar, mijn repo staat' },
+    { id: 'koppelen', plek: 'hier', scherm: 'koppelen', titel: 'Koppel het platform', kort: 'Het platform kijkt mee in die ene repo en ziet zo welke stappen af zijn.', handmatig: false,
+      links: () => {
+        const fase = isAf('koppelen') ? 3 : !gekoppeld ? 1 : 2;
+        const kop = (n, tekst) => `<div class="waar"><span class="waar-nr">${n}</span>${tekst}</div>`;
+        if (fase === 1) return `<div class="paneel-echt" style="text-align:center">${kop(1, 'Hier op het platform')}
+          <p class="veldlabel" style="margin:18px 0">Het platform vraagt GitHub om toegang tot één repo.</p>
+          <button class="knop p markeer-knop" id="verbind">Verbind met GitHub</button></div>`;
+        if (fase === 2) return `<div class="paneel-echt">${kop(2, 'Nu ben je op GitHub')}
+          <p class="hint" style="margin:6px 0 14px">In het echt opent GitHub in een nieuw tabblad. Hier is het nagebootst.</p>
+          <div class="scherm"><div class="balk"><i></i><i></i><i></i><span class="url">github.com/apps/ondernemen-met-ai</span></div><div class="inhoud">
+            <div style="font-size:1.35em;font-weight:600;margin-bottom:.6em">Install Ondernemen met AI</div>
+            <div class="gh-radio"><span class="r"></span>All repositories</div>
+            <button class="gh-radio${gekozenRepo ? ' on' : ' markeer'}" id="kies-repo" style="width:100%;color:inherit;font:inherit;background:none;cursor:pointer"><span class="r"></span>Only select: <b>&nbsp;fietskoerier-apotheken</b></button>
+            <div style="margin-top:1em"><button class="gh-knop${gekozenRepo ? ' markeer' : ''}" id="installeer" ${gekozenRepo ? '' : 'disabled style="opacity:.5"'}>Install</button></div></div></div></div>`;
+        return `<div class="paneel-echt" style="text-align:center">${kop(3, 'Terug op het platform')}
+          <p class="gelukt" style="font-size:20px;margin-top:18px">✓ Gekoppeld met jij/fietskoerier-apotheken</p>
+          <p class="hint">Het platform kan nu in die ene repo kijken en er je keuzes in zetten.</p></div>`;
+      },
+      stappen: () => ['Klik links op <b>Verbind met GitHub</b>.', 'Je bent nu op GitHub. Kies <b>Only select repositories</b> en dan je repo.', 'Klik op <b>Install</b>. Je komt terug op het platform en de stap is af.'],
+      bijStap: () => isAf('koppelen') ? 3 : !gekoppeld ? 0 : !gekozenRepo ? 1 : 2 },
+    { id: 'clonen', plek: 'desktop', scherm: 'clonen', titel: 'Zet je repo op je computer', kort: 'In GitHub Desktop haal je een kopie op. Daarna open je die map in je AI.', handmatig: true,
+      links: () => SCHERMEN.clonen,
+      stappen: () => ['Kies in GitHub Desktop <b>File › Clone repository</b>.', 'Kies je repo in de lijst.', 'Kies bij <b>Local path</b> een map in je Documenten en klik op <b>Clone</b>.', appOpenen(), 'Stel je AI de vraag hieronder.'],
+      extra: () => kopieer('Lees AGENTS.md en vertel me in drie zinnen wat je in deze repo voor me gaat doen.'), klaarTekst: 'Klaar, mijn AI antwoordt' },
+    { id: 'opdracht', plek: 'app', scherm: 'opdracht', titel: 'Je eerste opdracht', kort: 'Je AI vult werkplek.md met je in. Jij zet het online met Commit en Push.', handmatig: false,
+      links: () => SCHERMEN.opdracht,
+      stappen: () => ['Geef je AI de opdracht hieronder.', 'Typ in GitHub Desktop een korte beschrijving en klik op <b>Commit to main</b>.', 'Klik op <b>Push origin</b>. Zodra je wijziging online staat, ziet het platform dat dit level af is.'],
+      extra: () => kopieer('Vul level-0-werkplek/werkplek.md samen met mij in: vraag me per regel wat ik wil invullen, en haal daarna de markering bovenaan weg. Leg de wijziging niet zelf vast; dat doe ik in GitHub Desktop.')
+        + `<p class="check${isAf('opdracht') ? ' ok' : ''}">${isAf('opdracht') ? '✓' : '○'} Check op je repo: werkplek.md is ingevuld</p>`
+        + (isAf('opdracht') ? '' : '<button class="btn-demo" id="demo-push">Demo: doe alsof je AI werkplek.md invulde en jij hem pushte</button>') },
+  ];
+
+  const VOLGORDE = ['account', 'repo', 'koppelen', 'setup', 'download', 'desktop', 'clonen', 'opdracht'];
+  const STAPPEN = VOLGORDE.map((id) => ALLE_STAPPEN.find((s) => s.id === id));
+
+  const grid = document.getElementById('grid');
+  const kaarten = STAPPEN.map((s, i) => {
+    const b = document.createElement('button');
+    b.addEventListener('click', () => openStap(i));
+    grid.appendChild(b);
+    return b;
+  });
+  const eersteOpen = () => STAPPEN.findIndex((s) => !af.has(s.id));
+  function status(i) { return af.has(STAPPEN[i].id) ? 'af' : i === eersteOpen() ? 'nu' : 'straks'; }
+  function tekenKaarten() {
+    kaarten.forEach((b, i) => {
+      const s = STAPPEN[i], st = status(i);
+      b.className = `kaart ${st}`;
+      b.disabled = st === 'straks';
+      b.title = st === 'straks' ? `Eerst stap ${eersteOpen() + 1}` : '';
+      b.innerHTML = `<div class="voorbeeld">${SCHERMEN[s.scherm]}${st === 'af' ? '<span class="vinkje" aria-hidden="true">✓</span>' : ''}${st === 'straks' ? '<span class="slotje" aria-hidden="true">🔒</span>' : ''}</div>
+        <div class="tekstvak"><div class="nr">Stap ${i + 1}${st === 'nu' ? ' · <span class="nu-label">Nu</span>' : st === 'af' ? ' · Klaar' : ''}</div>
+        <h3>${s.titel}</h3><p>${s.kort}</p><span class="plek ${s.plek === 'hier' ? 'hier' : ''}">${PLEK[s.plek]}</span></div>`;
+      b.setAttribute('aria-label', `Stap ${i + 1}: ${s.titel}, ${st === 'af' ? 'klaar' : st === 'nu' ? 'nu aan de beurt' : 'nog niet aan de beurt'}`);
+    });
+    document.getElementById('voortgang').innerHTML = `<b>${af.size} van ${STAPPEN.length}</b> klaar`;
+    document.getElementById('balk').style.width = (af.size / STAPPEN.length * 100) + '%';
+    tekenAfronding();
+  }
+
+  let huidig = 0;
+  const open = document.getElementById('open');
+  function openStap(i) { huidig = i; tekenDetail(); open.classList.add('aan'); document.getElementById('open-titel').focus(); }
+  function tekenDetail() {
+    const s = STAPPEN[huidig];
+    document.getElementById('open-scherm').innerHTML = s.links();
+    document.getElementById('open-nr').innerHTML = `Stap ${huidig + 1} van ${STAPPEN.length} · <span class="plek ${s.plek === 'hier' ? 'hier' : ''}">${PLEK[s.plek]}</span>`;
+    document.getElementById('open-titel').textContent = s.titel;
+    const bij = s.bijStap ? s.bijStap() : null;
+    document.getElementById('open-stappen').className = bij === null ? '' : 'meelopen';
+    document.getElementById('open-stappen').innerHTML = s.stappen().map((t, j) => {
+      const st = bij === null ? '' : j < bij ? 'gedaan' : j === bij ? 'nu' : 'later';
+      return `<li class="${st}">${st === 'gedaan' ? '<span class="sr-only">Gedaan: </span>' : ''}${t}</li>`;
+    }).join('');
+    document.getElementById('open-extra').innerHTML = s.extra ? s.extra() : '';
+    document.getElementById('vorige').style.visibility = huidig === 0 ? 'hidden' : 'visible';
+    const volgende = document.getElementById('volgende');
+    const laatste = huidig === STAPPEN.length - 1;
+    if (s.handmatig && !af.has(s.id)) { volgende.disabled = false; volgende.textContent = s.klaarTekst ?? 'Klaar, volgende stap'; }
+    else { volgende.disabled = !af.has(s.id); volgende.textContent = laatste ? 'Klaar met je werkplek' : 'Volgende stap'; }
+    const waarom = document.getElementById('waarom-niet');
+    waarom.textContent = volgende.disabled ? (s.id === 'opdracht' ? 'Dit gaat vanzelf door zodra werkplek.md in je repo staat.' : 'Rond eerst de stappen links af; daarna gaat dit vanzelf door.') : '';
+    volgende.toggleAttribute('aria-describedby', volgende.disabled);
+    if (volgende.disabled) volgende.setAttribute('aria-describedby', 'waarom-niet');
+    koppelGedrag();
+  }
+  function markeerAf(id) { af.add(id); tekenKaarten(); tekenDetail(); }
+  function koppelGedrag() {
+    document.querySelectorAll('#open-scherm .keuzes').forEach((groep) => groep.querySelectorAll('.keuze-knop').forEach((k) => k.addEventListener('click', () => {
+      setup[groep.dataset.groep] = k.dataset.waarde; af.delete('setup'); tekenKaarten(); tekenDetail();
+    })));
+    document.getElementById('setup-opslaan')?.addEventListener('click', () => markeerAf('setup'));
+    document.getElementById('verbind')?.addEventListener('click', () => { gekoppeld = true; tekenDetail(); });
+    document.getElementById('kies-repo')?.addEventListener('click', () => { gekozenRepo = true; tekenDetail(); });
+    document.getElementById('installeer')?.addEventListener('click', () => markeerAf('koppelen'));
+    document.querySelectorAll('[data-kopieer]').forEach((k) => k.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(k.dataset.kopieer); } catch {}
+      k.textContent = 'Gekopieerd';
+    }));
+    document.getElementById('demo-push')?.addEventListener('click', () => {
+      markeerAf('opdracht');
+      if (af.size === STAPPEN.length) setTimeout(toonKlaar, 900);
+    });
+    const wk = document.getElementById('waarom-knop');
+    wk?.addEventListener('click', () => { const d = document.getElementById('waarom'); d.showModal(); document.getElementById('waarom-titel').focus(); d.onclose = () => wk.focus(); });
+  }
+  function tekenAfronding() {
+    const app = setup.ai === 'codex' ? 'Codex' : setup.ai === 'claude-code' ? 'Claude Code' : 'je AI-app';
+    const HEB = [
+      { id: 'desktop', tekst: '<b>GitHub Desktop</b>, waarmee je je werk online zet zonder iets te typen' },
+      { id: 'repo', tekst: 'Een eigen, privé <b>repo</b> op GitHub: <code>fietskoerier-apotheken</code>' },
+      { id: 'koppelen', tekst: 'Een <b>platform</b> dat in die ene repo meekijkt' },
+      { id: 'clonen', tekst: `<b>${app}</b> op je computer, die in je repo kan lezen en schrijven` },
+      { id: 'opdracht', tekst: 'Je <b>eerste wijziging online</b>: werkplek.md' },
+    ];
+    document.getElementById('heb').innerHTML = HEB.map((h) => `<li class="${af.has(h.id) ? 'ja' : ''}"><span class="bol" aria-hidden="true">${af.has(h.id) ? '✓' : ''}</span><span>${h.tekst}${af.has(h.id) ? '' : '<span class="sr-only"> (nog niet)</span>'}</span></li>`).join('');
+    const klaar = af.size === STAPPEN.length;
+    const sectie = document.getElementById('afronding');
+    sectie.classList.toggle('is-af', klaar);
+    document.getElementById('af-label').textContent = klaar ? 'Level 0 · Afgerond' : 'Level 0 · Werkplek';
+    document.getElementById('afronding-titel').textContent = klaar ? 'Je basiskamp staat.' : 'Zo staat je basiskamp straks.';
+    const knop = document.getElementById('naar-idee');
+    knop.setAttribute('aria-disabled', String(!klaar));
+    knop.tabIndex = klaar ? 0 : -1;
+    const nog = STAPPEN.length - af.size;
+    document.getElementById('af-hint').textContent = klaar ? '' : `Nog ${nog} ${nog === 1 ? 'stap' : 'stappen'}; daarna kun je verder.`;
+  }
+  function toonKlaar() {
+    open.classList.remove('aan');
+    tekenAfronding();
+    const sectie = document.getElementById('afronding');
+    sectie.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => sectie.classList.add('gevierd'), 500);
+    setTimeout(() => document.getElementById('naar-idee').focus({ preventScroll: true }), 900);
+  }
+  document.getElementById('naar-idee').addEventListener('click', (e) => { if (e.currentTarget.getAttribute('aria-disabled') === 'true') e.preventDefault(); });
+  function sluit() { open.classList.remove('aan'); kaarten[huidig].focus(); }
+  document.getElementById('sluit').addEventListener('click', sluit);
+  open.addEventListener('click', (e) => { if (e.target === open) sluit(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open.classList.contains('aan') && !document.getElementById('waarom').open) sluit(); });
+  document.getElementById('vorige').addEventListener('click', () => huidig > 0 && openStap(huidig - 1));
+  document.getElementById('volgende').addEventListener('click', () => {
+    const s = STAPPEN[huidig];
+    if (s.handmatig) af.add(s.id);
+    tekenKaarten();
+    if (af.size === STAPPEN.length) { toonKlaar(); return; }
+    if (huidig < STAPPEN.length - 1) openStap(huidig + 1);
+    else { sluit(); const nog = eersteOpen(); if (nog >= 0) openStap(nog); }
+  });
+  tekenKaarten();
+
+  const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && e.target.classList.add('zichtbaar')), { threshold: 0.2 });
+  document.querySelectorAll('section, .in').forEach((el) => io.observe(el));
+  document.querySelectorAll('.thema button').forEach((b) => b.addEventListener('click', () => {
+    document.getElementById('stappen').classList.toggle('licht', b.dataset.thema === 'licht');
+    document.getElementById('open').classList.toggle('licht', b.dataset.thema === 'licht');
+    document.querySelectorAll('.thema button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  }));
+</script>
+</body>
+</html>

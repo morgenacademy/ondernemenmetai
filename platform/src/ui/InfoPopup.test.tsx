@@ -1,18 +1,13 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { evaluateLevel } from '../lib/levels/evaluate';
 import { level0 } from '../lib/levels/level0';
 import { level1 } from '../lib/levels/level1';
 import { level2 } from '../lib/levels/level2';
 import type { LevelDef } from '../lib/levels/types';
-import { starterFiles } from '../lib/repo/starterFiles';
-import { StapKaart } from './StapKaart';
+import { InfoPopup } from './InfoPopup';
 
-const snapshot = { files: starterFiles, mergedPullRequests: 0 };
 const step = level0.steps.find((s) => s.id === 'l0-repo')!;
-const html = renderToStaticMarkup(
-  <StapKaart level={level0} step={step} nummer={5} snapshot={snapshot} evaluation={evaluateLevel(level0, snapshot)} setup={{}} onSave={async () => true} />,
-);
+const html = renderToStaticMarkup(<InfoPopup levelId={0} popup={step.popup!} />);
 
 describe('pop-up "Waarom een repo?"', () => {
   it('heeft een knop die zegt dat hij een dialoog opent', () => {
@@ -41,9 +36,7 @@ describe('pop-up "Waarom een repo?"', () => {
 
 const popupVan = (level: LevelDef, stepId: string) => {
   const stap = level.steps.find((s) => s.id === stepId)!;
-  const kaart = renderToStaticMarkup(
-    <StapKaart level={level} step={stap} nummer={5} snapshot={snapshot} evaluation={evaluateLevel(level, snapshot)} setup={{}} onSave={async () => true} />,
-  );
+  const kaart = renderToStaticMarkup(<InfoPopup levelId={level.id} popup={stap.popup!} />);
   return kaart.slice(kaart.indexOf('<dialog'));
 };
 

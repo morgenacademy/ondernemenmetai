@@ -6,12 +6,17 @@ export function evaluateLevel(level: LevelDef, s: RepoSnapshot): LevelEvaluation
   return { levelId: level.id, done: level.ready && results.every((r) => r.ok), results };
 }
 
-/** Een level gaat pas open als alle levels ervoor af zijn. */
+/**
+ * Een level gaat pas open als alle levels ervoor af zijn. Uitzondering: een level met opensEarly,
+ * zoals level 6 zodra je een klant hebt. Je eerste klant kan op elk moment komen.
+ */
 export function levelStatus(levels: LevelDef[], s: RepoSnapshot): Record<number, LevelState> {
   const status: Record<number, LevelState> = {};
   let blocked = false;
   for (const level of levels) {
-    if (blocked) {
+    if (blocked && level.opensEarly?.(s)) {
+      status[level.id] = evaluateLevel(level, s).done ? 'done' : 'active';
+    } else if (blocked) {
       status[level.id] = 'locked';
     } else if (evaluateLevel(level, s).done) {
       status[level.id] = 'done';

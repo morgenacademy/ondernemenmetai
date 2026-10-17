@@ -93,10 +93,15 @@ body::before {
   .btn-klein { padding: .5rem 1rem; font-size: .85rem; }
 
   .btn-demo {
-    margin-top: 1rem; font: 600 .85rem 'Barlow', sans-serif; color: var(--accent);
-    background: transparent; border: 1px dashed rgba(216, 254, 86, .5);
-    border-radius: var(--radius); padding: .5rem 1rem; cursor: pointer;
+    font: 700 .85rem 'Barlow', sans-serif; color: #1A1A2E; background: var(--white);
+    border: none; border-radius: var(--radius); padding: .55rem 1.1rem; cursor: pointer; transition: var(--transition);
   }
+  .btn-demo:hover { background: #e9e4f5; }
+  .btn-demo:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .btn-demo-groot { padding: .75rem 1.4rem; font-size: .95rem; }
+  .demo-rij, .demo-level { margin-top: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
+  .demo-level { margin-top: 0; }
+  .demo-uitleg { font-size: .85rem; color: var(--text-secondary); }
 
   .veld-label { display: block; font-weight: 600; font-size: .9rem; color: var(--text-secondary); margin-bottom: .35rem; }
   .veld {
@@ -144,6 +149,33 @@ body::before {
   }
   .stap-af .stap-nr { background: var(--accent); color: #1A1A2E; }
   .stap-nr.stap-optioneel { background: transparent; box-shadow: inset 0 0 0 2px var(--purple-light); }
+  .waar-rij { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .4rem; padding: 0; list-style: none; }
+  .waar-plek { font-size: .72rem; font-weight: 700; letter-spacing: .04em; color: var(--text-primary); padding: .15rem .55rem; border-radius: 999px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, .06); }
+  .waar-plek + .waar-plek { position: relative; margin-left: 1rem; }
+  .waar-plek + .waar-plek::before { content: '→'; position: absolute; left: -1.05rem; color: var(--accent); }
+  .stap-hint { margin-top: 1rem; padding: .75rem 1rem; border-radius: var(--radius); border-left: 3px solid var(--accent); background: rgba(216, 254, 86, .08); color: var(--white); font-weight: 600; }
+  .level-vraag { margin-top: .75rem; font-size: 1.2rem; font-weight: 700; color: var(--white); }
+  .level-doel { margin-top: 1rem; padding: .9rem 1.1rem; border-radius: var(--radius); background: var(--glass-bg-strong); border: 1px solid var(--glass-border); }
+  .level-doel .eyebrow { margin-bottom: .25rem; }
+  /* Zonder min-width: 0 duwt een brede tabel de kolom breder dan het scherm; nu scrolt de tabel in zijn paneel. */
+  .hoofd-grid > * { min-width: 0; }
+  .paneel { margin-top: 1rem; overflow-x: auto; }
+  .paneel-tabel { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  .paneel-tabel caption { text-align: left; font-weight: 700; color: var(--white); margin-bottom: .4rem; }
+  .paneel-tabel th, .paneel-tabel td { text-align: left; padding: .4rem .6rem; border-bottom: 1px solid var(--glass-border); vertical-align: top; }
+  .paneel-tabel thead th { color: var(--text-secondary); font-weight: 600; }
+  .paneel-tabel tbody th { color: var(--white); font-weight: 600; white-space: nowrap; }
+  .paneel-leeg { font-size: .9rem; color: var(--text-secondary); }
+  .klant-balk { margin-top: 1rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .5rem .75rem; font-size: .9rem; color: var(--text-secondary); }
+  .tussenscherm { display: block; }
+  .tussenscherm-vink { display: inline-grid; place-items: center; width: 2.4rem; height: 2.4rem; margin-right: .6rem; border-radius: 999px; background: var(--accent); color: #1A1A2E; vertical-align: middle; }
+  .tussenscherm-vink svg { width: 1.3rem; height: 1.3rem; }
+  .tussenscherm-lijst { margin-top: 1.5rem; display: grid; gap: .9rem; }
+  .tussenscherm-lijst dt { font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  .tussenscherm-lijst dd { margin-top: .2rem; color: var(--text-primary); }
+  .tussenscherm-kern { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+  .tussenscherm-kern code { font-size: .85rem; background: rgba(255, 255, 255, .08); padding: .15rem .45rem; border-radius: 6px; overflow-wrap: anywhere; }
+  .tussenscherm-volgende { margin-top: 1.75rem; padding: 1.1rem 1.25rem; border-radius: var(--radius); background: var(--glass-bg-strong); border: 1px solid var(--glass-border); }
   .stap-titel { font-weight: 800; font-size: 1.15rem; color: var(--white); line-height: 1.3; padding-top: .2rem; }
 
   .checks { margin-top: 1rem; padding: 0; list-style: none; font-size: .9rem; }

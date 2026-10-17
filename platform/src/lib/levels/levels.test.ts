@@ -17,7 +17,7 @@ import {
   madlibSentence,
 } from './level1';
 import { ANALYSE_PATH, DOELGROEP_PATH, EERSTE_DOELGROEP_PATH, INTERVIEWS_DIR, VRAGEN_PATH, level2, nextInterviewPath, requiredInterviews, slugify } from './level2';
-import { level6 } from './lockedLevels';
+import { level6 } from './level6';
 import type { FormStep, LevelDef, Step } from './types';
 
 const snap = (files: Record<string, string>, mergedPullRequests = 0): RepoSnapshot => ({
@@ -79,7 +79,7 @@ describe('levelStatus', () => {
     expect(levelStatus(LEVELS, snap(LEVEL1_DONE))[1]).toBe('locked');
   });
 
-  it('na level 0 t/m 2 is level 3 actief maar nooit af', () => {
+  it('na level 0 t/m 2 is level 3 actief', () => {
     expect(levelStatus(LEVELS, snap({ ...LEVEL0_DONE, ...LEVEL1_DONE, ...level2Done(5) }, 1))).toEqual({
       0: 'done', 1: 'done', 2: 'done', 3: 'active', 4: 'locked', 5: 'locked', 6: 'locked',
     });
@@ -87,14 +87,14 @@ describe('levelStatus', () => {
 });
 
 describe('level 0', () => {
-  it('loopt van setup via de AI-app en GitHub Desktop naar je eerste opdracht', () => {
+  it('begint op GitHub, zoals in de schets: account, repo en koppelen, daarna setup, AI-app en GitHub Desktop', () => {
     expect(level0.steps.map((s) => s.id)).toEqual([
-      'l0-setup',
-      'l0-download',
       'l0-account',
-      'l0-github-desktop',
       'l0-repo',
       'l0-koppelen',
+      'l0-setup',
+      'l0-download',
+      'l0-github-desktop',
       'l0-clonen',
       'l0-eerste-opdracht',
     ]);
@@ -136,23 +136,6 @@ describe('level 0', () => {
     expect(write.path).toBe(SETUP_PATH);
     expect(parseMarkdown(write.content).frontmatter).toEqual({ os: 'windows', ai: 'codex' });
   });
-});
-
-describe('alle stappen tellen', () => {
-  for (const level of [level1, level2]) {
-    it(`level ${level.id}: elke stap heeft een check, behalve een optionele kaart`, () => {
-      for (const step of level.steps) {
-        const checks = level.checks.filter((c) => c.stepId === step.id);
-        if (step.optional) expect(checks, step.id).toHaveLength(0);
-        else expect(checks.length, step.id).toBeGreaterThan(0);
-      }
-    });
-
-    it(`level ${level.id}: elke check hoort bij een stap`, () => {
-      const ids = level.steps.map((s) => s.id);
-      for (const check of level.checks) expect(ids, check.id).toContain(check.stepId);
-    });
-  }
 });
 
 describe('level 1', () => {

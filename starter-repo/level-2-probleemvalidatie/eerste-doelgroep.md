@@ -1,6 +1,6 @@
 ---
 gevonden: # ja of nee
-doelgroep:
+doelgroep: # past in: Hoe kunnen we [doelgroep] helpen met [probleem]?
 probleem:
 ---
 <!-- invullen -->
