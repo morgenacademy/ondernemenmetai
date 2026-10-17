@@ -71,12 +71,12 @@
 </style>
 </head>
 <body>
-<div class="top"><span class="logo">MORGEN<em>.</em></span><a href="/files/welkom-v4.html">↺ Bekijk de intro opnieuw</a></div>
+<div class="top"><span class="logo">MORGEN<em>.</em></span><a href="welkom-v4.html">↺ Bekijk de intro opnieuw</a></div>
 
 <section class="kaart" aria-label="Jouw route">
   <div class="laag" id="laag">
-    <img class="plaat" src="/files/start-leeg.png" alt="Een pad door de heuvels met zeven lichtjes, op weg naar een stad met een raket.">
-    <img class="jij" id="jij" src="/files/jij-uitgesneden.png" alt="">
+    <img class="plaat" src="../../../../platform/public/beelden/start-leeg.webp" alt="Een pad door de heuvels met zeven lichtjes, op weg naar een stad met een raket.">
+    <img class="jij" id="jij" src="../../../../platform/public/beelden/jij.webp" alt="">
     <button class="wijzer" id="wijzer" tabindex="-1" aria-hidden="true"><span class="wijzer-tekst">Je volgende level</span><span class="wijzer-pijl">↓</span></button>
   </div>
 </section>
@@ -93,7 +93,7 @@
 
 <script>
   const LEVELS = [
-    { naam: 'Werkplek', x: 49.9, y: 76.7, jx: 45.5, jy: 85, h: 40, kant: 'rechts', samenvatting: 'Richt je werkplek in: je AI-app, GitHub, je eigen repo en GitHub Desktop.', mijlpaal: 'Je AI werkt in je eigen repo en je eerste wijziging staat online.', knop: 'Begin met je werkplek', pagina: '/files/level0-v7.html' },
+    { naam: 'Werkplek', x: 49.9, y: 76.7, jx: 45.5, jy: 85, h: 40, kant: 'rechts', samenvatting: 'Richt je werkplek in: je AI-app, GitHub, je eigen repo en GitHub Desktop.', mijlpaal: 'Je AI werkt in je eigen repo en je eerste wijziging staat online.', knop: 'Begin met je werkplek', pagina: 'level0-v7.html' },
     { naam: 'Idee', x: 73.4, y: 69.4, jx: 72.0, jy: 70.6, h: 9, kant: 'links', samenvatting: 'Zet je idee, je visie en een eerste waardepropositie op papier.', mijlpaal: 'Je idee, je visie en een eerste waardepropositie.', knop: 'Ga verder met je idee' },
     { naam: 'Probleem-validatie', x: 83.3, y: 62.0, jx: 82.3, jy: 63.0, h: 6, kant: 'links', samenvatting: 'Bepaal je doelgroep, interview ze echt, en ontdek of ze hetzelfde probleem ervaren.', mijlpaal: 'Een eerste doelgroep die allemaal hetzelfde probleem ervaart.', knop: 'Ga verder met probleem-validatie' },
     { naam: 'Prototype', x: 73.5, y: 55.4, jx: 72.7, jy: 56.2, h: 4.5, kant: 'links', samenvatting: 'Bedenk oplossingen en maak een eerste versie die je kunt laten zien.', mijlpaal: 'Product/solution fit.' },
