@@ -1,7 +1,7 @@
 // De beleving per level, uit de schetsen van 16 oktober (welkom, routekaart en level 0) en doorgetrokken naar level 1 tot en met 6.
 // De stappen, checks en teksten van de stappen zelf staan in lib/levels en content/levels; hier staat wat eromheen hoort.
 
-/** Een halte op de routeplaat (start-leeg.jpg), in procenten van de plaat. jx, jy en h: waar de oprichter staat en hoe groot ze is. */
+/** Een halte op de routeplaat (start-leeg.webp), in procenten van de plaat. jx, jy en h: waar de oprichter staat en hoe groot ze is. */
 export type Halte = { x: number; y: number; jx: number; jy: number; h: number; kant: 'links' | 'rechts' };
 
 export const HALTES: Record<number, Halte> = {
@@ -41,12 +41,12 @@ const b = (naam: string) => `/beelden/${naam}`;
 
 export const BELEVING: Record<number, LevelBeleving> = {
   0: {
-    beeld: b('werkplek.jpg'),
+    beeld: b('werkplek.webp'),
     kop: 'Eerst je basiskamp.',
     zin: 'Voordat je met je idee begint, richt je de plek in waar al je werk komt te staan.',
     scenes: [
-      { soort: 'beeld', beeld: b('vroeger.jpg'), label: 'Zo deed je het altijd', kop: 'De patronen ontstonden in je hoofd.', zin: 'Je verzamelde gesprekken, aantekeningen en ideeën, en zag zelf wat ze verbond. Dat blijft waardevol.' },
-      { soort: 'beeld', beeld: b('samen.jpg'), label: 'Nu', kop: 'Je AI kijkt mee.', zin: 'Dan moet alles wat je verzamelt op één plek staan,', accent: 'waar je AI bij kan.' },
+      { soort: 'beeld', beeld: b('vroeger.webp'), label: 'Zo deed je het altijd', kop: 'De patronen ontstonden in je hoofd.', zin: 'Je verzamelde gesprekken, aantekeningen en ideeën, en zag zelf wat ze verbond. Dat blijft waardevol.' },
+      { soort: 'beeld', beeld: b('samen.webp'), label: 'Nu', kop: 'Je AI kijkt mee.', zin: 'Dan moet alles wat je verzamelt op één plek staan,', accent: 'waar je AI bij kan.' },
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Die plek heet een repo.', zin: 'Eén map voor je onderneming. Online bewaard en alleen voor jou. Je AI leest erin en werkt erin mee, als een assistent die bij je werk kan.', woord: 'repo', uitleg: 'kort voor repository, Engels voor bewaarplaats', beeld: 'repo' },
     ],
     stappenKop: 'Zo richt je je werkplek in.',
@@ -65,7 +65,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
     volgende: { kop: 'Tijd voor je idee.', zin: 'In level 1 zet je samen met je AI je idee, je visie en een eerste waardepropositie op papier. Alles komt meteen in je repo.', knop: 'Op naar je idee' },
   },
   1: {
-    beeld: b('idee.jpg'),
+    beeld: b('idee.webp'),
     kop: 'Je idee in één zin.',
     zin: 'Je zet je idee, je visie en je aannames neer. Je AI toetst het en maakt er een eerste waardepropositie van.',
     scenes: [
@@ -87,7 +87,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
     volgende: { kop: 'Tijd voor de markt.', zin: 'In level 2 interview je je doelgroep. Je ontdekt met je AI wie allemaal hetzelfde probleem hebben.', knop: 'Op naar je interviews' },
   },
   2: {
-    beeld: b('markt.jpg'),
+    beeld: b('markt.webp'),
     kop: 'Praat met echte mensen.',
     zin: 'Je interviewt je doelgroep over wat ze nu doen. Je AI legt de gesprekken naast elkaar en zoekt het patroon.',
     scenes: [
@@ -108,7 +108,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
     volgende: { kop: 'Tijd voor je oplossing.', zin: 'In level 3 bedenk je zoveel mogelijk oplossingen, kies je er één en maak je er een eerste versie van.', knop: 'Op naar je prototype' },
   },
   3: {
-    beeld: b('prototype.jpg'),
+    beeld: b('prototype.webp'),
     kop: 'Maak iets wat je kunt laten zien.',
     zin: 'Eerst breed: zoveel mogelijk oplossingen. Dan kies je er één, en bouw je er een MVP van.',
     scenes: [
@@ -130,7 +130,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
     volgende: { kop: 'Terug naar je mensen.', zin: 'In level 4 laat je je MVP zien aan de mensen die je interviewde, en doe je je voorstel.', knop: 'Op naar je feedback' },
   },
   4: {
-    beeld: b('feedback.jpg'),
+    beeld: b('feedback.webp'),
     kop: 'Wat vinden ze ervan?',
     zin: 'Je gaat met je MVP terug naar je mensen. Je laat ze proberen, doet je voorstel, en vraagt bij nee waarom.',
     scenes: [
@@ -152,7 +152,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
     volgende: { kop: 'Maak het beter.', zin: 'In level 5 ontwikkel je door op de redenen van nee, en ga je terug, tot je zegt: hier ga ik voor.', knop: 'Op naar je product' },
   },
   5: {
-    beeld: b('product.jpg'),
+    beeld: b('product.webp'),
     kop: 'Tot je zegt: hier ga ik voor.',
     zin: 'Je pakt de redenen van nee op, gaat terug naar de markt, en kiest.',
     scenes: [
@@ -174,7 +174,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
     volgende: { kop: 'Op naar je eerste klant.', zin: 'In level 6 leg je vast hoe je verkocht, en houd je je volgende klanten bij.', knop: 'Op naar je lancering' },
   },
   6: {
-    beeld: b('klanten.jpg'),
+    beeld: b('klanten.webp'),
     kop: 'Je eerste klant.',
     zin: 'Iemand betaalt voor wat je maakte. Nu leg je vast hoe dat ging, zodat het nog eens lukt.',
     scenes: [

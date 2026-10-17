@@ -43,8 +43,8 @@ describe('Routekaart', () => {
     <Routekaart status={status(1)} van={null} snapshot={snapshot} onOpen={niets} onDemoVoortgang={niets} onReset={niets} onKlant={async () => true} bezig={false} />,
   );
   it('zet de levels als lichtjes op het pad, met hun stand', () => {
-    expect(html).toContain('src="/beelden/start-leeg.jpg"');
-    expect(html).toContain('src="/beelden/jij.png"');
+    expect(html).toContain('src="/beelden/start-leeg.webp"');
+    expect(html).toContain('src="/beelden/jij.webp"');
     expect(html).toContain('aria-label="Level 0: Werkplek, afgerond"');
     expect(html).toContain('aria-label="Level 1: Idee, nu bezig"');
     expect(html).toContain('aria-label="Level 2: Probleem-validatie, op slot"');

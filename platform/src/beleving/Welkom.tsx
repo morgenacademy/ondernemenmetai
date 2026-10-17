@@ -58,7 +58,7 @@ export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
       </nav>
 
       <section className="bl-scene" id="bl-welkom-start">
-        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/start.jpg')" }} />
+        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/start.webp')" }} />
         <div className="bl-tekst">
           <div className="bl-label bl-in">Ondernemen met AI</div>
           <h1 className="bl-in d1">Je start je eigen bedrijf.</h1>
@@ -144,7 +144,7 @@ export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
       </section>
 
       <section className="bl-scene" id="bl-welkom-werkplek">
-        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/werkplek.jpg')" }} />
+        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/werkplek.webp')" }} />
         <div className="bl-tekst">
           <div className="bl-label bl-in">Level 0 · Werkplek</div>
           <h2 className="bl-in d1">Eerst je basiskamp.</h2>
@@ -155,7 +155,7 @@ export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
       </section>
 
       <section className="bl-scene" id="bl-welkom-markt">
-        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/markt.jpg')" }} />
+        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/markt.webp')" }} />
         <div className="bl-tekst">
           <div className="bl-label bl-in">Level 1 t/m 5</div>
           <h2 className="bl-in d1">Dan de markt op.</h2>
@@ -166,7 +166,7 @@ export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
       </section>
 
       <section className="bl-scene" id="bl-welkom-klanten">
-        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/klanten.jpg')" }} />
+        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/klanten.webp')" }} />
         <div className="bl-tekst">
           <div className="bl-label bl-in">Level 6 · Lancering</div>
           <h2 className="bl-in d1">Tot je eerste klant.</h2>

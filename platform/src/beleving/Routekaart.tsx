@@ -67,8 +67,8 @@ export function Routekaart({ status, van, snapshot, onOpen, onDemoVoortgang, onR
     <div className="bl-route">
       <section className="bl-kaart" aria-label="Jouw route">
         <div className="bl-laag">
-          <img className="plaat" src="/beelden/start-leeg.jpg" alt="Een pad door de heuvels met zeven lichtjes, op weg naar een stad met een raket." />
-          <img className="bl-jij" src="/beelden/jij.png" alt="" style={{ left: `${jij.jx}%`, top: `${jij.jy}%`, height: `${jij.h}%` }} />
+          <img className="plaat" src="/beelden/start-leeg.webp" alt="Een pad door de heuvels met zeven lichtjes, op weg naar een stad met een raket." />
+          <img className="bl-jij" src="/beelden/jij.webp" alt="" style={{ left: `${jij.jx}%`, top: `${jij.jy}%`, height: `${jij.h}%` }} />
           {LEVELS.map((l, i) => {
             const h = HALTES[l.id];
             const s = STAAT[status[l.id]];

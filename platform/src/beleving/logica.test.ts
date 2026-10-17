@@ -4,7 +4,7 @@ import { evaluateLevel } from '../lib/levels/evaluate';
 import { level0 } from '../lib/levels/level0';
 import { level1 } from '../lib/levels/level1';
 import { starterFiles } from '../lib/repo/starterFiles';
-import { HALTES } from './beleving';
+import { BELEVING, HALTES } from './beleving';
 import { leesHandmatig, schrijfHandmatig } from './handmatig';
 import { parseRoute, routeHash } from './route';
 import { huidigLevel, repoZichtbaar, stapStatussen, strookUitsnede } from './voortgang';
@@ -116,5 +116,27 @@ describe('repoZichtbaar', () => {
     expect(repoZichtbaar(new Set(['l0-account', 'l0-repo']), stand)).toBe(false);
     expect(repoZichtbaar(new Set(['l0-koppelen']), stand)).toBe(true);
     expect(repoZichtbaar(new Set(), { 0: 'done', 1: 'active' })).toBe(true);
+  });
+});
+
+describe('beelden', () => {
+  const bestanden = Object.keys(import.meta.glob('../../public/beelden/*', { query: '?url', import: 'default', eager: true })).map((p) => p.replace('../../public', ''));
+  const bronnen = import.meta.glob('./*.{ts,tsx}', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+
+  it('elk beeld waar de beleving naar verwijst, staat in public/beelden, als WebP', () => {
+    const gebruikt = new Set<string>();
+    for (const b of Object.values(BELEVING)) {
+      gebruikt.add(b.beeld);
+      for (const s of b.scenes) if (s.soort === 'beeld') gebruikt.add(s.beeld);
+    }
+    for (const [pad, tekst] of Object.entries(bronnen)) {
+      if (pad.includes('.test.')) continue;
+      for (const m of tekst.matchAll(/\/beelden\/[a-z-]+\.[a-z]+/g)) gebruikt.add(m[0]);
+    }
+    expect(gebruikt.size).toBeGreaterThan(5);
+    for (const pad of gebruikt) {
+      expect(pad, pad).toMatch(/\.webp$/);
+      expect(bestanden, pad).toContain(pad);
+    }
   });
 });

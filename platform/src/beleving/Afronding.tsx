@@ -55,8 +55,8 @@ export const Afronding = forwardRef<HTMLElement, Props>(function Afronding({ lev
         <div className="bl-af-rechts">
           <div className="bl-strook" aria-hidden="true">
             <div className="bl-strook-laag" style={{ left: `${uitsnede.left}%`, top: `${uitsnede.top}%`, width: `${uitsnede.zoom * 100}%` }}>
-              <img className="plaat" src="/beelden/start-leeg.jpg" alt="" />
-              <img className="bl-strook-jij" src="/beelden/jij.png" alt="" style={{ left: `${hier.jx}%`, top: `${hier.jy}%`, height: `${hier.h}%` }} />
+              <img className="plaat" src="/beelden/start-leeg.webp" alt="" />
+              <img className="bl-strook-jij" src="/beelden/jij.webp" alt="" style={{ left: `${hier.jx}%`, top: `${hier.jy}%`, height: `${hier.h}%` }} />
               {levelAf && (
                 <span className="bl-strook-af" style={{ left: `${hier.x}%`, top: `${hier.y}%` }}>
                   ✓

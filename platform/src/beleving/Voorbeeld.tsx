@@ -94,10 +94,10 @@ function formulier(step: Step): string {
 }
 
 /** Het beeld bij een stap die je buiten doet: eerst de markt op, later terug naar je mensen met je MVP. */
-const BUITEN_BEELD: Record<string, string> = { 'l5-terug': '/beelden/feedback.jpg' };
+const BUITEN_BEELD: Record<string, string> = { 'l5-terug': '/beelden/feedback.webp' };
 
 function buiten(step: Step): string {
-  return `<div class="bl-buiten" style="background-image:url('${BUITEN_BEELD[step.id] ?? '/beelden/markt.jpg'}')"><span>Buiten · bij je doelgroep</span></div>`;
+  return `<div class="bl-buiten" style="background-image:url('${BUITEN_BEELD[step.id] ?? '/beelden/markt.webp'}')"><span>Buiten · bij je doelgroep</span></div>`;
 }
 
 /** Het scherm bij een stap: bij level 0 uit de schets, daarna afgeleid van de soort stap en waar je hem doet. */
