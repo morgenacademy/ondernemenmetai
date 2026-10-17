@@ -49,10 +49,27 @@ describe('Routekaart', () => {
     expect(html).toContain('aria-label="Level 1: Idee, nu bezig"');
     expect(html).toContain('aria-label="Level 2: Probleem-validatie, op slot"');
   });
-  it('laat het level zien waar je nu bent, met de knop om verder te gaan', () => {
+  it('laat het level zien waar je nu bent, met de knop om te beginnen', () => {
     expect(html).toContain('Level 1 · Nu bezig');
     expect(html).toMatch(/<h1[^>]*>Idee<\/h1>/);
-    expect(html).toContain('Ga verder met je idee →');
+    expect(html).toMatch(/<button[^>]*class="bl-knop"[^>]*>Begin met je idee →<\/button>/);
+  });
+  it('staat er al iets van het level in je repo, dan ga je verder', () => {
+    const begonnen = { files: { ...starterFiles, 'level-1-idee/idee.md': '# Mijn idee\n\nSpoedbezorging per bakfiets voor apotheken.\n' }, mergedPullRequests: 0 };
+    const html = renderToStaticMarkup(
+      <Routekaart status={status(1)} van={null} snapshot={begonnen} onOpen={niets} onDemoVoortgang={niets} onReset={niets} onKlant={async () => true} bezig={false} />,
+    );
+    expect(html).toMatch(/<button[^>]*class="bl-knop"[^>]*>Ga verder met je idee →<\/button>/);
+  });
+  it('kom je van een afgerond level, dan staat het volgende level meteen klaar onder de kaart', () => {
+    const html = renderToStaticMarkup(
+      <Routekaart status={status(1)} van={0} snapshot={snapshot} onOpen={niets} onDemoVoortgang={niets} onReset={niets} onKlant={async () => true} bezig={false} />,
+    );
+    expect(html).toContain('Level 1 · Nu bezig');
+    expect(html).toMatch(/<h1[^>]*>Idee<\/h1>/);
+    expect(html).toMatch(/<button[^>]*class="bl-knop"[^>]*>Begin met je idee →<\/button>/);
+    expect(html).toContain('aria-label="Level 1: Idee, nu bezig" aria-pressed="true"');
+    expect(html).not.toContain('Klik op de kaart op het lichtje');
   });
   it('heeft de demo om je voortgang te zetten, en de knop voor je eerste klant', () => {
     expect(html).toContain('Demo: zet je voortgang');

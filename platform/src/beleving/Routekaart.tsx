@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LEVELS } from '../lib/levels';
+import { evaluateLevel } from '../lib/levels/evaluate';
 import type { FileWrite, LevelState } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
 import { KlantKnop } from '../ui/KlantKnop';
@@ -31,11 +32,12 @@ export function Routekaart({ status, van, snapshot, onOpen, onDemoVoortgang, onR
   const huidig = huidigLevel(status);
   const komtAan = van !== null && van < huidig;
   const [jijBij, setJijBij] = useState(komtAan ? van : huidig);
-  const [gekozen, setGekozen] = useState(komtAan ? van : huidig);
+  // Onder de kaart staat meteen het level dat nu aan de beurt is, ook als je net aankomt.
+  const [gekozen, setGekozen] = useState(huidig);
   const [gevierd, setGevierd] = useState<string | null>(null);
   const [wijzer, setWijzer] = useState<number | null>(null);
 
-  // Kom je net van een afgerond level, dan loop je naar het volgende lichtje. Dat level kies je daarna zelf: de wijzer laat zien waar.
+  // Kom je net van een afgerond level, dan loop je naar het volgende lichtje, en de wijzer laat zien waar dat is.
   useEffect(() => {
     if (!komtAan) {
       setJijBij(huidig);
@@ -62,6 +64,8 @@ export function Routekaart({ status, van, snapshot, onOpen, onDemoVoortgang, onR
   const staat = STAAT[status[level.id]];
   const b = BELEVING[level.id];
   const allesAf = LEVELS.every((l) => status[l.id] === 'done');
+  // Staat er al iets van dit level in je repo, dan ga je verder; anders begin je.
+  const begonnen = evaluateLevel(level, snapshot).results.some((r) => r.ok);
 
   return (
     <div className="bl-route">
@@ -125,7 +129,7 @@ export function Routekaart({ status, van, snapshot, onOpen, onDemoVoortgang, onR
         {level.milestone !== level.doel && <p className="bl-mijlpaal">Mijlpaal: {level.milestone}</p>}
         {staat.kort === 'nu' && (
           <button type="button" className="bl-knop" onClick={() => onOpen(level.id)}>
-            {b.knop} →
+            {begonnen ? 'Ga verder met' : 'Begin met'} {b.knop} →
           </button>
         )}
         {staat.kort === 'af' && (

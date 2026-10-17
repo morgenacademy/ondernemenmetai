@@ -30,7 +30,7 @@ export type LevelBeleving = {
   zin: string;
   scenes: Scene[];
   stappenKop: string;
-  /** Wat de knop op de routekaart zegt, bijvoorbeeld "Begin met je werkplek". */
+  /** Waar de knop op de routekaart mee begint of verdergaat: "Begin met je werkplek", "Ga verder met je werkplek". */
   knop: string;
   slot: { straks: string; af: string; heb: Heb[] };
   /** Het volgende level, zoals het op het slotscherm van dit level staat. Ontbreekt na level 6. */
@@ -50,7 +50,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Die plek heet een repo.', zin: 'Eén map voor je onderneming. Online bewaard en alleen voor jou. Je AI leest erin en werkt erin mee, als een assistent die bij je werk kan.', woord: 'repo', uitleg: 'kort voor repository, Engels voor bewaarplaats', beeld: 'repo' },
     ],
     stappenKop: 'Zo richt je je werkplek in.',
-    knop: 'Begin met je werkplek',
+    knop: 'je werkplek',
     slot: {
       straks: 'Zo staat je basiskamp straks.',
       af: 'Je basiskamp staat.',
@@ -72,7 +72,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je AI haalt het op.', zin: 'Wat je hier op het platform invult, komt op GitHub. Je AI werkt op je computer en haalt het op aan het begin van elke sessie.', woord: 'pull', uitleg: 'ophalen: van GitHub naar je computer', beeld: 'twee-plekken' },
     ],
     stappenKop: 'Zo zet je je idee neer.',
-    knop: 'Ga verder met je idee',
+    knop: 'je idee',
     slot: {
       straks: 'Zo staat je idee straks.',
       af: 'Je idee staat.',
@@ -94,7 +94,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je AI stelt voor, jij beslist.', zin: 'Je interviews en je analyse komen direct in je repo. Je canvas is van jou: daar doet je AI een voorstel, en jij kijkt het na voordat het meetelt.', woord: 'pull request', uitleg: 'een voorstel tot wijziging, dat je eerst nakijkt', beeld: 'twee-plekken' },
     ],
     stappenKop: 'Zo vind je je eerste doelgroep.',
-    knop: 'Ga verder met probleem-validatie',
+    knop: 'probleem-validatie',
     slot: {
       straks: 'Zo staat je eerste doelgroep straks.',
       af: 'Je eerste doelgroep staat.',
@@ -115,7 +115,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je repo onthoudt elke versie.', zin: 'Je madlib en je canvas hebben nu drie versies: je eerste idee, na je interviews, en voor je oplossing. In GitHub Desktop zie je wat er veranderde, en je kunt terug.', woord: 'geschiedenis', uitleg: 'elke commit is een versie waar je naar terug kunt', beeld: 'versies' },
     ],
     stappenKop: 'Zo maak je je MVP.',
-    knop: 'Ga verder met je prototype',
+    knop: 'je prototype',
     slot: {
       straks: 'Zo staat je MVP straks.',
       af: 'Je MVP staat.',
@@ -137,7 +137,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je repo is het geheugen van je AI.', zin: 'Je AI weet nog wat 01-apotheker in level 2 vertelde. Dat onthoudt hij niet zelf: het staat in je repo, en hij leest het.', woord: 'geheugen', uitleg: 'alles wat je vastlegt, kan je AI later gebruiken', beeld: 'geheugen' },
     ],
     stappenKop: 'Zo haal je je feedback op.',
-    knop: 'Ga verder met je feedback',
+    knop: 'je feedback',
     slot: {
       straks: 'Zo staat je eerste ronde straks.',
       af: 'Je eerste ronde staat.',
@@ -159,7 +159,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je AI leest eerst AGENTS.md.', zin: 'Elke sessie begint je AI daar. Nu je product staat, schrijf je er zelf bij wie je klanten zijn, wat je verkoopt en voor welke prijs.', woord: 'AGENTS.md', uitleg: 'het bestand waar elke sessie van je AI mee begint', beeld: 'agents' },
     ],
     stappenKop: 'Zo kom je tot je product.',
-    knop: 'Ga verder met je product',
+    knop: 'je product',
     slot: {
       straks: 'Zo staat je product straks.',
       af: 'Je gaat ervoor.',
@@ -181,7 +181,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je schrijft je eigen skill.', zin: 'Je AI gebruikte de hele route skills van Morgen. Nu schrijf je er zelf een: de stappen waarmee jij verkoopt, zodat je AI elk volgend gesprek zo voorbereidt.', woord: 'skill', uitleg: 'vaste stappen die je AI elke keer volgt', beeld: 'skill' },
     ],
     stappenKop: 'Zo maak je verkopen herhaalbaar.',
-    knop: 'Ga verder met je lancering',
+    knop: 'je lancering',
     slot: {
       straks: 'Zo staat je lancering straks.',
       af: 'Proof of Concept.',

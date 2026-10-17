@@ -50,7 +50,7 @@ Wat Harmen in de eerste versie stoorde: te veel tekst en vakjes ("ik kijk en ik 
 - **Het startbeeld is de levelkaart.** Het pad heeft precies zeven lichtjes; dat zijn level 0 tot en met 6. De stad met de raket is het einddoel.
 - **Op de kaart staan geen lussen;** dat houdt het beeld eenvoudig.
 - **Jij staat steeds verder op het pad,** bij je huidige level. Verder weg ben je kleiner.
-- **Na een afgerond level ga je terug naar de routekaart.** Daar loop je zichtbaar naar het volgende lichtje. Een wijzer met een hupje wijst het aan, en je klikt het zelf aan. Het platform kiest het volgende level niet voor je.
+- **Na een afgerond level ga je terug naar de routekaart.** Daar loop je zichtbaar naar het volgende lichtje, en een wijzer met een hupje wijst het aan. Onder de kaart staat dat level meteen klaar, met de knop "Begin met …" (18 oktober: Harmen vond dat "Op naar je idee" anders voelde als terug naar level 0).
 - **Overal staat "Afgerond", niet "Af".**
 
 ### Level 0
@@ -80,7 +80,7 @@ Wat Harmen in de eerste versie stoorde: te veel tekst en vakjes ("ik kijk en ik 
    - Koppelen geldt meteen als inloggen bij het platform.
    - Mac of Windows doet er pas toe vanaf het downloaden.
 2. **Het welkomstscherm verschijnt bij het eerste bezoek.** Dat het al gezien is, onthoudt de browser. Op de routekaart staat "Bekijk de intro opnieuw". Dit is een gemak per bezoeker, en hoort dus niet in de repo.
-3. **De routekaart is de startpagina.** Klik je een lichtje aan, dan zie je onder de kaart het level met een knop "Begin met…" of "Ga verder met…". Die knop opent de levelpagina. Op elke levelpagina staat bovenaan "← Jouw route".
+3. **De routekaart is de startpagina.** Klik je een lichtje aan, dan zie je onder de kaart het level met een knop "Begin met…", of "Ga verder met…" zodra er iets van dat level in je repo staat. Die knop opent de levelpagina. Op elke levelpagina staat bovenaan "← Jouw route".
 4. **Het slotscherm is het tussenscherm van elk level.** De branch `claude/determined-noether-3a2004` heeft een tussenscherm met wat je haalde, wat je leerde en wat in je repo staat (`doel`, `begrip`, `kern`). Dat wordt het slotscherm in deze vormgeving, met per level de lijst "Dit heb je nu".
 5. **Stappen die je zelf afrondt** (account, repo, GitHub Desktop, clonen) vink je af met een knop als "Klaar, ik heb een account". Het platform kan die stappen niet in de repo zien. Dat vinkje bewaart het platform zelf, in de demo in de browser, en nooit in de repo. Stappen die het platform wel kan zien (setup, koppelen, eerste opdracht) gaan vanzelf op Klaar.
 6. **Plekken per stap.** De term "Hier op het platform" wordt de plek `platform` uit die branch. GitHub Desktop installeren en clonen worden `github-desktop`, de eerste opdracht `ai-app` en daarna `github-desktop`.
@@ -116,7 +116,7 @@ Een reviewer las dit ontwerp als bouwer en stelde drie vragen. Ik heb ze zelf be
 | Daarna | De routekaart met jou bij je huidige level |
 | Lichtje aangeklikt | Onder de kaart: naam, doel, mijlpaal en de knop naar het level. Bij een level op slot: "Gaat open zodra je level N hebt afgerond." |
 | Op een levelpagina | Bovenaan "← Jouw route" |
-| Level net afgerond | Slotscherm op de levelpagina, dan de knop naar je route. Daar loop je naar het volgende lichtje, verschijnt de melding "Level N afgerond. Op naar …!", en wijst de wijzer het lichtje aan. Onder de kaart staat "✓ Afgerond. Klik op de kaart op het lichtje van level N+1 om verder te gaan." |
+| Level net afgerond | Slotscherm op de levelpagina, dan de knop naar je route. Daar loop je naar het volgende lichtje, verschijnt de melding "Level N afgerond. Op naar …!", en wijst de wijzer het lichtje aan. Onder de kaart staat level N+1 al klaar, met "Begin met …". |
 
 ### De routekaart
 
@@ -194,7 +194,7 @@ Een reviewer las dit ontwerp als bouwer en stelde drie vragen. Ik heb ze zelf be
   - "Volgende stap" met de reden waarom hij uit staat;
   - het slotscherm, ook vóór alles klaar is;
   - "Afgerond" in de labels;
-  - de routekaart: de juiste staat per lichtje, de wijzer na een afgerond level, en dat het volgende level pas opent als je het aanklikt.
+  - de routekaart: de juiste staat per lichtje, de wijzer na een afgerond level, en dat het volgende level dan meteen onder de kaart klaarstaat.
 - **In de browser:**
   - welkomst → route → Level 0 → slotscherm → route → wijzer → Level 1;
   - op 375 px breed;
