@@ -111,4 +111,10 @@ describe('StapVenster', () => {
     expect(html).toContain('1 · Hier op het platform');
     expect(html).toMatch(/<button[^>]*>Verbind met GitHub<\/button>/);
   });
+
+  it('koppelen sla je niet over: verder kan pas als het gelukt is', () => {
+    const html = venster('l0-koppelen', {}, ['l0-account', 'l0-repo']);
+    expect(html).toMatch(/<button[^>]*class="bl-vknop p"[^>]*disabled=""[^>]*>Volgende stap<\/button>/);
+    expect(html).toContain('Rond eerst de stappen links af; daarna gaat dit vanzelf door.');
+  });
 });

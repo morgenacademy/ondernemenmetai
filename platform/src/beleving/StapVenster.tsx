@@ -55,7 +55,8 @@ export function StapVenster({ level, step, status, snapshot, evaluation, setup, 
 
   const checks = evaluation.results.filter((r) => r.stepId === step.id);
   const af = status === 'af';
-  const handmatig = checks.length === 0;
+  // Koppelen vink je niet zelf af: die stap is pas klaar als het koppelen gelukt is.
+  const handmatig = checks.length === 0 && step.id !== 'l0-koppelen';
   const genummerd = level.steps.filter((s) => !s.optional);
   const nummer = genummerd.indexOf(step) + 1;
   const content = stepContent(level.id, step.id);
