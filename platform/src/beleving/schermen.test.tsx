@@ -8,7 +8,7 @@ import { Afronding } from './Afronding';
 import { BELEVING } from './beleving';
 import { LevelScherm } from './LevelScherm';
 import { Routekaart } from './Routekaart';
-import { StapVenster } from './StapVenster';
+import { StapVenster, toonVenster } from './StapVenster';
 import { Voorbeeld } from './Voorbeeld';
 import { Welkom } from './Welkom';
 
@@ -196,6 +196,17 @@ describe('StapVenster', () => {
     const html = venster(0, 'l0-account');
     expect(html).toMatch(/^<dialog class="bl-open licht" aria-labelledby="bl-venster-titel"/);
     expect(html).not.toContain('role="dialog"');
+  });
+
+  it('het venster gaat eerst modaal open en zet dan pas de focus, zodat de focus daarna terug kan naar de kaart', () => {
+    const stappen: string[] = [];
+    const d = { open: false, showModal: () => ((d.open = true), stappen.push('showModal')) };
+    const titel = { focus: () => stappen.push('focus') };
+    toonVenster(d, titel);
+    expect(stappen).toEqual(['showModal', 'focus']);
+    // Volgende stap in hetzelfde venster: het is al open, alleen de focus gaat naar de nieuwe titel.
+    toonVenster(d, titel);
+    expect(stappen).toEqual(['showModal', 'focus', 'focus']);
   });
 
   it('een stap zonder check vink je zelf af', () => {

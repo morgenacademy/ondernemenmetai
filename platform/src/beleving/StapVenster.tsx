@@ -104,6 +104,15 @@ function Koppelen({ af, onKlaar }: { af: boolean; onKlaar: () => void }) {
   );
 }
 
+/**
+ * Een echte modale dialog: de browser houdt de focus erin, Esc sluit hem, en daarna gaat de focus terug naar de kaart.
+ * Eerst openen, dan pas de focus op de titel: de browser onthoudt bij het openen waar de focus stond.
+ */
+export function toonVenster(d: Pick<HTMLDialogElement, 'open' | 'showModal'> | null, titel: Pick<HTMLElement, 'focus'> | null) {
+  if (d && !d.open) d.showModal?.();
+  titel?.focus({ preventScroll: true });
+}
+
 export function StapVenster({ level, step, nummer, totaal, status, snapshot, evaluation, licht, onSave, onDemo, onKlaar, onVorige, onVolgende, onSluit }: Props) {
   const titel = useRef<HTMLHeadingElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -125,14 +134,8 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
   useEffect(() => {
     if (vel.current) vel.current.scrollTop = 0;
     if (groot.current) groot.current.scrollTop = 0;
-    titel.current?.focus({ preventScroll: true });
+    toonVenster(dialog.current, titel.current);
   }, [step.id]);
-  // Een echte modale dialog: de browser houdt de focus erin, Esc sluit hem, en daarna gaat de focus terug naar de kaart.
-  useEffect(() => {
-    const d = dialog.current;
-    if (d && !d.open) d.showModal?.();
-    titel.current?.focus({ preventScroll: true });
-  }, []);
 
   const links = (() => {
     if (step.id === 'l0-koppelen') return <Koppelen af={af} onKlaar={onKlaar} />;
