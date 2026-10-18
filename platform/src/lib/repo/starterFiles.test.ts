@@ -102,6 +102,12 @@ describe('starter-repo', () => {
     expect(parseMarkdown(starterFiles['level-5-productvalidatie/product.md']).frontmatter).toEqual({ besluit: null, volgende_stap: null });
   });
 
+  it('.gitignore houdt opnames in interviews/ buiten git; alleen het uitgeschreven .md-bestand gaat naar GitHub', () => {
+    const regels = gitignore.split('\n').map((r) => r.trim());
+    for (const soort of ['m4a', 'mp3', 'wav', 'mp4']) expect(regels, soort).toContain(`level-2-probleemvalidatie/interviews/*.${soort}`);
+    expect(regels.filter((r) => r.includes('interviews/') && r.endsWith('.md'))).toEqual([]);
+  });
+
   it('.gitignore houdt de map opnames/ buiten git', () => {
     expect(gitignore.split('\n').map((r) => r.trim())).toContain('opnames/');
   });
