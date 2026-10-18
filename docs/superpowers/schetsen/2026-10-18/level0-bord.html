@@ -103,8 +103,6 @@
   .finish h2 { font-size: 38px; margin: 6px 0 8px; }
   .finish p { color: #d9d3e8; font-size: 19px; margin: 0 0 22px; }
   .finish .groot { display: inline-flex; background: linear-gradient(135deg, #D8FE56, #b8e040); color: #1A1A2E; font: 800 18px 'Barlow', sans-serif; padding: 16px 30px; border-radius: 20px; border: 0; cursor: pointer; box-shadow: 0 6px 30px rgba(216,254,86,.35); }
-  .snipper { position: absolute; width: 8px; height: 14px; border-radius: 2px; top: -20px; animation: val 2.4s ease-in forwards; }
-  @keyframes val { to { transform: translateY(420px) rotate(540deg); opacity: 0; } }
 
   .melding { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 30px); opacity: 0; background: #D8FE56; color: #1A1A2E; font-weight: 800; font-size: 17px; padding: 12px 20px; border-radius: 16px; box-shadow: 0 10px 40px rgba(216,254,86,.4); transition: .5s; pointer-events: none; }
   .melding.aan { transform: translate(-50%, 0); opacity: 1; }
@@ -208,9 +206,8 @@ function teken() {
 function blad() {
   const el = document.getElementById('blad');
   if (finish || gekozen === -1) {
-    el.innerHTML = `<div class="finish"><div class="label">Level 0 af</div><h2>Je werkplek staat.</h2><p>Je AI werkt in je eigen repo, en je eerste wijziging staat op GitHub.</p><button class="groot" onclick="melding('Hier ga je naar level 1')">Door naar level 1 →</button></div>`;
-    const f = el.querySelector('.finish');
-    for (let k = 0; k < 40; k++) { const s = document.createElement('i'); s.className = 'snipper'; s.style.left = Math.random() * 100 + '%'; s.style.background = ['#D8FE56', '#9B6FCF', '#fff'][k % 3]; s.style.animationDelay = Math.random() * .8 + 's'; f.appendChild(s); }
+    // Zoals in de app: na de laatste stap volgt het slotscherm van level 0, met wat je nu hebt en de strook naar level 1. Eén knop, één klik.
+    el.innerHTML = `<div class="finish"><div class="label">Level 0 · Afgerond</div><h2>Je basiskamp staat.</h2><p>Dit heb je nu: GitHub Desktop, je eigen repo, dit platform dat in je repo meekijkt, je AI-app en je eerste wijziging online.</p><p style="font-size:15px;color:#a59fb8">In de app staat hier de strook met de oprichter op weg naar level 1.</p><button class="groot" onclick="melding('Opent level 1')">Op naar je idee →</button></div>`;
     return;
   }
   const i = gekozen, s = STAPPEN[i], st = status(i);
