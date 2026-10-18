@@ -128,10 +128,12 @@ describe('LevelScherm', () => {
 
   it('eindigt met het slotscherm, met de knop naar het volgende level nog dicht', () => {
     const html = render(0);
-    expect(html).toContain('Zo staat je basiskamp straks.');
+    expect(html).toContain('Dit heb je na level 0.');
+    expect(html).not.toContain('Zo staat je');
+    expect(html).toMatch(/0 van \d+ af:/);
     expect(html).toContain('Tijd voor je idee.');
     expect(html).toMatch(/aria-disabled="true"[^>]*>Op naar je idee →/);
-    expect(html).toContain('Nog 8 stappen; daarna kun je verder.');
+    expect(html).toContain('Nog 8 stappen, dan gaat level 1 open.');
   });
 
   it('level 0 heeft zijn beeld, kop en stappen', () => {
