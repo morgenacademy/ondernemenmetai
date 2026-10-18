@@ -22,7 +22,7 @@ Elk level bouwt voort op het vorige. Lees eerst de bestanden van eerdere levels 
 
 ## Templates en de markering
 
-Templatebestanden beginnen met een HTML-commentaar met het woord "invullen". Het platform telt een bestand pas als ingevuld als die regel weg is. Haal hem alleen weg als het bestand echt is ingevuld, en alleen in overleg met de eigenaar.
+Templatebestanden beginnen met een HTML-commentaar met het woord "invullen". Ondernemen met AI telt een bestand pas als ingevuld als die regel weg is. Haal hem alleen weg als het bestand echt is ingevuld, en alleen in overleg met de eigenaar.
 
 ## Skills
 
@@ -30,12 +30,12 @@ In `skills/` staat per skill een map met een `SKILL.md`. Lees aan het begin van 
 
 ## Werkwijze
 
-- Haal aan het begin van elke sessie eerst de nieuwste versie op met `git pull`. Het platform zet soms zelf bestanden in de repo, bijvoorbeeld wat de eigenaar daar in een formulier invulde. Komt er zo iets nieuws binnen, zeg dat dan in één zin ("Ik heb idee.md opgehaald die je op het platform invulde"). Lukt het ophalen niet, bijvoorbeeld door een conflict, stop dan en leg de eigenaar in gewone woorden uit wat er aan de hand is.
+- Haal aan het begin van elke sessie eerst de nieuwste versie op met `git pull`. Ondernemen met AI zet soms zelf bestanden in de repo, bijvoorbeeld wat de eigenaar daar in een formulier invulde. Komt er zo iets nieuws binnen, zeg dat dan in één zin ("Ik heb idee.md opgehaald die je in Ondernemen met AI invulde"). Lukt het ophalen niet, bijvoorbeeld door een conflict, stop dan en leg de eigenaar in gewone woorden uit wat er aan de hand is.
 - Werk in het Nederlands, tenzij de eigenaar iets anders vraagt.
 - Stel vragen één voor één en wacht op antwoord.
 - Verzin geen marktinformatie. Wat niet uit de repo of van de eigenaar komt, benoem je als aanname.
-- Leg wijzigingen vast met een duidelijke commit; de eigenaar pusht via GitHub Desktop.
-- Interviews push je zelf met `git push`, direct na het vastleggen. Zo gaat het vak op het platform meteen aan. Lukt pushen niet, vraag de eigenaar dan om in GitHub Desktop op Push origin te klikken.
+- Leg wijzigingen vast met een duidelijke commit; de eigenaar pusht via GitHub Desktop. Vraagt de eigenaar je om te pushen, doe dat dan met `git push`.
+- Interviews push je zelf met `git push`, direct na het vastleggen. Zo gaat het vak in Ondernemen met AI meteen aan. Lukt pushen niet, vraag de eigenaar dan om in GitHub Desktop op Push origin te klikken.
 - Vraagt de eigenaar "Is alles in sync?" of "Staat mijn interview al in de repo?", kijk dan met `git fetch` en `git status` en antwoord in één zin: wat nog alleen op de computer staat (niet vastgelegd of niet gepusht), wat nog op GitHub klaarstaat om op te halen, en wat bewust op de computer blijft, zoals de opnames in `interviews/`.
 - Schrijf kort en concreet, zonder vage claims.
 

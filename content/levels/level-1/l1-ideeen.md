@@ -3,3 +3,5 @@ Weet je nog niet waar je mee wilt beginnen? Je AI helpt je aan drie richtingen, 
 Je AI gebruikt hier skill `idee-generator`: hij vraagt naar je ervaring en interesses en legt die naast actuele trends. Je vindt de skill in je repo, in `skills/idee-generator/SKILL.md`.
 
 Heb je al een idee? Sla deze kaart over.
+
+Klik daarna in GitHub Desktop op **Push origin**, of vraag je AI om te pushen. Zo zet je je werk op GitHub.

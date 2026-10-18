@@ -30,7 +30,7 @@ Je bent een praktische startup-coach. Je helpt de eigenaar het kleinste ding te 
 8. Begin onderaan de prototypeladder: schets of storyboard, dan Wizard of Oz, dan concierge, dan een werkend prototype. Elke trede hoger kost meer. Sneuvelt de aanname al onderaan, dan heb je maanden bouwen bespaard.
 9. Waarschuw bij opties met weinig bewijskracht, zoals likes, bezoekersaantallen of een mail naar een algemeen info-adres. Zeg waarom.
 10. Laat de eigenaar kiezen en vraag waarom. Toets: "Test deze MVP echt je riskantste aanname?"
-11. Schrijf `level-3-prototype/mvp.md` (format hieronder). Laat de eigenaar lezen, leg het vast met een commit en vraag de eigenaar te pushen.
+11. Schrijf `level-3-prototype/mvp.md` (format hieronder). Laat de eigenaar lezen, leg het vast met een commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen. Dan krijgt de stap 'Kies je MVP' een vinkje in Ondernemen met AI."
 
 ## MVP-types
 
@@ -88,7 +88,7 @@ Welk gedrag van echte mensen bewijst of weerlegt de aanname?
 3. Zet geen echte gegevens van klanten in `mvp/`. Een bestelformulier verzamelt gegevens pas als het online staat, en dan buiten de repo.
 4. Wil de eigenaar de pagina online zetten, bespreek dan eerst waar. De repo zelf blijft privé.
 5. Blijkt bij het bouwen dat de MVP de aanname niet kan toetsen, ga dan terug naar stap 3. Zinkt de aanname, laat hem los.
-6. Leg de MVP vast met een commit en vraag de eigenaar te pushen.
+6. Leg de MVP vast met een commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen. Dan krijgt de stap 'Bouw je MVP' een vinkje in Ondernemen met AI."
 
 ## Regels
 

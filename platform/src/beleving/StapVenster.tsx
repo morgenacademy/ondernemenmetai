@@ -57,16 +57,16 @@ function Koppelen({ af, onKlaar }: { af: boolean; onKlaar: () => void }) {
   if (af)
     return (
       <div className="bl-paneel-echt" style={{ textAlign: 'center' }}>
-        {kop(3, 'Terug op het platform')}
+        {kop(3, 'Terug in Ondernemen met AI')}
         <p className="bl-gelukt">✓ Gekoppeld met jij/mijn-onderneming</p>
-        <p className="bl-hint">Het platform kan nu in die ene repo kijken en er je keuzes in zetten.</p>
+        <p className="bl-hint">Ondernemen met AI kan nu in die ene repo kijken en er je keuzes in zetten.</p>
       </div>
     );
   if (fase === 1)
     return (
       <div className="bl-paneel-echt" style={{ textAlign: 'center' }}>
-        {kop(1, 'Hier op het platform')}
-        <p className="bl-veldlabel">Het platform vraagt GitHub om toegang tot één repo.</p>
+        {kop(1, 'Hier, in Ondernemen met AI')}
+        <p className="bl-veldlabel">Ondernemen met AI vraagt GitHub om toegang tot één repo.</p>
         <button type="button" className="bl-vknop p bl-markeer-knop" onClick={() => setFase(2)}>
           Verbind met GitHub
         </button>
@@ -257,7 +257,7 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
           </div>
           {!af && !handmatig && !step.optional && (
             <p className="bl-hint" id="bl-waarom-niet">
-              {isKoppel ? 'Rond eerst de stappen links af; daarna gaat dit vanzelf door.' : 'Dit gaat vanzelf door zodra je repo het laat zien.'}
+              {isKoppel ? 'Kies je repo op GitHub en klik op Install. Dan krijgt deze stap vanzelf een vinkje.' : 'Staat je wijziging op GitHub, dan krijgt deze stap vanzelf een vinkje.'}
             </p>
           )}
         </div>

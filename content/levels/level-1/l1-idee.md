@@ -1,1 +1,1 @@
-Begin bij jezelf. Leg je idee uit alsof je het aan een vriend vertelt: wat ga je doen, voor wie, en waarom ben jij degene die het gaat doen? Het hoeft nog niet af of juist te zijn. Alles wat je nu opschrijft, is een aanname die je straks gaat toetsen.
+Begin bij jezelf. Leg je idee uit alsof je het aan een vriend vertelt: wat ga je doen, voor wie, en waarom ben jij degene die het gaat doen? Het hoeft nog niet af of juist te zijn. Alles wat je nu opschrijft, is een aanname die je in level 2 gaat toetsen.

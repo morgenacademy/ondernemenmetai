@@ -36,7 +36,7 @@ De scan bouwt op de Theory of Change, het model van de zes kapitalen en de matur
 5. **Stap 3: maturiteit.** Vraag per kapitaal in welke fase het doel past (de ambitie) en in welke fase de activiteit past (de uitvoering). Die twee verschillen vaak. Benoem het verschil: daar zit een tegenstrijdigheid of een kans.
 6. **Stap 4: resultaten.** Vraag wat de activiteiten al opleverden, positief en negatief, en in welke fase dat resultaat past. Is er nog niets, zet dan "later" en zeg dat de eigenaar dit over een paar maanden aanvult.
 7. **Stap 5: betekenis.** Leg de matrix naast elkaar en vraag: wat valt op? Waar lopen doel, activiteit en resultaat uiteen? Welk kapitaal krijgt veel aandacht, welk weinig? Wat betekent dat voor je volgende stappen? De eigenaar trekt de conclusies; jij stelt de vragen.
-8. Schrijf `level-6-lancering/impact.md` (format hieronder). Laat de eigenaar lezen, leg het vast met een commit en vraag de eigenaar te pushen.
+8. Schrijf `level-6-lancering/impact.md` (format hieronder). Laat de eigenaar lezen, leg het vast met een commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen. Dan krijgt de stap 'Maak je impact zichtbaar' een vinkje in Ondernemen met AI."
 
 ## impact.md
 

@@ -5,7 +5,7 @@ volgende_stap:
 <!-- invullen -->
 # Mijn product
 
-Je AI vult dit met skill `verbeteren`. Je besluit en je volgende stap kies je zelf op het platform.
+Je AI vult dit met skill `verbeteren`. Je besluit en je volgende stap kies je zelf in Ondernemen met AI.
 
 ## Wat erin zit
 

@@ -1,6 +1,6 @@
-### Het platform kan niet in je map meekijken
+### Ondernemen met AI kan niet in je map meekijken
 
-Het hele level-mechanisme (stap af → volgend level open) leest de bestanden in de repo. Bij een Drive-map moet je per deelnemer een Drive-koppeling bouwen, en dat is rommeliger.
+Ondernemen met AI ziet aan de bestanden in je repo welke stappen af zijn, en zet dan het volgende level open. In een gedeelde map kan het niet kijken.
 
 ### Je ziet niet terug wat je AI deed
 
@@ -8,7 +8,7 @@ Herschrijft de AI je analyse slecht, dan wil je terug kunnen. Git bewaart elke v
 
 ### Je kunt niet eerst nakijken
 
-De gewoonte "de AI stelt voor, ik keur goed" (pull request) is misschien wel de belangrijkste AI-vaardigheid die je ze meegeeft.
+De gewoonte "je AI stelt voor, jij keurt goed" (pull request) is misschien wel de belangrijkste AI-vaardigheid die je hier leert.
 
 ### Je AI kan er niet in de cloud in werken
 

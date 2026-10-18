@@ -149,7 +149,7 @@ export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
           <div className="bl-label bl-in">Level 0 · Werkplek</div>
           <h2 className="bl-in d1">Eerst je basiskamp.</h2>
           <p className="bl-zin bl-in d2">
-            Even pas op de plaats. Alles wat je straks ophaalt, komt op één plek. <span className="bl-accent">Je AI leest mee.</span>
+            Even pas op de plaats. Alles wat je bij je doelgroep ophaalt, komt op één plek. <span className="bl-accent">Je AI leest mee.</span>
           </p>
         </div>
       </section>

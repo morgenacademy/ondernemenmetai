@@ -226,13 +226,13 @@ describe('StapVenster', () => {
     const html = venster(0, 'l0-koppelen');
     expect(html).not.toContain('Klaar, volgende stap');
     expect(html).toMatch(/<button[^>]*class="bl-vknop p"[^>]*disabled=""[^>]*>Volgende stap<\/button>/);
-    expect(html).toContain('Rond eerst de stappen links af; daarna gaat dit vanzelf door.');
+    expect(html).toContain('Kies je repo op GitHub en klik op Install. Dan krijgt deze stap vanzelf een vinkje.');
   });
 
   it('een stap met een check gaat vanzelf door zodra de repo het laat zien', () => {
     const html = venster(2, 'l2-analyse');
     expect(html).toMatch(/<button[^>]*class="bl-vknop p"[^>]*disabled=""[^>]*>Volgende stap<\/button>/);
-    expect(html).toContain('Dit gaat vanzelf door zodra je repo het laat zien.');
+    expect(html).toContain('Staat je wijziging op GitHub, dan krijgt deze stap vanzelf een vinkje.');
     expect(html).toContain('Vul met demo content');
   });
 

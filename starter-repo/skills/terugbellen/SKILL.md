@@ -13,7 +13,7 @@ De eigenaar gaat met hun MVP terug naar de mensen die ze in level 2 interviewden
 2. Maak een lijst van iedereen met `terugbellen: ja`. Zet erbij: nummer en rol, datum van het interview, en of die persoon bij de eerste doelgroep hoort. Laat de eigenaar kiezen wie ze bellen. Mensen met `terugbellen: nee` bel je niet.
 3. Wil de eigenaar ook nieuwe mensen spreken, geef die dan het volgende vrije nummer, gekeken over `interviews/` en `feedback/` samen, en een rol: `07-apotheker`.
 4. Maak per persoon `level-4-marktfeedback/feedback/NN-rol.md` met hetzelfde nummer en dezelfde rol als het interview. Bestaat het bestand al uit een eerdere ronde, zet dan onder de vorige ronde een nieuw spiekbriefje en een nieuwe sectie: "Spiekbriefje ronde 2" en "Ronde 2". Zet `ronde` in de frontmatter op het nieuwe nummer; `antwoord` blijft staan tot er een nieuw antwoord is.
-5. Laat de eigenaar de spiekbriefjes lezen. Leg ze vast met een commit en vraag de eigenaar te pushen.
+5. Laat de eigenaar de spiekbriefjes lezen. Leg ze vast met een commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen. Dan krijgt de stap 'Bereid je terugbelgesprekken voor' een vinkje in Ondernemen met AI."
 
 ## Het spiekbriefje
 
@@ -57,9 +57,9 @@ antwoord:
 - Waarom:
 ```
 
-`antwoord` in de frontmatter blijft leeg tot na het eerste gesprek. Daarna staat er `ja`, `nee` of `twijfel`: het antwoord uit de laatste ronde. De eigenaar vult de sectie "Ronde 1" in op het platform, of vertelt jou hoe het ging; dan vul jij hem in. Een ja is gedrag: een aanbetaling, een voorbestelling, of het tegen je prijs willen blijven gebruiken. "Ik zou het kopen" is twijfel.
+`antwoord` in de frontmatter blijft leeg tot na het eerste gesprek. Daarna staat er `ja`, `nee` of `twijfel`: het antwoord uit de laatste ronde. De eigenaar vult de sectie "Ronde 1" in in Ondernemen met AI, of vertelt jou hoe het ging; dan vul jij hem in. Een ja is gedrag: een aanbetaling, een voorbestelling, of het tegen je prijs willen blijven gebruiken. "Ik zou het kopen" is twijfel.
 
-Koopt iemand echt, wijs dan op de knop "Ik heb een klant" op het platform.
+Koopt iemand echt, wijs dan op de knop "Ik heb een klant" op de routekaart in Ondernemen met AI.
 
 ## Regels
 

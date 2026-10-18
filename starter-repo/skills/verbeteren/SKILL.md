@@ -23,7 +23,7 @@ De MVP en het product zijn keuzes van de eigenaar. Daarom gaat dit via een pull 
 
 1. Maak een branch: `git switch -c doorontwikkelen-na-ronde-N`.
 2. Pas de digitale delen van de MVP aan in `level-3-prototype/mvp/`.
-3. Schrijf of werk `level-5-productvalidatie/product.md` bij (format hieronder). Laat `besluit` en `volgende_stap` leeg; die kiest de eigenaar op het platform in stap 3.
+3. Schrijf of werk `level-5-productvalidatie/product.md` bij (format hieronder). Laat `besluit` en `volgende_stap` leeg; die kiest de eigenaar in Ondernemen met AI, in stap 3 van level 5.
 4. Leg alles vast in één commit. Leg de eigenaar uit: in GitHub Desktop **Publish branch** en **Create Pull Request**, op GitHub onder **Files changed** nakijken, dan **Merge pull request**.
 5. Na de merge: `git switch main` en `git pull`.
 
@@ -51,7 +51,7 @@ volgende_stap:
 
 ## De onderbouwing voor je besluit
 
-Kiest de eigenaar in stap 3 of ze ervoor gaan, vat dan het bewijs samen uit `feedback/` en `resultaten/`: hoeveel ja per ronde, wie betaalde of bleef gebruiken, en welke redenen van nee er nog liggen. Geef de samenvatting in het gesprek; de eigenaar neemt hem over op het platform, samen met het besluit. Wil de eigenaar dat jij hem in `product.md` zet, doe dat dan via een pull request.
+Kiest de eigenaar in stap 3 van level 5 of ze ervoor gaan, vat dan het bewijs samen uit `feedback/` en `resultaten/`: hoeveel ja per ronde, wie betaalde of bleef gebruiken, en welke redenen van nee er nog liggen. Geef de samenvatting in het gesprek; de eigenaar neemt hem over in Ondernemen met AI, samen met het besluit. Wil de eigenaar dat jij hem in `product.md` zet, doe dat dan via een pull request.
 
 ## Regels
 

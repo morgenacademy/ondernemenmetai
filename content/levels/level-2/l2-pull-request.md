@@ -6,7 +6,7 @@ Je interviews en je analyse zijn nieuw: die komen direct in je repo. Je canvas e
 2. Klik in GitHub Desktop op **Publish branch**. Het zijspoor staat nu ook op GitHub.
 3. Klik op **Create Pull Request**. GitHub opent in je browser. Klik daar op **Create pull request**.
 4. Open **Files changed**: in rood zie je wat sneuvelde, in groen wat erbij kwam.
-5. Klopt het? Klik op **Merge pull request** en daarna op **Confirm merge**. Het zijspoor is nu samengevoegd met je repo, en het platform telt het mee.
+5. Klopt het? Klik op **Merge pull request** en daarna op **Confirm merge**. Het zijspoor is nu samengevoegd met je repo, en de stap krijgt hier een vinkje.
 
 Klopt het niet? Vraag je AI om het aan te passen. De pull request werkt zich vanzelf bij.
 
