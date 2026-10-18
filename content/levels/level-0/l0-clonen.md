@@ -11,4 +11,4 @@ Open daarna de Claude-app, ga naar het tabblad **Code** en kies de map van je re
 Open daarna Codex en open de map van je repo.
 <!-- /alleen -->
 
-Je AI leest als eerste `AGENTS.md`. Daarin staat hoe je repo in elkaar zit en wat de AI wel en niet voor je doet. Test het met de vraag hieronder.
+Je AI leest als eerste `AGENTS.md`. Daarin staat hoe je repo in elkaar zit en wat je AI wel en niet voor je doet. Test het met de vraag hieronder.
