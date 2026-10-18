@@ -9,18 +9,14 @@ export const ANALYSE_PATH = 'level-2-probleemvalidatie/analyse.md';
 export const EERSTE_DOELGROEP_PATH = 'level-2-probleemvalidatie/eerste-doelgroep.md';
 export const INTERVIEWS_DIR = 'level-2-probleemvalidatie/interviews';
 
-/** Bovengrens: meer vakjes dan dit tekenen heeft geen zin en kan de pagina laten vastlopen. */
-export const MAX_INTERVIEWS = 50;
-
+/** Verkoop je aan bedrijven, dan spreek je er 5; verkoop je aan consumenten, dan 15. */
 export function defaultInterviews(type: unknown): number {
   return typeof type === 'string' && type.trim().toUpperCase() === 'B2C' ? 15 : 5;
 }
 
+/** Het aantal gesprekken volgt uit je doelgroep. Je kiest het niet zelf. */
 export function requiredInterviews(s: RepoSnapshot): number {
-  const fm = frontmatterOf(s, DOELGROEP_PATH);
-  const n = fm.interviews_nodig;
-  if (typeof n === 'number' && Number.isInteger(n) && n > 0) return Math.min(n, MAX_INTERVIEWS);
-  return defaultInterviews(fm.type);
+  return defaultInterviews(frontmatterOf(s, DOELGROEP_PATH).type);
 }
 
 export function slugify(text: string): string {
@@ -65,18 +61,24 @@ export const level2: LevelDef = {
         { kind: 'textarea', name: 'gebruiker', label: 'Wie gebruikt uiteindelijk je oplossing?' },
         { kind: 'textarea', name: 'betaler', label: 'Wie betaalt jou voor je oplossing?' },
         { kind: 'textarea', name: 'beslisser', label: 'Wie beslist welke oplossing gebruikt wordt?' },
-        { kind: 'select', name: 'type', label: 'Verkoop je aan bedrijven of consumenten?', options: [{ value: 'B2B', label: 'Bedrijven (B2B)' }, { value: 'B2C', label: 'Consumenten (B2C)' }] },
-        { kind: 'number', name: 'aantal', label: 'Aantal interviews (leeg = 5 bij B2B, 15 bij B2C)', optional: true, max: MAX_INTERVIEWS },
+        {
+          kind: 'select',
+          name: 'type',
+          label: 'Verkoop je aan bedrijven of consumenten?',
+          knoppen: true,
+          options: [
+            { value: 'B2B', label: 'Bedrijven: 5 gesprekken' },
+            { value: 'B2C', label: 'Consumenten: 15 gesprekken' },
+          ],
+        },
       ],
       toFile: (v) => {
         const type = v.type === 'B2C' ? 'B2C' : 'B2B';
-        const n = Number.parseInt(v.aantal, 10);
-        const nodig = Number.isInteger(n) && n > 0 ? Math.min(n, MAX_INTERVIEWS) : defaultInterviews(type);
         return {
           path: DOELGROEP_PATH,
           message: 'Doelgroep bepaald',
           content: toMarkdown(
-            { type, interviews_nodig: nodig },
+            { type },
             `# Doelgroep\n\n## Voor wie creëer je waarde?\n\n${v.waarde.trim()}\n\n## Wie gebruikt uiteindelijk je oplossing?\n\n${v.gebruiker.trim()}\n\n## Wie betaalt jou voor je oplossing?\n\n${v.betaler.trim()}\n\n## Wie beslist welke oplossing gebruikt wordt?\n\n${v.beslisser.trim()}`,
           ),
         };

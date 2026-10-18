@@ -22,7 +22,7 @@ Bron: `docs/superpowers/specs/2026-10-16-levels-1-6-opzet.md`, besloten met Harm
 - **Level 6 is de uitzondering.** De knop "Ik heb een klant" staat er vanaf level 1. Gebruikt de deelnemer hem, dan gaat level 6 open, ook als level 4 of 5 nog niet af is.
 - **"Ingevuld" betekent:** het bestand staat in de repo, de markering `<!-- invullen -->` bovenaan is weg, en onder de koppen staat tekst.
 - **Het platform leest de repo op GitHub.** Wat de deelnemer of de AI op de eigen computer maakt, telt pas na een push.
-- **De aantallen volgen B2B of B2C** uit `doelgroep.md`: 5 of 15 interviews, 3 of 10 mensen met een antwoord. De deelnemer kan ze aanpassen met `interviews_nodig` en `feedback_nodig` in de frontmatter van `doelgroep.md`.
+- **De aantallen volgen B2B of B2C** uit `doelgroep.md`: 5 of 15 interviews, 3 of 10 mensen met een antwoord. Het aantal interviews ligt daarmee vast. Het aantal antwoorden kan de deelnemer aanpassen met `feedback_nodig` in de frontmatter van `doelgroep.md`.
 - **Teruggaan sluit niets af.** Wordt een check later weer rood, dan blijft het volgende level open en krijgt het eerdere level een markering.
 
 ## Wat de checks niet meten

@@ -69,7 +69,7 @@ export const DEMO_FORMS: Record<string, (s: RepoSnapshot) => FormValues> = {
   'l1-aannames': () => ({
     aannames: '[wens] Apotheken willen bezorging uitbesteden\n[haalbaar] Een bakfiets haalt 20 adressen per dag\n[rendabel] Apotheken betalen 6 euro per bezorging',
   }),
-  'l2-doelgroep': () => ({ waarde: 'Patiënten die niet zelf naar de apotheek kunnen', gebruiker: 'Apothekersassistenten', betaler: 'De apotheek', beslisser: 'De apotheker-eigenaar', type: 'B2B', aantal: '' }),
+  'l2-doelgroep': () => ({ waarde: 'Patiënten die niet zelf naar de apotheek kunnen', gebruiker: 'Apothekersassistenten', betaler: 'De apotheek', beslisser: 'De apotheker-eigenaar', type: 'B2B' }),
   'l3-oplossingen': () => ({
     ideeen: [
       'Spoedbezorging per bakfiets rond het middaguur',

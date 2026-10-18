@@ -37,7 +37,7 @@ it('de demo doorloopt level 0 tot en met 2 en opent level 3', async () => {
   expect(levelStatus(LEVELS, await buildSnapshot(repo))[1]).toBe('active');
   await simulate(repo, 'l1-propositie');
   expect(levelStatus(LEVELS, await buildSnapshot(repo))[1]).toBe('done');
-  await saveForm(repo, level2, 'l2-doelgroep', { waarde: 'Patiënten', gebruiker: 'Apothekersassistenten', betaler: 'De apotheek', beslisser: 'De apotheker-eigenaar', type: 'B2B', aantal: '' });
+  await saveForm(repo, level2, 'l2-doelgroep', { waarde: 'Patiënten', gebruiker: 'Apothekersassistenten', betaler: 'De apotheek', beslisser: 'De apotheker-eigenaar', type: 'B2B' });
   await simulate(repo, 'l2-vragen');
   for (let i = 0; i < 4; i++) await simulate(repo, 'l2-interviews');
   expect(levelStatus(LEVELS, await buildSnapshot(repo))[2]).toBe('active');

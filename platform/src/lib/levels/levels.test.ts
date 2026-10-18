@@ -244,8 +244,9 @@ describe('level 2', () => {
     expect(evaluateLevel(level2, snap(level2Done(15, 'B2C'), PR)).done).toBe(true);
   });
 
-  it('interviews_nodig overschrijft de standaard', () => {
-    expect(evaluateLevel(level2, snap({ ...level2Done(3), [DOELGROEP_PATH]: doelgroep('B2B', 3) }, PR)).done).toBe(true);
+  it('het aantal gesprekken volgt alleen uit je doelgroep, ook als er een ander aantal in het bestand staat', () => {
+    expect(evaluateLevel(level2, snap({ ...level2Done(3), [DOELGROEP_PATH]: doelgroep('B2B', 3) }, PR)).done).toBe(false);
+    expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep('B2C', 8) }))).toBe(15);
   });
 
   it('is pas af als je eerste doelgroep gevonden is', () => {
@@ -268,13 +269,6 @@ describe('level 2', () => {
     expect(step.popup).toEqual({ label: 'Wat is een pull request?', title: 'Je AI stelt voor, jij beslist', contentId: 'l2-pull-request', plaatje: 'twee-plekken' });
   });
 
-  it('requiredInterviews valt terug bij ongeldige waarden', () => {
-    for (const value of [0, -2, 'vijf', 2.5]) {
-      expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep('B2B', value) })), String(value)).toBe(5);
-    }
-    expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep('B2C') }))).toBe(15);
-  });
-
   it('requiredInterviews leest het type hoofdletterongevoelig', () => {
     for (const type of ['b2c', 'B2c', ' B2C ']) {
       expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep(type) })), type).toBe(15);
@@ -288,21 +282,16 @@ describe('level 2', () => {
     expect(requiredInterviews(snap({ [DOELGROEP_PATH]: b2c }))).toBe(15);
   });
 
-  it('requiredInterviews begrenst absurd grote aantallen op 50', () => {
-    expect(requiredInterviews(snap({ [DOELGROEP_PATH]: doelgroep('B2B', 10_000_000_000) }))).toBe(50);
+  it('het doelgroep-formulier vraagt geen aantal interviews meer', () => {
+    const step = formStep(level2, 'l2-doelgroep');
+    expect(step.fields.map((f) => f.name)).not.toContain('aantal');
+    expect(step.fields.map((f) => f.label).join(' ')).not.toMatch(/aantal interviews/i);
   });
 
-  it('doelgroep-formulier begrenst het aantal op 50', () => {
+  it('het doelgroep-formulier zet alleen het type in je repo', () => {
     const step = formStep(level2, 'l2-doelgroep');
-    const values = { waarde: 'a', gebruiker: 'b', betaler: 'c', beslisser: 'd', type: 'B2B', aantal: '10000000000' };
-    expect(parseMarkdown(step.toFile(values, snap({})).content).frontmatter).toEqual({ type: 'B2B', interviews_nodig: 50 });
-  });
-
-  it('doelgroep-formulier gebruikt de standaard als het aantal leeg is', () => {
-    const step = formStep(level2, 'l2-doelgroep');
-    const values = { waarde: 'Patiënten', gebruiker: 'Assistenten', betaler: 'Apotheek', beslisser: 'Eigenaar', type: 'B2C', aantal: '' };
-    expect(parseMarkdown(step.toFile(values, snap({})).content).frontmatter).toEqual({ type: 'B2C', interviews_nodig: 15 });
-    expect(parseMarkdown(step.toFile({ ...values, aantal: '8' }, snap({})).content).frontmatter).toEqual({ type: 'B2C', interviews_nodig: 8 });
+    const values = { waarde: 'Patiënten', gebruiker: 'Assistenten', betaler: 'Apotheek', beslisser: 'Eigenaar', type: 'B2C' };
+    expect(parseMarkdown(step.toFile(values, snap({})).content).frontmatter).toEqual({ type: 'B2C' });
   });
 
   it('slugify maakt veilige namen', () => {
