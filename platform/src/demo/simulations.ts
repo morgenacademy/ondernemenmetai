@@ -92,7 +92,7 @@ export const SIMULATIONS: Record<string, Simulation> = {
     },
   },
   'l2-interviews': {
-    label: 'doet alsof je AI een interview omzette en jij het pushte',
+    label: 'doet alsof je AI een interview omzette en pushte',
     run: interviewToevoegen,
   },
   'l2-analyse': {

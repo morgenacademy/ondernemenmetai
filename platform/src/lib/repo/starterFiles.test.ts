@@ -63,6 +63,13 @@ describe('starter-repo', () => {
     expect(starterFiles['AGENTS.md']).not.toContain('Branches en pull requests komen in een later level.');
   });
 
+  it('AGENTS.md: interviews push je AI zelf, zodat het vak op het platform meteen aangaat', () => {
+    const interviews = sectie('Werkwijze').split('\n').find((r) => r.includes('Interviews push je zelf')) ?? '';
+    expect(interviews).toContain('`git push`');
+    expect(interviews).toMatch(/vak/);
+    expect(sectie('Keuzes en materiaal')).not.toMatch(/interviews[^\n]*de eigenaar pusht/);
+  });
+
   it('AGENTS.md: vanaf level 2 gaan keuzes via een pull request en komt materiaal direct in de repo', () => {
     const regel = sectie('Keuzes en materiaal');
     expect(regel).toContain('level-2-probleemvalidatie/doelgroep.md');
