@@ -7,6 +7,7 @@ import { Afronding } from './Afronding';
 import { BegripBeeld } from './BegripBeeld';
 import { BELEVING } from './beleving';
 import { KORT } from './kort';
+import { LevelBord } from './LevelBord';
 import { StapVenster } from './StapVenster';
 import { useZichtbaar } from './useZichtbaar';
 import { Voorbeeld } from './Voorbeeld';
@@ -25,10 +26,15 @@ type Props = {
   onFillLevel: () => void;
   /** Naar de routekaart; van = het level dat je net afrondde. */
   onNaarRoute: (van: number | null) => void;
+  /** Kijkt opnieuw in je repo. */
+  onVervers: () => void;
 };
 
-/** Eén level als in de schets level0-v7: beeld, het nieuwe woord, stap voor stap, en het slotscherm. */
-export function LevelScherm({ level, state, status, snapshot, evaluation, handmatig, onHandmatig, onSave, onDemoStap, onFillLevel, onNaarRoute }: Props) {
+/**
+ * Eén level. Level 0 als in de schets level0-v7: beeld, het nieuwe woord, stap voor stap in een venster, en het slotscherm.
+ * Level 1 tot en met 6 hebben een eigen speelbord (schets speelborden, 18 oktober), met hetzelfde slotscherm.
+ */
+export function LevelScherm({ level, state, status, snapshot, evaluation, handmatig, onHandmatig, onSave, onDemoStap, onFillLevel, onNaarRoute, onVervers }: Props) {
   const b = BELEVING[level.id];
   const wortel = useZichtbaar<HTMLDivElement>();
   const afronding = useRef<HTMLElement>(null);
@@ -83,6 +89,29 @@ export function LevelScherm({ level, state, status, snapshot, evaluation, handma
       </div>
     );
   }
+
+  const afrondingScherm = (
+    <Afronding ref={afronding} level={level} status={status} statussen={statussen} levelAf={levelAf} gevierd={gevierd} onNaarRoute={(van) => onNaarRoute(van)} />
+  );
+
+  if (level.id > 0)
+    return (
+      <div ref={wortel}>
+        <LevelBord
+          level={level}
+          snapshot={snapshot}
+          evaluation={evaluation}
+          statussen={statussen}
+          levelAf={levelAf}
+          onSave={onSave}
+          onDemoStap={onDemoStap}
+          onHandmatig={onHandmatig}
+          onFillLevel={onFillLevel}
+          onVervers={onVervers}
+        />
+        {afrondingScherm}
+      </div>
+    );
 
   return (
     <div ref={wortel}>
@@ -216,7 +245,7 @@ export function LevelScherm({ level, state, status, snapshot, evaluation, handma
         )}
       </section>
 
-      <Afronding ref={afronding} level={level} status={status} statussen={statussen} levelAf={levelAf} gevierd={gevierd} onNaarRoute={(van) => onNaarRoute(van)} />
+      {afrondingScherm}
 
       {open !== null && level.steps[open] && (
         <StapVenster

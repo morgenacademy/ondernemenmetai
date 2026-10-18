@@ -35,6 +35,8 @@ export type LevelBeleving = {
   slot: { straks: string; af: string; heb: Heb[] };
   /** Het volgende level, zoals het op het slotscherm van dit level staat. Ontbreekt na level 6. */
   volgende?: { kop: string; zin: string; knop: string };
+  /** Bovenaan het speelbord van level 1 tot en met 6: één vraag en één zin. Level 0 heeft stapkaarten. */
+  bord?: { vraag: string; zin: string };
 };
 
 const b = (naam: string) => `/beelden/${naam}`;
@@ -66,6 +68,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
   },
   1: {
     beeld: b('idee.webp'),
+    bord: { vraag: 'Wat is je idee?', zin: 'Zet je idee neer, en zie wat je daarbij aanneemt.' },
     kop: 'Je idee in één zin.',
     zin: 'Je zet je idee, je visie en je aannames neer. Je AI toetst het en maakt er een eerste waardepropositie van.',
     scenes: [
@@ -88,6 +91,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
   },
   2: {
     beeld: b('markt.webp'),
+    bord: { vraag: 'Hebben ze dit probleem?', zin: 'Praat met je doelgroep. Elk gesprek vult een vak.' },
     kop: 'Praat met echte mensen.',
     zin: 'Je interviewt je doelgroep over wat ze nu doen. Je AI legt de gesprekken naast elkaar en zoekt het patroon.',
     scenes: [
@@ -109,6 +113,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
   },
   3: {
     beeld: b('prototype.webp'),
+    bord: { vraag: 'Welke oplossing past het best?', zin: 'Bedenk er veel, kies er één, en maak er een eerste versie van.' },
     kop: 'Maak iets wat je kunt laten zien.',
     zin: 'Eerst breed: zoveel mogelijk oplossingen. Dan kies je er één, en bouw je er een MVP van.',
     scenes: [
@@ -131,6 +136,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
   },
   4: {
     beeld: b('feedback.webp'),
+    bord: { vraag: 'Willen ze het, tegen jouw prijs?', zin: 'Laat je MVP proberen, en doe je voorstel.' },
     kop: 'Wat vinden ze ervan?',
     zin: 'Je gaat met je MVP terug naar je mensen. Je laat ze proberen, doet je voorstel, en vraagt bij nee waarom.',
     scenes: [
@@ -153,6 +159,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
   },
   5: {
     beeld: b('product.webp'),
+    bord: { vraag: 'Wat moet er beter?', zin: 'Pas aan op de redenen van nee, en ga terug. Tot je zegt: hier ga ik voor.' },
     kop: 'Tot je zegt: hier ga ik voor.',
     zin: 'Je pakt de redenen van nee op, gaat terug naar de markt, en kiest.',
     scenes: [
@@ -175,6 +182,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
   },
   6: {
     beeld: b('klanten.webp'),
+    bord: { vraag: 'Je hebt een klant. Wat nu?', zin: 'Leg vast hoe je verkocht, en houd je volgende klanten bij.' },
     kop: 'Je eerste klant.',
     zin: 'Iemand betaalt voor wat je maakte. Nu leg je vast hoe dat ging, zodat het nog eens lukt.',
     scenes: [

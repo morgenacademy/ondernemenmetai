@@ -154,6 +154,7 @@ export default function App({ repo, storage = null }: Props) {
           }}
           onFillLevel={() => void demo(() => vulLevel(level, repo))}
           onNaarRoute={(van) => navigeer({ scherm: 'route', van })}
+          onVervers={() => void r.refresh()}
         />
       )}
       {lade && repoZichtbaar(handmatig, status) && (

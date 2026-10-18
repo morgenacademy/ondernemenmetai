@@ -10,6 +10,7 @@ import { frontmatterOf } from '../lib/levels/checks';
 import { MockRepoAdapter } from '../lib/repo/mockRepo';
 import { buildSnapshot } from '../lib/repo/snapshot';
 import { starterFiles } from '../lib/repo/starterFiles';
+import { gesprekkenVan } from '../beleving/gesprekken';
 import { DEMO_FORMS } from './formulieren';
 import { SIMULATIONS } from './simulations';
 import { demoVoorStap, vulLevel, vulStap } from './vullen';
@@ -60,6 +61,16 @@ describe('demo-content', () => {
     expect(mdFilesIn(await buildSnapshot(repo), INTERVIEWS_DIR)).toHaveLength(1);
     await vulStap(stap(2, 'l2-interviewen'), repo);
     expect(mdFilesIn(await buildSnapshot(repo), INTERVIEWS_DIR)).toHaveLength(5);
+  });
+
+  it('de demo-gesprekken vullen elk vak met een eigen plaats, datum en uitspraak', async () => {
+    const repo = new MockRepoAdapter(null, starterFiles);
+    await vulStap(stap(2, 'l2-interviewen'), repo);
+    const { vol } = gesprekkenVan(await buildSnapshot(repo), '2026-12-31');
+    expect(vol).toHaveLength(5);
+    expect(new Set(vol.map((v) => v.wie)).size).toBe(5);
+    expect(new Set(vol.map((v) => v.uitspraak)).size).toBe(5);
+    for (const v of vol) expect(v.wanneer, v.nr).toMatch(/^\d+ \w+ · \d+ min$/);
   });
 
   it('per stap: het voorstel vult telkens de volgende persoon zonder antwoord', async () => {

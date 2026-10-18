@@ -120,15 +120,28 @@ export const VOORBEELD_AANNAMES_NA_INTERVIEWS = `# Aannames
 - [rendabel] Apotheken betalen 6 euro per bezorging (ontkracht: ze vinden 4 euro het maximum)
 `;
 
+/** Per gesprek een eigen plaats, datum, duur en uitspraak, zodat elk vak in de demo iets anders laat zien. */
+const DEMO_GESPREKKEN = [
+  { locatie: 'Breda', datum: '2026-10-12', duur: 24, uitspraak: 'Om twaalf uur staat de bezorger er nog niet.' },
+  { locatie: 'Etten-Leur', datum: '2026-10-13', duur: 18, uitspraak: 'Mijn assistent rijdt elke middag zelf rond.' },
+  { locatie: 'Oosterhout', datum: '2026-10-14', duur: 31, uitspraak: 'Spoedrecepten zijn ons grootste gedoe.' },
+  { locatie: 'Prinsenbeek', datum: '2026-10-15', duur: 22, uitspraak: 'Parkeren in de binnenstad kost me een half uur.' },
+  { locatie: 'Teteringen', datum: '2026-10-16', duur: 27, uitspraak: 'Een koerier is te duur voor drie adressen.' },
+];
+
 export function voorbeeldInterview(path: string): string {
   const nummer = path.split('/').pop()?.slice(0, 2) ?? '01';
   // In de demo zeggen 03 en 05 nee op de terugbelvraag, zodat level 4 met drie mensen verdergaat.
   const terugbellen = ['03', '05'].includes(nummer) ? 'nee' : 'ja';
+  const g = DEMO_GESPREKKEN[(Number(nummer) - 1) % DEMO_GESPREKKEN.length] ?? DEMO_GESPREKKEN[0];
   return `---
 rol: apotheker
 segment: zelfstandige apotheken
-locatie: Breda
+locatie: ${g.locatie}
 dmu: ja
+datum: ${g.datum}
+duur: ${g.duur}
+uitspraak: ${g.uitspraak}
 terugbellen: ${terugbellen}
 ---
 # Interview ${nummer}: apotheker

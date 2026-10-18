@@ -1,8 +1,17 @@
-# Opnames en ruwe transcripts blijven op je eigen computer (privacy)
+# Opnames van je interviews blijven op je eigen computer (privacy).
+# Alleen het uitgeschreven .md-bestand gaat naar GitHub.
+level-2-probleemvalidatie/interviews/*.m4a
+level-2-probleemvalidatie/interviews/*.mp3
+level-2-probleemvalidatie/interviews/*.wav
+level-2-probleemvalidatie/interviews/*.mp4
+
+# Opnames en ruwe transcripts, waar ze ook staan
 opnames/
 *.m4a
 *.mp3
 *.wav
+*.mp4
+*.mov
 *.aac
 *.ogg
 *.webm
