@@ -64,6 +64,12 @@ describe('skill transcriberen', () => {
     expect(vak.uitspraak).toBe(fm.uitspraak);
   });
 
+  it('zegt de eigenaar bij elke stap wat jij doet en wat zij nu moeten doen, tot "Je hoeft niets meer te doen"', () => {
+    const zeggen = skill.split('## Zeg steeds wie wat doet')[1]?.split('\n## ')[0] ?? '';
+    expect(zeggen, 'een sectie "Zeg steeds wie wat doet"').not.toBe('');
+    for (const moment of ['Toestaan', 'Je hoeft nu niets te doen', 'klopt', 'Je hoeft niets meer te doen', 'Push origin']) expect(zeggen, moment).toContain(moment);
+  });
+
   it('legt vast en pusht zelf, zonder pull request', () => {
     const afronden = skill.split('## Afronden')[1] ?? '';
     expect(afronden).toContain('git push');

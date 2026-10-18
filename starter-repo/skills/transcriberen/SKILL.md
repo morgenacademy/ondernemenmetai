@@ -7,6 +7,19 @@ description: Schrijft nieuwe interviews in level-2-probleemvalidatie/interviews/
 
 Je zet een interview om naar een vast format, zodat alle interviews later naast elkaar te analyseren zijn. De opname en het ruwe transcript blijven op de computer van de eigenaar. In de repo komt alleen het interview zonder namen.
 
+## Zeg steeds wie wat doet
+
+De eigenaar moet op elk moment weten of er iets te doen is. Zeg dat bij elke stap in één of twee zinnen, voordat je begint. Gebruik deze zinnen, of zinnen die er dicht bij blijven:
+
+1. **Je begint.** "Ik zie 1 nieuwe opname: `gesprek.m4a`. Ik schrijf hem uit. Je hoeft nu niets te doen."
+2. **De eerste keer, voor je `uv` installeert of de 900 MB ophaalt.** "Om je opname op je eigen computer uit te schrijven, haal ik één keer ongeveer 900 MB op. Het kost niets en je opname gaat de deur niet uit. Vraagt je AI-app om toestemming, klik dan op Toestaan."
+3. **Je schrijft uit.** "Dit duurt ongeveer 5 minuten. Je hoeft nu niets te doen."
+4. **Het interview staat klaar.** "Je interview staat klaar: `03-apotheker-breda.md`. Lees het. Klopt het, zeg dan 'klopt'. Moet er iets anders, zeg het me."
+5. **Na de push.** "Klaar. Je interview staat op GitHub en vak 3 op het platform is vol. Je hoeft niets meer te doen."
+6. **Pushen lukt niet.** "Het lukt me niet om je interview op GitHub te zetten. Open GitHub Desktop en klik op Push origin. Daarna is vak 3 vol."
+
+Wacht na zin 2 en zin 4 op antwoord. Na de andere zinnen ga je meteen door.
+
 ## Voor je begint
 
 1. Controleer dat git de opnames in `level-2-probleemvalidatie/interviews/` overslaat: `git check-ignore level-2-probleemvalidatie/interviews/test.m4a` geeft het pad terug. Doet het dat niet, zet dan deze regels in `.gitignore`, leg dat vast met een commit en zeg het tegen de eigenaar. Ga pas verder als git de opnames overslaat.
@@ -118,6 +131,6 @@ Wil de eigenaar het stuk liever helemaal weglaten, laat het dan weg.
 
 ## Afronden
 
-1. Laat de eigenaar het interviewbestand lezen.
-2. Leg het vast met een commit op `main` en push zelf met `git push`, zonder pull request: een interview is materiaal. Na de push gaat het vak op het platform aan; zeg de eigenaar dat. Lukt pushen niet, vraag de eigenaar dan om in GitHub Desktop op Push origin te klikken.
+1. Laat de eigenaar het interviewbestand lezen (zin 4). Wacht tot de eigenaar "klopt" zegt.
+2. Leg het vast met een commit op `main` en push zelf met `git push`, zonder pull request: een interview is materiaal. Zeg daarna zin 5. Lukt pushen niet, zeg dan zin 6.
 3. Vraagt de eigenaar "Staat mijn interview al in de repo?", antwoord dan in één zin: wat nog alleen op de computer staat, wat al op GitHub staat, en dat de opnames in `interviews/` bewust op de computer blijven.

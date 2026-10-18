@@ -562,10 +562,13 @@ button.bl-vak:focus-visible { outline: 2px solid #5B2D8E; outline-offset: 3px; }
 .bl-vul-kop h4:focus { outline: none; }
 .bl-sluitrond { flex: none; border: 0; background: #f0f0f3; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; line-height: 1; cursor: pointer; color: #1d1d1f; }
 .bl-sluitrond:focus-visible { outline: 2px solid #5B2D8E; outline-offset: 2px; }
-.bl-vul-stappen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.bl-vul-stappen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px 18px; }
 .bl-vul-stappen li { display: flex; gap: 12px; min-width: 0; }
 .bl-vul-stappen .n { flex: none; width: 26px; height: 26px; border-radius: 50%; background: #5B2D8E; color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 600; }
-.bl-vul-stappen .waar { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #5B2D8E; }
+.bl-vul-stappen .wie { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #5B2D8E; }
+.bl-vul-stappen .ai .n { background: #fff; color: #5B2D8E; box-shadow: inset 0 0 0 2px #5B2D8E; }
+.bl-vul-stappen .vanzelf .n { background: #e8e8ed; color: #6e6e73; }
+.bl-vul-stappen .vanzelf .wie { color: #6e6e73; }
 .bl-vul-stappen b { display: block; font-size: 15px; font-weight: 600; margin: 3px 0 4px; color: #1d1d1f; }
 .bl-vul-stappen p { margin: 0; font-size: 14px; line-height: 1.45; color: #6e6e73; }
 .bl-vul-stappen code { background: #f0f0f3; border-radius: 5px; padding: 1px 5px; font-size: 13px; color: #1d1d1f; }
