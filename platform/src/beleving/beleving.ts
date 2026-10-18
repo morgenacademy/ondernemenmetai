@@ -32,7 +32,7 @@ export type LevelBeleving = {
   stappenKop: string;
   /** Waar de knop op de routekaart mee begint of verdergaat: "Begin met je werkplek", "Ga verder met je werkplek". */
   knop: string;
-  slot: { straks: string; af: string; heb: Heb[] };
+  slot: { af: string; heb: Heb[] };
   /** Het volgende level, zoals het op het slotscherm van dit level staat. Ontbreekt na level 6. */
   volgende?: { kop: string; zin: string; knop: string };
   /** Bovenaan het speelbord van level 1 tot en met 6: één vraag en één zin. Level 0 heeft stapkaarten. */
@@ -54,7 +54,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     stappenKop: 'Zo richt je je werkplek in.',
     knop: 'je werkplek',
     slot: {
-      straks: 'Zo staat je basiskamp straks.',
       af: 'Je basiskamp staat.',
       heb: [
         { stepId: 'l0-github-desktop', tekst: '<b>GitHub Desktop</b>, waarmee je je werk online zet zonder iets te typen' },
@@ -77,7 +76,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     stappenKop: 'Zo zet je je idee neer.',
     knop: 'je idee',
     slot: {
-      straks: 'Zo staat je idee straks.',
       af: 'Je idee staat.',
       heb: [
         { stepId: 'l1-idee', tekst: 'Je <b>idee</b>: wat je gaat doen, voor wie, en waarom jij' },
@@ -100,7 +98,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     stappenKop: 'Zo vind je je eerste doelgroep.',
     knop: 'probleem-validatie',
     slot: {
-      straks: 'Zo staat je eerste doelgroep straks.',
       af: 'Je eerste doelgroep staat.',
       heb: [
         { stepId: 'l2-doelgroep', tekst: 'Je <b>doelgroep</b>: gebruiker, betaler en beslisser' },
@@ -122,7 +119,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     stappenKop: 'Zo maak je je MVP.',
     knop: 'je prototype',
     slot: {
-      straks: 'Zo staat je MVP straks.',
       af: 'Je MVP staat.',
       heb: [
         { stepId: 'l3-oplossingen', tekst: 'Minstens <b>tien ideeën</b> voor je oplossing' },
@@ -145,7 +141,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     stappenKop: 'Zo haal je je feedback op.',
     knop: 'je feedback',
     slot: {
-      straks: 'Zo staat je eerste ronde straks.',
       af: 'Je eerste ronde staat.',
       heb: [
         { stepId: 'l4-prijs', tekst: 'Een <b>prijs</b>, en een schatting van je kostprijs' },
@@ -168,7 +163,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     stappenKop: 'Zo kom je tot je product.',
     knop: 'je product',
     slot: {
-      straks: 'Zo staat je product straks.',
       af: 'Je gaat ervoor.',
       heb: [
         { stepId: 'l5-doorontwikkelen', tekst: 'Een <b>betere versie</b>, op de redenen van nee' },
@@ -191,7 +185,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     stappenKop: 'Zo maak je verkopen herhaalbaar.',
     knop: 'je lancering',
     slot: {
-      straks: 'Zo staat je lancering straks.',
       af: 'Proof of Concept.',
       heb: [
         { stepId: 'l6-klant', tekst: 'Je <b>eerste betalende klant</b>' },

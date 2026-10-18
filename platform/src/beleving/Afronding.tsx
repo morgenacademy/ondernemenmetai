@@ -22,6 +22,7 @@ export const Afronding = forwardRef<HTMLElement, Props>(function Afronding({ lev
   const hier = HALTES[level.id];
   const daar = volgendeLevel ? HALTES[volgendeLevel.id] : hier;
   const uitsnede = strookUitsnede(hier, daar);
+  const klaar = b.slot.heb.filter((h) => statussen[h.stepId] === 'af').length;
   const nog = level.steps.filter((s) => !s.optional && statussen[s.id] !== 'af').length;
 
   return (
@@ -31,9 +32,9 @@ export const Afronding = forwardRef<HTMLElement, Props>(function Afronding({ lev
           <div className="bl-label">
             Level {level.id} · {levelAf ? 'Afgerond' : level.name}
           </div>
-          <h2 id="bl-afronding-titel">{levelAf ? b.slot.af : b.slot.straks}</h2>
+          <h2 id="bl-afronding-titel">{levelAf ? b.slot.af : `Dit heb je na level ${level.id}.`}</h2>
           <p className="bl-zin" style={{ maxWidth: '36ch' }}>
-            Dit heb je nu:
+            {levelAf ? 'Dit heb je nu:' : `${klaar} van ${b.slot.heb.length} af:`}
           </p>
           <ul className="bl-heb">
             {b.slot.heb.map((h) => {
@@ -101,7 +102,7 @@ export const Afronding = forwardRef<HTMLElement, Props>(function Afronding({ lev
           )}
           {!levelAf && (
             <p className="bl-af-hint">
-              Nog {nog} {nog === 1 ? 'stap' : 'stappen'}; daarna kun je verder.
+              Nog {nog} {nog === 1 ? 'stap' : 'stappen'}, {volgendeLevel ? `dan gaat level ${volgendeLevel.id} open` : 'dan is module 1 af'}.
             </p>
           )}
         </div>
