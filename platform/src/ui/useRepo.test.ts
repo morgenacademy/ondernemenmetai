@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MockRepoAdapter, type StorageLike } from '../lib/repo/mockRepo';
-import { opslagMelding } from './useRepo';
+import { opslagMelding, verversBijTerugkomst } from './useRepo';
 
 const fullStorage: StorageLike = {
   getItem: () => null,
@@ -27,5 +27,53 @@ describe('opslagMelding', () => {
     const repo = new MockRepoAdapter(fullStorage, {});
     await repo.writeFile('a.md', 'x', 'm');
     expect(opslagMelding(repo)).toMatch(/niet .*bewaard|kwijt/);
+  });
+});
+
+describe('verversBijTerugkomst', () => {
+  const nep = () => {
+    const luisteraars = new Map<string, () => void>();
+    return {
+      visibilityState: 'visible' as DocumentVisibilityState,
+      addEventListener: (type: string, f: () => void) => void luisteraars.set(type, f),
+      removeEventListener: (type: string) => void luisteraars.delete(type),
+      vuur: (type: string) => luisteraars.get(type)?.(),
+      luisteraars,
+    };
+  };
+
+  it('ververst zodra je terugkomt in het tabblad', () => {
+    const doc = nep();
+    const win = nep();
+    let keer = 0;
+    verversBijTerugkomst(win, doc, () => keer++, () => 0);
+    doc.visibilityState = 'hidden';
+    doc.vuur('visibilitychange');
+    expect(keer).toBe(0);
+    doc.visibilityState = 'visible';
+    doc.vuur('visibilitychange');
+    expect(keer).toBe(1);
+  });
+
+  it('ververst ook als je terugkomt uit een andere app, maar niet twee keer tegelijk', () => {
+    const doc = nep();
+    const win = nep();
+    let keer = 0;
+    let nu = 0;
+    verversBijTerugkomst(win, doc, () => keer++, () => nu);
+    win.vuur('focus');
+    doc.vuur('visibilitychange');
+    expect(keer).toBe(1);
+    nu = 5000;
+    win.vuur('focus');
+    expect(keer).toBe(2);
+  });
+
+  it('ruimt zijn luisteraars op', () => {
+    const doc = nep();
+    const win = nep();
+    const stop = verversBijTerugkomst(win, doc, () => {}, () => 0);
+    stop();
+    expect(doc.luisteraars.size + win.luisteraars.size).toBe(0);
   });
 });
