@@ -1,6 +1,6 @@
 # Ontwerp: een eigen speelbord per level
 
-Datum: 18 oktober 2026 · Status: schetsen goedgekeurd door Harmen ("super dit"). Nog niet gebouwd.
+Datum: 18 oktober 2026 · Status: schetsen goedgekeurd door Harmen ("super dit"). Eerste stap gebouwd: de regel voor elk level en de werkbladen van level 1 en 2. Level 3 tot en met 6 hebben nog een algemeen werkblad.
 
 Klikbare schets: `docs/superpowers/schetsen/2026-10-18/speelborden.html`. Daarin staan level 1 tot en met 6 achter elkaar. In level 2 kun je een leeg vak openen en aantekeningen in een vak zetten. Bij twijfel geldt wat de schets laat zien, tenzij dit document het anders zegt.
 
