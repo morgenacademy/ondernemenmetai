@@ -13,7 +13,7 @@ export function TweePlekken({ level }: { level: number }) {
             <li>je repo, met wat je AI maakt</li>
             {level >= 2 && (
               <li className="alleen-hier">
-                <code>opnames/</code> blijft hier: git slaat die map over
+                je opnames in <code>interviews/</code> blijven hier: git slaat ze over
               </li>
             )}
           </ul>

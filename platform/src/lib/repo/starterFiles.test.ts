@@ -1,3 +1,7 @@
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { MARKER, parseMarkdown } from '../markdown';
 import gitignore from '../../../../starter-repo/.gitignore?raw';
@@ -68,12 +72,12 @@ describe('starter-repo', () => {
     expect(regel).toMatch(/Tot die tijd[^\n]*direct/);
   });
 
-  it('AGENTS.md beantwoordt "Is alles in sync?" in één zin, met opnames/ als map die bewust lokaal blijft', () => {
+  it('AGENTS.md beantwoordt "Is alles in sync?" in één zin, met de opnames in interviews/ als wat bewust lokaal blijft', () => {
     const regel = sectie('Werkwijze').split('\n').find((r) => r.includes('Is alles in sync?')) ?? '';
     expect(regel).toMatch(/in één zin/);
     expect(regel).toMatch(/alleen op (de|je) computer/);
     expect(regel).toMatch(/GitHub/);
-    expect(regel).toContain('`opnames/`');
+    expect(regel).toMatch(/opnames in `interviews\/`/);
   });
 
   it('AGENTS.md laat de AI de frontmatter van elk SKILL.md lezen, zonder lijst met losse skills', () => {
@@ -82,9 +86,16 @@ describe('starter-repo', () => {
     expect(skills).not.toMatch(/skills\/[a-z-]+\/SKILL\.md/);
   });
 
-  it('AGENTS.md beschrijft vpc.md, eerste-doelgroep.md en de lokale map opnames/', () => {
+  it('AGENTS.md beschrijft vpc.md, eerste-doelgroep.md en dat opnames in interviews/ op de computer blijven', () => {
     const opbouw = sectie('Hoe deze repo in elkaar zit');
-    for (const deel of ['vpc.md', 'eerste-doelgroep.md', '`opnames/`']) expect(opbouw, deel).toContain(deel);
+    for (const deel of ['vpc.md', 'eerste-doelgroep.md']) expect(opbouw, deel).toContain(deel);
+    const interviews = opbouw.split('\n').find((r) => r.includes('interviews/')) ?? '';
+    expect(interviews).toMatch(/opname/);
+    expect(interviews).toContain('.gitignore');
+  });
+
+  it('geen bestand in de starter-repo stuurt opnames nog naar de oude map opnames/', () => {
+    for (const [path, tekst] of Object.entries(starterFiles)) expect(tekst, path).not.toContain('opnames/');
   });
 
   it('AGENTS.md heeft een lege sectie "Over mijn onderneming" voor level 5', () => {
@@ -102,10 +113,31 @@ describe('starter-repo', () => {
     expect(parseMarkdown(starterFiles['level-5-productvalidatie/product.md']).frontmatter).toEqual({ besluit: null, volgende_stap: null });
   });
 
-  it('.gitignore houdt opnames in interviews/ buiten git; alleen het uitgeschreven .md-bestand gaat naar GitHub', () => {
-    const regels = gitignore.split('\n').map((r) => r.trim());
-    for (const soort of ['m4a', 'mp3', 'wav', 'mp4']) expect(regels, soort).toContain(`level-2-probleemvalidatie/interviews/*.${soort}`);
-    expect(regels.filter((r) => r.includes('interviews/') && r.endsWith('.md'))).toEqual([]);
+  it('.gitignore houdt opnames en ruwe transcripts in interviews/ buiten git; alleen de .md-bestanden gaan naar GitHub', () => {
+    const map = mkdtempSync(join(tmpdir(), 'starter-gitignore-'));
+    try {
+      const git = (...args: string[]) => execFileSync('git', args, { cwd: map, encoding: 'utf8' });
+      git('init', '-q');
+      writeFileSync(join(map, '.gitignore'), gitignore);
+      const interviews = 'level-2-probleemvalidatie/interviews';
+      mkdirSync(join(map, interviews, 'ronde-1'), { recursive: true });
+      const bestanden = [
+        ...['m4a', 'mp3', 'wav', 'mp4', 'mov', 'txt', 'vtt', 'srt', 'docx'].map((soort) => `${interviews}/04-apotheker-utrecht.${soort}`),
+        `${interviews}/04-apotheker-utrecht.md`,
+        `${interviews}/README.md`,
+        `${interviews}/ronde-1/05-assistent-zeist.md`,
+        `${interviews}/ronde-1/05-assistent-zeist.m4a`,
+      ];
+      for (const b of bestanden) writeFileSync(join(map, b), 'x');
+      const zichtbaar = git('status', '--porcelain', '--untracked-files=all')
+        .split('\n')
+        .filter((r) => r.includes(interviews))
+        .map((r) => r.slice(3))
+        .sort();
+      expect(zichtbaar).toEqual([`${interviews}/04-apotheker-utrecht.md`, `${interviews}/README.md`, `${interviews}/ronde-1/05-assistent-zeist.md`]);
+    } finally {
+      rmSync(map, { recursive: true, force: true });
+    }
   });
 
   it('.gitignore houdt de map opnames/ buiten git', () => {

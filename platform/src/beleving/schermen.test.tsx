@@ -237,7 +237,7 @@ describe('StapVenster', () => {
   it('de interviewstap toont de vakken en de opdracht voor je AI, zonder upload', () => {
     const html = venster(2, 'l2-interviews');
     expect(html).toContain('0 van de 5 interviews in je repo');
-    expect(html).toContain('Gebruik skill transcriberen.');
+    expect(html).toContain('Schrijf mijn nieuwe interviews uit.');
     expect(html).not.toContain('type="file"');
   });
 

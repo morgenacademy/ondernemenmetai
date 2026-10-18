@@ -16,7 +16,7 @@ Merge betekent samenvoegen. Bij een pull gebeurt hetzelfde: wat op GitHub nieuw 
 
 ### Wat alleen op je computer staat
 
-De map `opnames/` staat in `.gitignore`. Git slaat hem over, dus hij komt nooit op GitHub. Zo blijven stemmen en namen op je eigen computer.
+Je opnames staan in `interviews/`, naast de uitgeschreven gesprekken. `.gitignore` zorgt dat git ze overslaat, dus ze komen nooit op GitHub. Zo blijven stemmen en namen op je eigen computer.
 
 ### Wanneer een pull request?
 

@@ -217,11 +217,10 @@ describe('level 2', () => {
     expect(stepOf(level2, 'l2-canvas').title).toBe('Werk je canvas bij');
   });
 
-  it('de interviewvakken zijn voortgang zonder upload, met een opdracht voor skill transcriberen', () => {
+  it('de interviewvakken zijn voortgang zonder upload; je vraagt je AI je nieuwe interviews uit te schrijven', () => {
     const step = stepOf(level2, 'l2-interviews');
     expect(step.kind).toBe('voortgang');
-    expect(step.aiPrompt).toMatch(/^Gebruik skill transcriberen\./);
-    expect(step.aiPrompt).toContain('opnames/');
+    expect(step.aiPrompt).toBe('Schrijf mijn nieuwe interviews uit.');
   });
 
   it('interviewen telt via de interviews die in je repo staan', () => {

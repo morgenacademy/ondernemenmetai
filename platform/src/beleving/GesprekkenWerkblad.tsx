@@ -1,10 +1,9 @@
 import { forwardRef, useEffect, useRef, useState, type FormEvent } from 'react';
+import { UITSCHRIJF_OPDRACHT } from '../lib/levels/level2';
 import type { FileWrite, VoortgangStep } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
 import { aantekeningenBestand, gesprekkenVan, netBinnen, vandaagIso } from './gesprekken';
 import { DemoRegel, WerkbladKader } from './WerkbladDelen';
-
-const OPDRACHT = 'Schrijf mijn nieuwe interviews uit.';
 
 /** Een zin om te kopiëren, met een knop ernaast. Lukt kopiëren niet, dan selecteer je hem zelf. */
 function KopieerRegel({ tekst }: { tekst: string }) {
@@ -118,7 +117,7 @@ export function ZoVulJeEenVak({ open, snapshot, onSluit, onSave, onVervers, onGe
           <div>
             <div className="waar">AI-app</div>
             <b>Vraag je AI om hem uit te schrijven</b>
-            <KopieerRegel tekst={OPDRACHT} />
+            <KopieerRegel tekst={UITSCHRIJF_OPDRACHT} />
           </div>
         </li>
         <li>

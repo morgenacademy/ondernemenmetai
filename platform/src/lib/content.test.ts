@@ -22,6 +22,12 @@ describe('content', () => {
     }
   });
 
+  it('de uitleg van level 2 zet opnames in interviews/, niet in de oude map opnames/', () => {
+    for (const step of LEVELS.find((l) => l.id === 2)!.steps) {
+      for (const id of [step.id, ...(step.popup ? [step.popup.contentId] : [])]) expect(stepContent(2, id) ?? '', id).not.toContain('opnames/');
+    }
+  });
+
   it('de uitleg van level 0 werkt zonder terminal', () => {
     const ids = level0.steps.flatMap((s) => [s.id, ...(s.popup ? [s.popup.contentId] : [])]);
     for (const id of ids) {
