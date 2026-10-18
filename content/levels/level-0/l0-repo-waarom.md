@@ -1,6 +1,6 @@
-### Ondernemen met AI kan niet in je map meekijken
+### Dit platform kan niet in je map meekijken
 
-Ondernemen met AI ziet aan de bestanden in je repo welke stappen af zijn, en zet dan het volgende level open. In een gedeelde map kan het niet kijken.
+Dit platform ziet aan de bestanden in je repo welke stappen af zijn, en zet dan het volgende level open. In een gedeelde map kan het niet kijken.
 
 ### Je ziet niet terug wat je AI deed
 

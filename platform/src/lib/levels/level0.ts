@@ -45,7 +45,7 @@ export const level0: LevelDef = {
       waar: ['github'],
       popup: { label: 'Waarom een repo en geen gedeelde map?', title: 'Wat een gedeelde map niet kan', contentId: 'l0-repo-waarom' },
     },
-    { id: 'l0-koppelen', title: 'Koppel Ondernemen met AI aan je repo', kind: 'action', waar: ['platform', 'github'] },
+    { id: 'l0-koppelen', title: 'Koppel dit platform aan je repo', kind: 'action', waar: ['platform', 'github'] },
     {
       id: 'l0-setup',
       title: 'Kies je setup',

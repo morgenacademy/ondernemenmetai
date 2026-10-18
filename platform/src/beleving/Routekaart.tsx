@@ -151,8 +151,8 @@ export function Routekaart({ status, van, snapshot, onOpen, onDemoVoortgang, onR
         )}
         {staat.kort === 'dicht' && (
           <p className="bl-slot-uitleg">
-            🔒 Gaat open zodra je level {level.id - 1} hebt afgerond.
-            {level.opensEarly && ' Of eerder: zodra je een klant hebt.'}
+            🔒 Maak eerst level {level.id - 1} af: {BELEVING[level.id - 1].knop}.
+            {level.opensEarly && ' Heb je eerder een klant, dan kun je hier ook meteen beginnen.'}
           </p>
         )}
         {status[1] !== 'locked' && status[6] === 'locked' && (

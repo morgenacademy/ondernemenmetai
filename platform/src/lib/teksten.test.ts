@@ -27,6 +27,10 @@ describe('concrete teksten', () => {
     expect(PLEK_LABEL.platform).toBe('Hier');
   });
 
+  it('op de site praat de site over zichzelf als "dit platform", niet als "Ondernemen met AI" in de derde persoon', () => {
+    for (const [waar, tekst] of opHetPlatform) expect(tekst.replace(/[Dd]it platform<?\/?b?>?, Ondernemen met AI,/g, ''), waar).not.toContain('Ondernemen met AI');
+  });
+
   it('zegt geen "straks": het zegt wanneer', () => {
     for (const [waar, tekst] of [...opHetPlatform, ...skills]) expect(tekst, waar).not.toMatch(/\bstraks\b/i);
   });

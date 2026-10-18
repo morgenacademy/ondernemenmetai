@@ -8,7 +8,7 @@ import { Afronding } from './Afronding';
 import { BELEVING } from './beleving';
 import { LevelScherm } from './LevelScherm';
 import { Routekaart } from './Routekaart';
-import { StapVenster, toonVenster } from './StapVenster';
+import { StapBlad } from './StapBlad';
 import { Voorbeeld } from './Voorbeeld';
 import { Welkom } from './Welkom';
 
@@ -109,6 +109,12 @@ describe('LevelScherm', () => {
     );
   };
 
+  it('een level op slot zegt welk level je eerst afmaakt, niet dat het ooit opengaat', () => {
+    const html = render(2, 1);
+    expect(html).toContain('Maak eerst level 1 af: je idee.');
+    expect(html).not.toContain('gaat open');
+  });
+
   it('level 0 opent met het basiskamp, de scènes en het nieuwe woord', () => {
     const html = render(0);
     expect(html).toContain('Eerst je basiskamp.');
@@ -116,14 +122,15 @@ describe('LevelScherm', () => {
     expect(html).toContain('Die plek heet een repo.');
   });
 
-  it('de stappen staan als kaarten: de eerste is aan de beurt, de rest komt straks', () => {
+  it('de stappen staan als rondjes op een pad: de eerste is aan de beurt en staat open', () => {
     const html = render(0);
-    expect(html).toContain('Zo richt je je werkplek in.');
-    expect(html).toMatch(/<b>0 van 8<\/b> klaar/);
-    const kaarten = html.split('class="bl-stapkaart').slice(1);
-    expect(kaarten[0]).toMatch(/^ nu"/);
-    expect(kaarten[0]).toContain('Maak een GitHub-account');
-    expect(kaarten[1]).toMatch(/^ straks"[^>]*disabled=""/);
+    expect(html).toContain('Richt je werkplek in.');
+    expect(html).toMatch(/<b>0<small> \/ 8<\/small><\/b>klaar/);
+    expect(html).toContain('aria-label="Account, nu aan de beurt"');
+    expect(html).toContain('aria-label="Repo, nog niet aan de beurt"');
+    expect(html).toMatch(/<h3[^>]*>Maak een GitHub-account<\/h3>/);
+    expect(html).not.toContain('bl-stapkaart');
+    expect(html).not.toContain('<dialog');
   });
 
   it('eindigt met het slotscherm, met de knop naar het volgende level nog dicht', () => {
@@ -141,7 +148,7 @@ describe('LevelScherm', () => {
     const b = BELEVING[0];
     expect(html).toContain(b.beeld);
     expect(html).toContain(b.kop);
-    expect(html).toContain(b.stappenKop);
+    expect(html).toContain(b.bord!.zin);
   });
 
   it('heeft een knop die het hele level met demo content vult', () => {
@@ -169,13 +176,13 @@ describe('Afronding', () => {
   });
 });
 
-describe('StapVenster', () => {
+describe('StapBlad', () => {
   const venster = (levelId: number, stepId: string, st: 'nu' | 'af' | 'straks' = 'nu') => {
     const l = level(levelId);
     const s = stap(levelId, stepId);
     const index = l.steps.filter((x) => !x.optional).indexOf(s);
     return renderToStaticMarkup(
-      <StapVenster
+      <StapBlad
         level={l}
         step={s}
         nummer={index + 1}
@@ -183,13 +190,9 @@ describe('StapVenster', () => {
         status={st}
         snapshot={snapshot}
         evaluation={evaluateLevel(l, snapshot)}
-        licht
         onSave={async () => true}
         onDemo={niets}
         onKlaar={niets}
-        onVorige={niets}
-        onVolgende={niets}
-        onSluit={niets}
       />,
     );
   };
@@ -201,37 +204,56 @@ describe('StapVenster', () => {
     expect(html).toMatch(/<h3[^>]*>Werk je canvas bij<\/h3>/);
   });
 
-  it('het venster is een echte dialog: Esc en de focus regelt de browser', () => {
+  it('het werkblad staat op de pagina, zonder venster eromheen', () => {
     const html = venster(0, 'l0-account');
-    expect(html).toMatch(/^<dialog class="bl-open licht" aria-labelledby="bl-venster-titel"/);
-    expect(html).not.toContain('role="dialog"');
+    expect(html).toMatch(/^<div class="bl-licht bl-stapblad" id="bl-stapblad">/);
+    expect(html).not.toContain('<dialog');
+    expect(html).not.toContain('Volgende stap');
   });
 
-  it('het venster gaat eerst modaal open en zet dan pas de focus, zodat de focus daarna terug kan naar de kaart', () => {
-    const stappen: string[] = [];
-    const d = { open: false, showModal: () => ((d.open = true), stappen.push('showModal')) };
-    const titel = { focus: () => stappen.push('focus') };
-    toonVenster(d, titel);
-    expect(stappen).toEqual(['showModal', 'focus']);
-    // Volgende stap in hetzelfde venster: het is al open, alleen de focus gaat naar de nieuwe titel.
-    toonVenster(d, titel);
-    expect(stappen).toEqual(['showModal', 'focus', 'focus']);
+  it('een stap zonder check vink je zelf af, met een knop die zegt wat klaar is en zonder extra regel', () => {
+    const html = venster(0, 'l0-account');
+    expect(html).toMatch(/<button[^>]*class="bl-vknop p"[^>]*>Klaar, ik heb een account<\/button>/);
+    expect(html).not.toContain('bl-hoe');
+    expect(html).not.toContain('zelf af');
   });
 
-  it('een stap zonder check vink je zelf af', () => {
-    expect(venster(0, 'l0-account')).toMatch(/<button[^>]*class="bl-vknop p"[^>]*>Klaar, ik heb een account<\/button>/);
+  it('ook de downloadstap heeft zijn knop om af te vinken', () => {
+    expect(venster(0, 'l0-download')).toMatch(/<button[^>]*class="bl-vknop p"[^>]*>Klaar, de app werkt<\/button>/);
+  });
+
+  it('één zin per stap; de uitleg staat dicht achter Zo doe je het', () => {
+    const html = venster(0, 'l0-account');
+    expect(html).toContain('Op GitHub komt je repo te staan. Een gratis account is genoeg.');
+    expect(html).toMatch(/<details class="bl-zo"><summary>Zo doe je het<\/summary>/);
+  });
+
+  it('een stap die nog niet aan de beurt is, zegt welke stap eerst moet en brengt je erheen', () => {
+    const l = level(0);
+    const html = renderToStaticMarkup(
+      <StapBlad level={l} step={stap(0, 'l0-setup')} nummer={4} totaal={8} status="straks" snapshot={snapshot} evaluation={evaluateLevel(l, snapshot)} onSave={async () => true} onDemo={niets} onKlaar={niets} eerst={{ nummer: 2, step: stap(0, 'l0-repo') }} onNaarEerst={niets} />,
+    );
+    expect(html).toContain('Eerst stap 2 van dit level: maak je repo.');
+    expect(html).toMatch(/<button[^>]*>Naar stap 2<\/button>/);
+    expect(html).not.toContain('Mijn computer');
+    expect(html).not.toContain('Vul met demo content');
+  });
+
+  it('een stap die klaar is, zegt dat', () => {
+    expect(venster(0, 'l0-account', 'af')).toContain('Klaar</p>');
+    expect(venster(0, 'l0-account', 'af')).not.toContain('Klaar, ik heb een account');
   });
 
   it('koppelen sla je niet over: verder kan pas als het koppelen gelukt is', () => {
     const html = venster(0, 'l0-koppelen');
     expect(html).not.toContain('Klaar, volgende stap');
-    expect(html).toMatch(/<button[^>]*class="bl-vknop p"[^>]*disabled=""[^>]*>Volgende stap<\/button>/);
+    expect(html).not.toContain('class="bl-vknop p"');
     expect(html).toContain('Kies je repo op GitHub en klik op Install. Dan krijgt deze stap vanzelf een vinkje.');
   });
 
-  it('een stap met een check gaat vanzelf door zodra de repo het laat zien', () => {
+  it('een stap met een check krijgt vanzelf een vinkje zodra de repo het laat zien', () => {
     const html = venster(2, 'l2-analyse');
-    expect(html).toMatch(/<button[^>]*class="bl-vknop p"[^>]*disabled=""[^>]*>Volgende stap<\/button>/);
+    expect(html).not.toContain('Klaar, volgende stap');
     expect(html).toContain('Staat je wijziging op GitHub, dan krijgt deze stap vanzelf een vinkje.');
     expect(html).toContain('Vul met demo content');
   });
@@ -255,7 +277,7 @@ describe('StapVenster', () => {
     const files = { ...starterFiles, 'level-2-probleemvalidatie/eerste-doelgroep.md': '---\ngevonden: ja\ndoelgroep: apothekers\nprobleem: spoedbezorging\n---\n# E\n\nx' };
     const s = { files, mergedPullRequests: 0 };
     const html = renderToStaticMarkup(
-      <StapVenster level={l} step={stap(3, 'l3-oplossingen')} nummer={1} totaal={5} status="nu" snapshot={s} evaluation={evaluateLevel(l, s)} licht onSave={async () => true} onDemo={niets} onKlaar={niets} onVorige={niets} onVolgende={niets} onSluit={niets} />,
+      <StapBlad level={l} step={stap(3, 'l3-oplossingen')} nummer={1} totaal={5} status="nu" snapshot={s} evaluation={evaluateLevel(l, s)} onSave={async () => true} onDemo={niets} onKlaar={niets} />,
     );
     expect(html).toMatch(/<blockquote class="stap-hint">Hoe kunnen we apothekers helpen met spoedbezorging\?<\/blockquote>/);
   });
@@ -265,7 +287,7 @@ describe('StapVenster', () => {
     const kaart = '---\nronde: 1\nhypothese: Ze willen door voor €40\ntest_opzet: proef\nmetriek: ja\nsuccesdrempel: 2 van de 3\ntijd_en_sample: 3 apothekers\n---\n# Testkaart ronde 1\n\nTekst.';
     const s = { files: { ...starterFiles, 'level-4-marktfeedback/testkaarten/ronde-1.md': kaart }, mergedPullRequests: 0 };
     const html = renderToStaticMarkup(
-      <StapVenster level={l} step={stap(4, 'l4-testkaart')} nummer={2} totaal={5} status="af" snapshot={s} evaluation={evaluateLevel(l, s)} licht onSave={async () => true} onDemo={niets} onKlaar={niets} onVorige={niets} onVolgende={niets} onSluit={niets} />,
+      <StapBlad level={l} step={stap(4, 'l4-testkaart')} nummer={2} totaal={5} status="af" snapshot={s} evaluation={evaluateLevel(l, s)} onSave={async () => true} onDemo={niets} onKlaar={niets} />,
     );
     expect(html).toContain('Je AI maakte');
     expect(html).toContain('testkaarten/ronde-1.md');

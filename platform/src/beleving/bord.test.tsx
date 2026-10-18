@@ -64,18 +64,21 @@ describe('het speelbord van level 1 tot en met 6', () => {
     }
   });
 
-  it('level 0 houdt zijn stapkaarten', () => {
-    expect(render(0)).toContain('bl-stapkaart');
+  it('level 0 heeft zijn eigen bord: rondjes op een pad, geen werkbladen van level 1 tot en met 6', () => {
+    expect(render(0)).toContain('class="bl-pad"');
     expect(render(0)).not.toContain('class="bl-werkblad');
   });
 
-  it('wat nog komt ligt op slot: grijs, met een reden en niets om te bedienen', () => {
+  it('wat nog komt ligt op slot: grijs, met de stap die eerst moet en alleen een knop erheen', () => {
     const html = render(1);
     const dicht = gesloten(html);
     expect(dicht).toHaveLength(4);
     expect(dicht.map((d) => d.match(/<h3>(.*?)<\/h3>/)?.[1])).toEqual(['Je visie', 'Je idee in één zin', 'Je aannames', 'Je waardepropositie']);
-    expect(dicht.map((d) => d.match(/class="bl-slot-reden">(.*?)</)?.[1])).toEqual(['eerst je idee', 'eerst je visie', 'eerst je zin', 'eerst je aannames']);
-    for (const d of dicht) expect(d).not.toMatch(/<(button|input|textarea|select|a)\b/);
+    for (const d of dicht) {
+      expect(d.match(/class="bl-slot-reden">(.*?)</)?.[1]).toBe('Eerst stap 1 van dit level: zet je idee uiteen.');
+      expect(d.match(/<button[^>]*>(.*?)<\/button>/g)).toEqual(['<button type="button" class="bl-slot-knop">Naar stap 1</button>']);
+      expect(d).not.toMatch(/<(input|textarea|select|a)\b/);
+    }
   });
 
   it('heeft per werkblad een demoknop, en een knop die het hele level vult', () => {
@@ -152,7 +155,7 @@ describe('level 2: je gesprekken', () => {
 
   it('analyse en canvas liggen op slot tot je gesprekken binnen zijn', () => {
     const html = render(2, { ...DOELGROEP('B2B'), ...VRAGEN, ...DRIE });
-    expect(gesloten(html).map((d) => d.match(/class="bl-slot-reden">(.*?)</)?.[1])).toEqual(['nog 2 gesprekken', 'nog 2 gesprekken']);
+    expect(gesloten(html).map((d) => d.match(/class="bl-slot-reden">(.*?)</)?.[1])).toEqual(['Eerst stap 3 van dit level: nog 2 gesprekken.', 'Eerst stap 3 van dit level: nog 2 gesprekken.']);
   });
 });
 

@@ -31,7 +31,7 @@ type Props = {
 export function LevelBord({ level, snapshot, evaluation, statussen, levelAf, onSave, onDemoStap, onHandmatig, onFillLevel, onVervers }: Props) {
   const b = BELEVING[level.id];
   const bord = bordVan(level, statussen);
-  const redenen = slotRedenen(bord, snapshot);
+  const slots = slotRedenen(level, bord, snapshot);
   const kop = useRef<HTMLHeadingElement>(null);
   const [optie, setOptie] = useState<string | null>(null);
   const opties = levelAf ? [] : bord.opties;
@@ -43,6 +43,12 @@ export function LevelBord({ level, snapshot, evaluation, statussen, levelAf, onS
     if (nuId && vorige.current !== nuId) kop.current?.focus();
     vorige.current = nuId;
   }, [nuId]);
+
+  // De knop op een slotje brengt je naar het werkblad waar je nu bent.
+  const naarNu = () => {
+    kop.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    kop.current?.focus({ preventScroll: true });
+  };
 
   return (
     <section className="bl-bord" aria-labelledby="bl-bord-vraag">
@@ -104,7 +110,7 @@ export function LevelBord({ level, snapshot, evaluation, statussen, levelAf, onS
           {bord.straks.length > 0 && (
             <div className="bl-straks">
               {bord.straks.map((w) => (
-                <GeslotenWerkblad key={w.id} id={w.id} naam={werkbladNaam(w.id, w.stappen[0].title)} reden={redenen[w.id]} />
+                <GeslotenWerkblad key={w.id} id={w.id} naam={werkbladNaam(w.id, w.stappen[0].title)} slot={slots[w.id]} onNaar={naarNu} />
               ))}
             </div>
           )}

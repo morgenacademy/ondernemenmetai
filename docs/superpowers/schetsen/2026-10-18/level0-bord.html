@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speelbord level 0</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Barlow', -apple-system, system-ui, sans-serif; background: #0c0818; color: #f4f1fa; -webkit-font-smoothing: antialiased; }
+  .schets-top { max-width: 1240px; margin: 0 auto; padding: 18px 4vw 0; color: #a59fb8; font-size: 14px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .schets-top b { color: #fff; }
+  .schets-top button { font: inherit; font-weight: 600; color: #d9d3e8; background: rgba(255,255,255,.07); border: 0; border-radius: 99px; padding: 6px 12px; cursor: pointer; }
+  .schets-top button:hover { background: #D8FE56; color: #0c0818; }
+
+  .bord { max-width: 1240px; margin: 0 auto; padding: 18px 4vw 70px; }
+  .doek { background: #14102a; border-radius: 28px; overflow: hidden; }
+  .held { min-height: 260px; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; padding: 0 44px 30px; background-size: cover; background-position: center 40%;
+    background-image: linear-gradient(0deg, #14102a 2%, rgba(20,16,42,.25) 55%, rgba(20,16,42,.55)), url('../../../../platform/public/beelden/werkplek.webp'); }
+  .label { color: #D8FE56; font-weight: 600; letter-spacing: .14em; font-size: 12px; text-transform: uppercase; }
+  h1 { font-size: clamp(32px, 4vw, 46px); font-weight: 700; letter-spacing: -.01em; line-height: 1.05; margin: 8px 0; }
+  .zin { font-size: 19px; margin: 0; color: #d9d3e8; }
+  .teller { text-align: right; color: #d9d3e8; font-size: 15px; white-space: nowrap; }
+  .teller b { display: block; font-size: 40px; line-height: 1; color: #fff; font-weight: 700; }
+  .teller b small { font-size: 20px; color: #a59fb8; font-weight: 600; }
+
+  .inhoud { padding: 34px 44px 44px; }
+
+  /* Het pad: acht ronde stappen aan een lijn. */
+  .pad { position: relative; display: grid; grid-template-columns: repeat(8, 1fr); padding-top: 34px; }
+  .lijn { position: absolute; left: 6.25%; right: 6.25%; top: calc(34px + 31px); height: 4px; border-radius: 99px; background: rgba(255,255,255,.1); }
+  .lijn i { display: block; height: 100%; width: 0; border-radius: 99px; background: #D8FE56; box-shadow: 0 0 12px rgba(216,254,86,.5); transition: width .8s cubic-bezier(.3,.7,.3,1); }
+  .stap { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 0 2px 16px; }
+  .rond { position: relative; width: 66px; height: 66px; border-radius: 50%; display: grid; place-items: center; background: #221c3d; color: #8a82a3; box-shadow: inset 0 0 0 2px rgba(255,255,255,.12); transition: transform .25s, background .4s, color .4s, box-shadow .4s; }
+  .rond svg { width: 26px; height: 26px; }
+  .stap .naam { font-size: 15px; font-weight: 600; color: #8a82a3; transition: color .3s; }
+  .stap:hover .rond { transform: translateY(-3px); }
+  .stap:focus-visible { outline: none; } .stap:focus-visible .rond { outline: 3px solid #D8FE56; outline-offset: 4px; }
+
+  .stap.af .rond { background: #D8FE56; color: #14102a; box-shadow: 0 6px 20px rgba(216,254,86,.25); }
+  .stap.af .naam { color: #f4f1fa; }
+  .stap.nu .rond { background: #5B2D8E; color: #fff; box-shadow: inset 0 0 0 2px #9B6FCF; }
+  .stap.nu .rond::after { content: ''; position: absolute; inset: -7px; border-radius: 50%; border: 2px solid #D8FE56; animation: puls 1.8s ease-out infinite; }
+  .stap.nu .naam { color: #fff; }
+  @keyframes puls { 0% { transform: scale(.92); opacity: 1; } 100% { transform: scale(1.25); opacity: 0; } }
+  .stap.straks .rond { opacity: .75; }
+  .stap.gekozen .rond { transform: scale(1.1); }
+  .stap.gekozen .naam { color: #fff; }
+  .stap.gekozen::after { content: ''; position: absolute; bottom: -14px; width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 12px solid #f5f5f7; }
+  .stap.pop .rond { animation: pop .55s cubic-bezier(.3,1.6,.5,1); }
+  @keyframes pop { 0% { transform: scale(.7); } 100% { transform: scale(1.1); } }
+
+  /* Jij staat hier. */
+  .jij { position: absolute; top: -34px; left: 50%; transform: translateX(-50%); background: #D8FE56; color: #14102a; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 99px; white-space: nowrap; animation: zweef 2.4s ease-in-out infinite; }
+  .jij::after { content: ''; position: absolute; left: 50%; bottom: -5px; transform: translateX(-50%); border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid #D8FE56; }
+  @keyframes zweef { 50% { transform: translate(-50%, -4px); } }
+
+  /* Het werkblad van de gekozen stap. */
+  .werkblad { margin-top: 12px; background: #f5f5f7; color: #1d1d1f; border-radius: 22px; padding: 30px 32px 30px; box-shadow: 0 30px 80px rgba(0,0,0,.35); display: grid; grid-template-columns: 1fr 1.05fr; gap: 34px; align-items: start; animation: in .35s ease; }
+  @keyframes in { from { opacity: 0; transform: translateY(8px); } }
+  .eyebrow { display: flex; gap: 8px; align-items: center; color: #86868b; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+  .plek { background: #e8e1f3; color: #5B2D8E; border-radius: 99px; padding: 3px 9px; font-size: 12px; letter-spacing: 0; text-transform: none; }
+  .werkblad h2 { margin: 10px 0 8px; font-size: 30px; font-weight: 700; letter-spacing: -.01em; }
+  .werkblad p { margin: 0 0 14px; font-size: 18px; line-height: 1.45; color: #3a3a3c; }
+  .hoe { display: flex; gap: 8px; align-items: center; font-size: 14px; color: #6e6e73; margin-top: 18px; }
+  .hoe .bol { width: 18px; height: 18px; border-radius: 50%; }
+  .bol.zelf { box-shadow: inset 0 0 0 2px #9b9ba1; border: 2px dashed transparent; background: transparent; outline: 2px dashed #9b9ba1; outline-offset: -2px; box-shadow: none; }
+  .bol.vanzelf { background: #5B2D8E; }
+
+  .rechts { background: #fff; border-radius: 16px; padding: 22px; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.05); min-height: 180px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+  .knop { align-self: flex-start; border: 0; background: #5B2D8E; color: #fff; font: inherit; font-size: 17px; font-weight: 600; border-radius: 12px; padding: 12px 18px; cursor: pointer; text-decoration: none; }
+  .knop:hover { background: #4a2375; }
+  .knop.zacht { background: #fff; color: #5B2D8E; box-shadow: inset 0 0 0 1.5px rgba(91,45,142,.4); }
+  .knop.zacht:hover { background: #f3eefa; }
+  .knop[disabled] { opacity: .45; cursor: default; }
+  .rij { display: flex; gap: 10px; flex-wrap: wrap; }
+  .keuze { font: inherit; font-size: 16px; font-weight: 600; border: 0; border-radius: 12px; padding: 12px 16px; background: #f0f0f3; color: #1d1d1f; cursor: pointer; }
+  .keuze.aan { background: #5B2D8E; color: #fff; }
+  .veld { font-size: 13px; color: #86868b; font-weight: 600; margin-bottom: -4px; }
+  .prompt { background: #1d1d1f; color: #f5f5f7; border-radius: 12px; padding: 14px 16px; font-size: 15px; line-height: 1.4; position: relative; }
+  .prompt button { position: absolute; top: 8px; right: 8px; font: inherit; font-size: 12px; font-weight: 600; border: 0; border-radius: 8px; padding: 4px 8px; background: rgba(255,255,255,.14); color: #fff; cursor: pointer; }
+  .gelukt { color: #2f7d32; font-weight: 700; font-size: 18px; }
+  .wacht { color: #6e6e73; font-size: 15px; display: flex; gap: 8px; align-items: center; }
+  .wacht .stip { width: 10px; height: 10px; border-radius: 50%; background: #d2d2d7; }
+  .demo { font: inherit; font-size: 14px; font-weight: 600; color: #6e6e73; background: none; border: 1px dashed #c7c7cc; border-radius: 10px; padding: 7px 12px; cursor: pointer; align-self: flex-start; }
+  .demo:hover { color: #5B2D8E; border-color: #5B2D8E; }
+
+  .gh { border-radius: 12px; overflow: hidden; box-shadow: inset 0 0 0 1px #d0d7de; font-size: 14px; }
+  .gh .balk { background: #f6f8fa; padding: 8px 10px; display: flex; gap: 6px; align-items: center; color: #57606a; font-size: 12px; border-bottom: 1px solid #d0d7de; }
+  .gh .balk i { width: 9px; height: 9px; border-radius: 50%; background: #d0d7de; }
+  .gh .in { padding: 14px; display: grid; gap: 8px; }
+  .gh .radio { display: flex; gap: 8px; align-items: center; font: inherit; background: none; border: 0; text-align: left; padding: 4px 0; cursor: pointer; color: #1f2328; }
+  .gh .radio .r { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px #8c959f; }
+  .gh .radio.aan .r { box-shadow: inset 0 0 0 4px #0969da; }
+  .gh .install { justify-self: start; font: inherit; font-weight: 600; background: #1f883d; color: #fff; border: 0; border-radius: 6px; padding: 6px 14px; cursor: pointer; }
+  .gh .install[disabled] { opacity: .5; cursor: default; }
+
+  .slot { display: grid; justify-items: center; text-align: center; gap: 10px; }
+  .slot .s { width: 52px; height: 52px; border-radius: 50%; background: #e5e5ea; display: grid; place-items: center; font-size: 22px; }
+
+  /* Level af. */
+  .finish { margin-top: 12px; border-radius: 22px; padding: 40px 32px; text-align: center; background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(216,254,86,.18), transparent 70%), #1c1636; animation: in .5s ease; position: relative; overflow: hidden; }
+  .finish h2 { font-size: 38px; margin: 6px 0 8px; }
+  .finish p { color: #d9d3e8; font-size: 19px; margin: 0 0 22px; }
+  .finish .groot { display: inline-flex; background: linear-gradient(135deg, #D8FE56, #b8e040); color: #1A1A2E; font: 800 18px 'Barlow', sans-serif; padding: 16px 30px; border-radius: 20px; border: 0; cursor: pointer; box-shadow: 0 6px 30px rgba(216,254,86,.35); }
+  .snipper { position: absolute; width: 8px; height: 14px; border-radius: 2px; top: -20px; animation: val 2.4s ease-in forwards; }
+  @keyframes val { to { transform: translateY(420px) rotate(540deg); opacity: 0; } }
+
+  .melding { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 30px); opacity: 0; background: #D8FE56; color: #1A1A2E; font-weight: 800; font-size: 17px; padding: 12px 20px; border-radius: 16px; box-shadow: 0 10px 40px rgba(216,254,86,.4); transition: .5s; pointer-events: none; }
+  .melding.aan { transform: translate(-50%, 0); opacity: 1; }
+
+  @media (max-width: 860px) {
+    .held { padding: 0 20px 22px; } .inhoud { padding: 24px 16px 30px; }
+    .pad { grid-template-columns: repeat(4, 1fr); row-gap: 40px; } .lijn { display: none; }
+    .werkblad { grid-template-columns: 1fr; padding: 22px 18px; gap: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="schets-top"><span><b>Schets</b> · speelbord level 0. Klik op een rondje. Alles werkt.</span> <button id="reset">Opnieuw beginnen</button> <button id="alles">Spring naar de laatste stap</button></div>
+
+<section class="bord">
+  <div class="doek">
+    <div class="held">
+      <div>
+        <div class="label">Level 0 · Werkplek</div>
+        <h1>Richt je werkplek in.</h1>
+        <p class="zin">Acht stappen. Na je eerste push staat alles.</p>
+      </div>
+      <div class="teller"><b id="teller">0<small> / 8</small></b>klaar</div>
+    </div>
+    <div class="inhoud">
+      <div class="pad" id="pad"><div class="lijn"><i id="lijn"></i></div></div>
+      <div id="blad"></div>
+    </div>
+  </div>
+</section>
+<div class="melding" id="melding"></div>
+
+<script>
+const ic = {
+  account: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0"/>',
+  repo: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>',
+  koppelen: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  setup: '<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+  app: '<path d="M12 4v11m-4-4 4 4 4-4M5 20h14"/>',
+  desktop: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+  clonen: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+  push: '<path d="M12 19V7m-5 5 5-5 5 5M5 4h14"/>',
+  vink: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+};
+const svg = (n) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ic[n]}</svg>`;
+
+// hoe: 'zelf' = jij vinkt af; 'vanzelf' = krijgt een vinkje zodra het in je repo staat of het koppelen lukt.
+const STAPPEN = [
+  { id: 'account', naam: 'Account', titel: 'Maak een GitHub-account', zin: 'Op GitHub komt je repo te staan. Een gratis account is genoeg.', waar: 'Op GitHub', hoe: 'zelf', klaar: 'Klaar, ik heb een account', link: 'Naar GitHub ↗' },
+  { id: 'repo', naam: 'Repo', titel: 'Maak je repo', zin: 'Kopieer de starter-repo, geef hem de naam van je onderneming en zet hem op Private.', waar: 'Op GitHub', hoe: 'zelf', klaar: 'Klaar, mijn repo staat', link: 'Open de starter-repo ↗' },
+  { id: 'koppelen', naam: 'Koppelen', titel: 'Koppel je repo', zin: 'Ondernemen met AI kijkt mee in die ene repo en ziet zo welke stappen af zijn.', waar: 'Hier en op GitHub', hoe: 'vanzelf' },
+  { id: 'setup', naam: 'Setup', titel: 'Kies je setup', zin: 'Kies je computer en je abonnement. De uitleg bij de volgende stappen past zich daarop aan.', waar: 'Hier', hoe: 'vanzelf' },
+  { id: 'app', naam: 'AI-app', titel: 'Download je AI-app', zin: 'De app die bij je abonnement hoort.', waar: 'Op je computer', hoe: 'zelf', klaar: 'Klaar, de app werkt' },
+  { id: 'desktop', naam: 'Desktop', titel: 'Installeer GitHub Desktop', zin: 'Daarmee zet je je repo op je computer en je werk online, zonder iets te typen.', waar: 'Op je computer', hoe: 'zelf', klaar: 'Klaar, ik ben ingelogd', link: 'Download GitHub Desktop ↗' },
+  { id: 'clonen', naam: 'Clonen', titel: 'Zet je repo op je computer', zin: 'Klik in GitHub Desktop op Clone. Open die map in je AI-app en plak deze vraag:', waar: 'GitHub Desktop en je AI-app', hoe: 'zelf', klaar: 'Klaar, mijn AI antwoordt', prompt: 'Lees AGENTS.md en vertel me in drie zinnen wat je in deze repo voor me gaat doen.' },
+  { id: 'push', naam: '1e push', titel: 'Je eerste push', zin: 'Je AI vult werkplek.md met je in. Jij klikt in GitHub Desktop op Commit en daarna op Push origin.', waar: 'Je AI-app en GitHub Desktop', hoe: 'vanzelf', prompt: 'Vul level-0-werkplek/werkplek.md samen met mij in: vraag me per regel wat ik wil invullen.' },
+];
+
+let af = new Set();
+let gekozen = 0;
+let koppelFase = 1, repoGekozen = false;
+let setup = { os: null, ai: null };
+let finish = false;
+let pop = null;
+
+const nu = () => STAPPEN.findIndex((s) => !af.has(s.id));
+const status = (i) => (af.has(STAPPEN[i].id) ? 'af' : i === nu() ? 'nu' : 'straks');
+
+function melding(t) { const m = document.getElementById('melding'); m.textContent = t; m.classList.add('aan'); clearTimeout(m._t); m._t = setTimeout(() => m.classList.remove('aan'), 1800); }
+
+function vink(i) {
+  af.add(STAPPEN[i].id); pop = i;
+  const n = nu();
+  if (n === -1) { finish = true; gekozen = -1; melding('Level 0 is af'); }
+  else { gekozen = n; melding(`✓ ${STAPPEN[i].naam}`); }
+  teken();
+}
+
+function teken() {
+  const pad = document.getElementById('pad');
+  pad.querySelectorAll('.stap').forEach((e) => e.remove());
+  const n = nu();
+  STAPPEN.forEach((s, i) => {
+    const st = status(i);
+    const b = document.createElement('button');
+    b.className = `stap ${st}${i === gekozen ? ' gekozen' : ''}${i === pop ? ' pop' : ''}`;
+    b.setAttribute('aria-label', `${s.naam}, ${st === 'af' ? 'klaar' : st === 'nu' ? 'nu aan de beurt' : 'nog niet aan de beurt'}`);
+    b.innerHTML = `${i === n ? '<span class="jij">Jij</span>' : ''}<span class="rond">${svg(st === 'af' ? 'vink' : s.id)}</span><span class="naam">${s.naam}</span>`;
+    b.onclick = () => { gekozen = i; finish = false; pop = null; teken(); };
+    pad.appendChild(b);
+  });
+  pop = null;
+  const klaar = af.size;
+  document.getElementById('teller').innerHTML = `${klaar}<small> / 8</small>`;
+  // De lijn loopt tot het rondje waar je nu bent.
+  const tot = n === -1 ? 7 : n;
+  document.getElementById('lijn').style.width = `${(tot / 7) * 100}%`;
+  blad();
+}
+
+function blad() {
+  const el = document.getElementById('blad');
+  if (finish || gekozen === -1) {
+    el.innerHTML = `<div class="finish"><div class="label">Level 0 af</div><h2>Je werkplek staat.</h2><p>Je AI werkt in je eigen repo, en je eerste wijziging staat op GitHub.</p><button class="groot" onclick="melding('Hier ga je naar level 1')">Door naar level 1 →</button></div>`;
+    const f = el.querySelector('.finish');
+    for (let k = 0; k < 40; k++) { const s = document.createElement('i'); s.className = 'snipper'; s.style.left = Math.random() * 100 + '%'; s.style.background = ['#D8FE56', '#9B6FCF', '#fff'][k % 3]; s.style.animationDelay = Math.random() * .8 + 's'; f.appendChild(s); }
+    return;
+  }
+  const i = gekozen, s = STAPPEN[i], st = status(i);
+  const hoe = s.hoe === 'zelf'
+    ? ''
+    : `<div class="hoe"><span class="bol vanzelf"></span>${s.id === 'koppelen' ? 'Lukt het koppelen, dan krijgt deze stap vanzelf een vinkje.' : 'Staat het in je repo, dan krijgt deze stap vanzelf een vinkje.'}</div>`;
+  let rechts = '';
+  if (st === 'straks') {
+    const n = nu();
+    rechts = `<div class="slot"><span class="s">🔒</span><b>Eerst stap ${n + 1} van dit level: ${STAPPEN[n].titel[0].toLowerCase() + STAPPEN[n].titel.slice(1)}.</b><button class="knop zacht" data-ga="${n}">Naar stap ${n + 1}</button></div>`;
+  } else if (st === 'af') {
+    rechts = `<div class="slot"><span class="s" style="background:#D8FE56">✓</span><span class="gelukt">${s.naam} is klaar</span>${s.id === 'koppelen' ? '<span class="wacht">Gekoppeld met jij/mijn-onderneming</span>' : ''}${s.id === 'setup' ? `<span class="wacht">${setup.os === 'windows' ? 'Windows' : 'Mac'} · ${setup.ai === 'codex' ? 'ChatGPT' : 'Claude'}</span>` : ''}</div>`;
+  } else if (s.id === 'koppelen') {
+    rechts = koppelFase === 1
+      ? `<button class="knop" data-koppel="2">Verbind met GitHub</button><span class="wacht">Ondernemen met AI vraagt toegang tot één repo.</span>`
+      : `<div class="gh"><div class="balk"><i></i><i></i><i></i>github.com/apps/ondernemen-met-ai</div><div class="in"><b>Install Ondernemen met AI</b><button class="radio"><span class="r"></span>All repositories</button><button class="radio ${repoGekozen ? 'aan' : ''}" data-kies><span class="r"></span>Only select: <b>&nbsp;mijn-onderneming</b></button><button class="install" data-install ${repoGekozen ? '' : 'disabled'}>Install</button></div></div>`;
+  } else if (s.id === 'setup') {
+    const k = (veld, w, t) => `<button class="keuze ${setup[veld] === w ? 'aan' : ''}" data-setup="${veld}:${w}">${t}</button>`;
+    rechts = `<span class="veld">Mijn computer</span><div class="rij">${k('os', 'mac', 'Mac')}${k('os', 'windows', 'Windows')}</div><span class="veld">Mijn abonnement</span><div class="rij">${k('ai', 'claude', 'Claude')}${k('ai', 'codex', 'ChatGPT')}</div><button class="knop" data-bewaar ${setup.os && setup.ai ? '' : 'disabled'}>Bewaar in je repo</button>`;
+  } else if (s.id === 'app') {
+    const naam = setup.ai === 'codex' ? 'Codex' : 'Claude Code';
+    rechts = `<b style="font-size:20px">${naam}</b><span class="wacht">Download de app, installeer hem en log in.</span><a class="knop zacht" href="#" data-link>Download ${naam} ↗</a><button class="knop" data-klaar>${s.klaar}</button>`;
+  } else if (s.id === 'push') {
+    rechts = `<div class="prompt">${s.prompt}<button data-kopieer>Kopieer</button></div><span class="wacht"><span class="stip"></span>Nog niet op GitHub: werkplek.md is leeg.</span><button class="demo" data-demo>Demo: doe alsof je gepusht hebt</button>`;
+  } else {
+    rechts = `${s.prompt ? `<div class="prompt">${s.prompt}<button data-kopieer>Kopieer</button></div>` : ''}${s.link ? `<a class="knop zacht" href="#" data-link>${s.link}</a>` : ''}<button class="knop" data-klaar>${s.klaar}</button>`;
+  }
+  el.innerHTML = `<div class="werkblad"><div><div class="eyebrow">Stap ${i + 1} van 8 <span class="plek">${s.waar}</span></div><h2>${s.titel}</h2><p>${s.zin}</p>${st !== 'af' ? hoe : ''}</div><div class="rechts">${rechts}</div></div>`;
+
+  el.querySelector('[data-klaar]')?.addEventListener('click', () => vink(i));
+  el.querySelector('[data-demo]')?.addEventListener('click', () => vink(i));
+  el.querySelectorAll('[data-link]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); melding('Opent in een nieuw tabblad'); }));
+  el.querySelector('[data-kopieer]')?.addEventListener('click', (e) => { e.target.textContent = 'Gekopieerd'; });
+  el.querySelector('[data-ga]')?.addEventListener('click', (e) => { gekozen = +e.target.dataset.ga; teken(); });
+  el.querySelector('[data-koppel]')?.addEventListener('click', () => { koppelFase = 2; blad(); });
+  el.querySelector('[data-kies]')?.addEventListener('click', () => { repoGekozen = true; blad(); });
+  el.querySelector('[data-install]')?.addEventListener('click', () => vink(i));
+  el.querySelectorAll('[data-setup]').forEach((b) => b.addEventListener('click', () => { const [v, w] = b.dataset.setup.split(':'); setup[v] = w; blad(); }));
+  el.querySelector('[data-bewaar]')?.addEventListener('click', () => vink(i));
+}
+
+document.getElementById('reset').onclick = () => { af = new Set(); gekozen = 0; koppelFase = 1; repoGekozen = false; setup = { os: null, ai: null }; finish = false; teken(); };
+document.getElementById('alles').onclick = () => { af = new Set(STAPPEN.slice(0, 7).map((s) => s.id)); setup = { os: 'mac', ai: 'claude' }; gekozen = 7; finish = false; teken(); };
+teken();
+</script>
+</body>
+</html>

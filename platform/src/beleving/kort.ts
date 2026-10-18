@@ -2,7 +2,7 @@
 export const KORT: Record<string, string> = {
   'l0-account': 'Op GitHub komt je repo te staan. Een gratis account is genoeg.',
   'l0-repo': 'Kopieer de starter-repo, geef hem de naam van je onderneming en zet hem op Private.',
-  'l0-koppelen': 'Ondernemen met AI kijkt mee in die ene repo en ziet zo welke stappen af zijn.',
+  'l0-koppelen': 'Dit platform, Ondernemen met AI, kijkt mee in die ene repo op GitHub en ziet zo welke stappen af zijn.',
   'l0-setup': 'Kies je computer en je abonnement. De uitleg in de volgende stappen past zich daarop aan.',
   'l0-download': 'De app die bij je abonnement hoort: Claude Code of Codex.',
   'l0-github-desktop': 'Daarmee zet je je repo op je computer en je wijzigingen online, zonder iets te typen.',

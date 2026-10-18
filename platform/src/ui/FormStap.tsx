@@ -28,7 +28,7 @@ function resolve(fields: Field[], values: FormValues, snapshot: RepoSnapshot): F
   return resolved;
 }
 
-/** Uitleg bij een uitgeschakelde knop: het eerste lege veld, plus hoeveel er nog meer leeg zijn. */
+/** Uitleg bij een uitgeschakelde knop: de eerste lege keuzelijst, plus hoeveel er nog meer leeg zijn. */
 export function missingFieldsHint(labels: string[]): string | null {
   if (labels.length === 0) return null;
   const rest = labels.length - 1;
@@ -40,8 +40,9 @@ export function FormStap({ step, snapshot, alreadyDone, onSave, demoWaarden }: P
   const [saving, setSaving] = useState(false);
   const values = resolve(step.fields, raw, snapshot);
   const empty = step.fields.filter((f) => (isRequired(f) && values[f.name].trim() === '') || (f.kind === 'select' && optionsOf(f, snapshot).length === 0));
-  const hint = missingFieldsHint(empty.map((f) => f.label));
-  const missing = hint !== null;
+  // Een leeg tekstveld zie je zelf; alleen een keuzelijst zonder keuzes verklaart waarom de knop niet werkt.
+  const hint = missingFieldsHint(empty.filter((f) => f.kind === 'select').map((f) => f.label));
+  const missing = empty.length > 0;
   const hintId = `${step.id}-leeg`;
   const set = (name: string, value: string) => setValues((prev) => ({ ...prev, [name]: value }));
 

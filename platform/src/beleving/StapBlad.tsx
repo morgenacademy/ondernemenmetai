@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState, type Ref } from 'react';
 import { DEMO_FORMS } from '../demo/formulieren';
 import { demoVoorStap } from '../demo/vullen';
 import { filterVariants, setupFrom, stepContent } from '../lib/content';
@@ -12,6 +12,7 @@ import { PLEK_LABEL } from '../ui/labels';
 import { Markdown } from '../ui/Markdown';
 import { Paneel } from '../ui/Paneel';
 import { VoortgangStap } from '../ui/VoortgangStap';
+import { KORT } from './kort';
 import { aiResultaat } from './resultaat';
 import { Voorbeeld } from './Voorbeeld';
 import type { StapStatus } from './voortgang';
@@ -34,14 +35,14 @@ type Props = {
   status: StapStatus;
   snapshot: RepoSnapshot;
   evaluation: LevelEvaluation;
-  licht: boolean;
   onSave: (w: FileWrite) => Promise<boolean>;
   onDemo: () => void;
-  /** Vinkt een stap zonder check af en gaat door. */
+  /** Vinkt een stap zonder check af. */
   onKlaar: () => void;
-  onVorige: () => void;
-  onVolgende: () => void;
-  onSluit: () => void;
+  /** Bij een stap die nog niet aan de beurt is: de stap die eerst moet, en de knop erheen. */
+  eerst?: { nummer: number; step: Step };
+  onNaarEerst?: () => void;
+  titelRef?: Ref<HTMLHeadingElement>;
 };
 
 /** Koppelen in drie stappen, zoals in de schets: verbind op het platform, kies je repo op GitHub, terug op het platform. */
@@ -57,16 +58,16 @@ function Koppelen({ af, onKlaar }: { af: boolean; onKlaar: () => void }) {
   if (af)
     return (
       <div className="bl-paneel-echt" style={{ textAlign: 'center' }}>
-        {kop(3, 'Terug in Ondernemen met AI')}
+        {kop(3, 'Terug op dit platform')}
         <p className="bl-gelukt">✓ Gekoppeld met jij/mijn-onderneming</p>
-        <p className="bl-hint">Ondernemen met AI kan nu in die ene repo kijken en er je keuzes in zetten.</p>
+        <p className="bl-hint">Dit platform kan nu in die ene repo kijken en er je keuzes in zetten.</p>
       </div>
     );
   if (fase === 1)
     return (
       <div className="bl-paneel-echt" style={{ textAlign: 'center' }}>
-        {kop(1, 'Hier, in Ondernemen met AI')}
-        <p className="bl-veldlabel">Ondernemen met AI vraagt GitHub om toegang tot één repo.</p>
+        {kop(1, 'Hier, op dit platform')}
+        <p className="bl-veldlabel">Dit platform vraagt GitHub om toegang tot één repo.</p>
         <button type="button" className="bl-vknop p bl-markeer-knop" onClick={() => setFase(2)}>
           Verbind met GitHub
         </button>
@@ -104,40 +105,49 @@ function Koppelen({ af, onKlaar }: { af: boolean; onKlaar: () => void }) {
   );
 }
 
-/**
- * Een echte modale dialog: de browser houdt de focus erin, Esc sluit hem, en daarna gaat de focus terug naar de kaart.
- * Eerst openen, dan pas de focus op de titel: de browser onthoudt bij het openen waar de focus stond.
- */
-export function toonVenster(d: Pick<HTMLDialogElement, 'open' | 'showModal'> | null, titel: Pick<HTMLElement, 'focus'> | null) {
-  if (d && !d.open) d.showModal?.();
-  titel?.focus({ preventScroll: true });
+/** Een titel als "Maak je repo" midden in een zin: "Eerst stap 2 van dit level: maak je repo." */
+export function kleineLetter(tekst: string): string {
+  return tekst ? tekst[0].toLowerCase() + tekst.slice(1) : tekst;
 }
 
-export function StapVenster({ level, step, nummer, totaal, status, snapshot, evaluation, licht, onSave, onDemo, onKlaar, onVorige, onVolgende, onSluit }: Props) {
-  const titel = useRef<HTMLHeadingElement>(null);
-  const dialog = useRef<HTMLDialogElement>(null);
-  const vel = useRef<HTMLDivElement>(null);
-  const groot = useRef<HTMLDivElement>(null);
+/**
+ * Het werkblad van één stap, onder het pad van level 0: links wat je weet, rechts wat je doet.
+ * Een stap die nog niet aan de beurt is, zegt welke stap eerst moet en brengt je erheen.
+ */
+export function StapBlad({ level, step, nummer, totaal, status, snapshot, evaluation, onSave, onDemo, onKlaar, eerst, onNaarEerst, titelRef }: Props) {
   const setup = setupFrom(snapshot);
   const checks = evaluation.results.filter((r) => r.stepId === step.id);
   // Koppelen vink je niet zelf af: die stap is pas klaar als het koppelen gelukt is.
   const isKoppel = step.id === 'l0-koppelen';
   const handmatig = checks.length === 0 && !step.optional && !isKoppel;
   const af = status === 'af';
-  const laatste = nummer === totaal;
+  const straks = status === 'straks';
   const demo = demoVoorStap(step);
   const content = stepContent(level.id, step.id);
   const hint = step.hint?.(snapshot);
   const resultaat = af ? aiResultaat(step.id, snapshot) : null;
-
-  // Elke stap begint bovenaan, ook als je in de vorige stap naar beneden scrolde.
-  useEffect(() => {
-    if (vel.current) vel.current.scrollTop = 0;
-    if (groot.current) groot.current.scrollTop = 0;
-    toonVenster(dialog.current, titel.current);
-  }, [step.id]);
+  // Een stap die je zelf afvinkt, heeft zijn knop "Klaar, …"; alleen wat vanzelf een vinkje krijgt, zegt hoe.
+  const hoe = isKoppel
+      ? 'Kies je repo op GitHub en klik op Install. Dan krijgt deze stap vanzelf een vinkje.'
+      : step.kind === 'form'
+        ? 'Klik op Zet in je repo. Dan krijgt deze stap vanzelf een vinkje.'
+        : 'Staat je wijziging op GitHub, dan krijgt deze stap vanzelf een vinkje.';
 
   const links = (() => {
+    if (straks && eerst)
+      return (
+        <div className="bl-paneel-echt bl-stap-slot">
+          <span className="bl-stap-slot-rond" aria-hidden="true">
+            🔒
+          </span>
+          <p>
+            Eerst stap {eerst.nummer} van dit level: {kleineLetter(eerst.step.title)}.
+          </p>
+          <button type="button" className="bl-vknop o" onClick={onNaarEerst}>
+            Naar stap {eerst.nummer}
+          </button>
+        </div>
+      );
     if (step.id === 'l0-koppelen') return <Koppelen af={af} onKlaar={onKlaar} />;
     if (step.kind === 'form')
       return (
@@ -182,22 +192,8 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
   })();
 
   return (
-    <dialog
-      ref={dialog}
-      className={`bl-open${licht ? ' licht' : ''}`}
-      aria-labelledby="bl-venster-titel"
-      onClose={onSluit}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) dialog.current?.close();
-      }}
-    >
-      <div className="bl-vel" ref={vel}>
-        <button type="button" className="bl-sluit" aria-label="Sluiten" onClick={() => dialog.current?.close()}>
-          ×
-        </button>
-        <div className="bl-groot" ref={groot}>
-          {links}
-        </div>
+    <div className="bl-licht bl-stapblad" id="bl-stapblad">
+      <div className="bl-vel">
         <div className="bl-uitleg">
           <div className="bl-eyebrow">
             <span>{nummer ? `Stap ${nummer} van ${totaal}` : 'Optioneel'}</span>
@@ -207,13 +203,35 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
               </span>
             ))}
           </div>
-          <h3 id="bl-venster-titel" ref={titel} tabIndex={-1}>
+          <h3 id="bl-stapblad-titel" ref={titelRef} tabIndex={-1}>
             {step.title}
           </h3>
+          {KORT[step.id] && <p className="bl-stap-kort">{KORT[step.id]}</p>}
+          {af ? (
+            <p className="bl-hoe af">
+              <span className="bol" aria-hidden="true">
+                ✓
+              </span>
+              Klaar
+            </p>
+          ) : (
+            !step.optional &&
+            !handmatig && (
+              <p className="bl-hoe">
+                <span className="bol" aria-hidden="true" />
+                {hoe}
+              </p>
+            )
+          )}
           {hint && <blockquote className="stap-hint">{hint}</blockquote>}
-          {content && <Markdown text={filterVariants(content, setup)} />}
+          {!straks && step.aiPrompt && <KopieerBlok prompt={step.aiPrompt} />}
+          {content && (
+            <details className="bl-zo">
+              <summary>Zo doe je het</summary>
+              <Markdown text={filterVariants(content, setup)} />
+            </details>
+          )}
           {step.popup && <InfoPopup levelId={level.id} popup={step.popup} />}
-          {step.aiPrompt && <KopieerBlok prompt={step.aiPrompt} />}
           {checks.length > 0 && (
             <ul className="bl-checks" aria-label="Checks op je repo">
               {checks.map((c) => (
@@ -227,7 +245,7 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
             </ul>
           )}
           {/* Na afronden geen demoknop meer, behalve bij de interviewvakken: daar zet hij er telkens één bij. */}
-          {demo?.soort === 'simulatie' && (!af || step.kind === 'voortgang') && (
+          {!straks && demo?.soort === 'simulatie' && (!af || step.kind === 'voortgang') && (
             <div className="bl-demo-stap">
               <button type="button" className="bl-knop-demo" onClick={onDemo}>
                 Vul met demo content
@@ -235,33 +253,16 @@ export function StapVenster({ level, step, nummer, totaal, status, snapshot, eva
               <span>Demo: {demo.label}</span>
             </div>
           )}
-          <div className="bl-acties">
-            {nummer !== undefined && nummer > 1 && (
-              <button type="button" className="bl-vknop o" onClick={onVorige}>
-                Vorige
-              </button>
-            )}
-            {step.optional ? (
-              <button type="button" className="bl-vknop p" onClick={() => dialog.current?.close()}>
-                Sluiten
-              </button>
-            ) : handmatig && !af ? (
-              <button type="button" className="bl-vknop p" onClick={onKlaar}>
-                {KLAAR_TEKST[step.id] ?? 'Klaar, volgende stap'}
-              </button>
-            ) : (
-              <button type="button" className="bl-vknop p" disabled={!af} aria-describedby={af ? undefined : 'bl-waarom-niet'} onClick={onVolgende}>
-                {af && laatste ? 'Klaar met dit level' : 'Volgende stap'}
-              </button>
-            )}
-          </div>
-          {!af && !handmatig && !step.optional && (
-            <p className="bl-hint" id="bl-waarom-niet">
-              {isKoppel ? 'Kies je repo op GitHub en klik op Install. Dan krijgt deze stap vanzelf een vinkje.' : 'Staat je wijziging op GitHub, dan krijgt deze stap vanzelf een vinkje.'}
-            </p>
+        </div>
+        <div className="bl-groot">
+          {links}
+          {handmatig && !af && !straks && (
+            <button type="button" className="bl-vknop p" onClick={onKlaar}>
+              {KLAAR_TEKST[step.id] ?? 'Klaar, volgende stap'}
+            </button>
           )}
         </div>
       </div>
-    </dialog>
+    </div>
   );
 }
