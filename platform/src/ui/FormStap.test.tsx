@@ -12,13 +12,11 @@ const render = (step: FormStep) =>
   renderToStaticMarkup(<FormStap step={step} snapshot={{ files: starterFiles, mergedPullRequests: 0 }} alreadyDone={false} onSave={async () => true} />);
 
 describe('FormStap', () => {
-  it('zegt bij een uitgeschakelde knop welk veld nog leeg is', () => {
+  it('lege tekstvelden zie je zelf: de knop staat uit, zonder regel erbij', () => {
     const html = render(formStep(level1, 'l1-idee'));
-    const id = html.match(/<button[^>]*disabled=""[^>]*aria-describedby="([^"]+)"|<button[^>]*aria-describedby="([^"]+)"[^>]*disabled=""/);
-    const hintId = id?.[1] ?? id?.[2];
-    expect(hintId).toBeTruthy();
-    expect(html).toContain(`id="${hintId}"`);
-    expect(html).toContain('Nog leeg: Wat ga je doen? en nog 2 velden');
+    expect(html).toMatch(/<button type="submit"[^>]*disabled=""/);
+    expect(html).not.toContain('Nog leeg');
+    expect(html).not.toContain('aria-describedby');
   });
 
   it('toont geen hint als er niets in te vullen is', () => {
@@ -39,6 +37,7 @@ describe('FormStap met keuzes uit de repo en demo-content', () => {
 
   it('zonder mensen in feedback/ kan het formulier niet worden opgeslagen', () => {
     const html = render(voorstel);
+    // Een keuzelijst zonder keuzes zie je niet; daar zegt de regel waarom de knop niet werkt.
     expect(html).toContain('Nog leeg: Met wie sprak je?');
     expect(html).toMatch(/<button type="submit"[^>]*disabled=""/);
   });
