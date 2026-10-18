@@ -28,3 +28,15 @@ Bron: `docs/superpowers/specs/2026-10-16-levels-1-6-opzet.md`, besloten met Harm
 ## Wat de checks niet meten
 
 De checks zien of iets er staat, niet of het goed is. Een ingevulde analyse kan een zwakke analyse zijn, en `gevonden: ja` vult de deelnemer zelf in. Daarvoor kijkt de trainer mee. De trainer hoeft niets goed te keuren om een level te openen, maar kan elk bestand in de repo lezen en erop reageren.
+
+## Wat de pilot wel en niet doet
+
+Besloten met Harmen van Heist op 18 oktober 2026. Bron: `docs/superpowers/specs/2026-10-18-github-koppeling-design.md`.
+
+| In de pilot | Later |
+|---|---|
+| Inloggen met GitHub en je repo koppelen | Trainersoverzicht |
+| Formulieren schrijven in je repo, op jouw naam | Eigen werkbladen voor level 3 tot en met 6 |
+| Checks op je echte repo | Live bijwerken. In de pilot haalt het platform je repo op als je terugkomt in het tabblad. |
+| De echte geschiedenis in "Jouw repo" | Teams op één repo |
+| De demo op een eigen adres (`/demo`) | |
