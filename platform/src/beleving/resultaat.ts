@@ -23,6 +23,12 @@ const BESTAND: Record<string, { pad: string | ((s: RepoSnapshot) => string | und
   'l6-impact': { pad: 'level-6-lancering/impact.md' },
 };
 
+/** Het bestand waar je AI bij deze stap het resultaat in zet, als dat vastligt. */
+export function aiBestand(stepId: string, s: RepoSnapshot): string | undefined {
+  const b = BESTAND[stepId];
+  return typeof b?.pad === 'function' ? b.pad(s) : b?.pad;
+}
+
 /** De eerste regels van wat je AI bij deze stap in je repo zette, of null zolang het er niet (ingevuld) staat. */
 export function aiResultaat(stepId: string, s: RepoSnapshot, regels = 14): { pad: string; regels: string[] } | null {
   const b = BESTAND[stepId];

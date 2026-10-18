@@ -8,7 +8,8 @@ import { TweePlekken } from './TweePlekken';
  * Knop met een pop-up voor extra uitleg. Gebruikt <dialog>: Esc sluit hem, de focus blijft erin
  * zolang hij open is, en gaat daarna terug naar de knop.
  */
-export function InfoPopup({ levelId, popup }: { levelId: number; popup: StepPopup }) {
+/** link: een kleine link op een werkblad in plaats van een knop. */
+export function InfoPopup({ levelId, popup, link = false }: { levelId: number; popup: StepPopup; link?: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -18,7 +19,7 @@ export function InfoPopup({ levelId, popup }: { levelId: number; popup: StepPopu
       <button
         ref={trigger}
         type="button"
-        className="btn-o btn-klein mt-4"
+        className={link ? 'bl-uitleglink' : 'btn-o btn-klein mt-4'}
         aria-haspopup="dialog"
         aria-controls={id}
         onClick={() => {

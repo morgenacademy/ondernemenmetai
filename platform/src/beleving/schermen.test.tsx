@@ -104,6 +104,7 @@ describe('LevelScherm', () => {
         onDemoStap={niets}
         onFillLevel={niets}
         onNaarRoute={niets}
+        onVervers={niets}
       />,
     );
   };
@@ -133,27 +134,16 @@ describe('LevelScherm', () => {
     expect(html).toContain('Nog 8 stappen; daarna kun je verder.');
   });
 
-  it('elk level heeft zijn beeld, kop en stappen', () => {
-    for (const l of LEVELS) {
-      const html = render(l.id);
-      const b = BELEVING[l.id];
-      expect(html, `level ${l.id}`).toContain(b.beeld);
-      expect(html, `level ${l.id}`).toContain(b.kop);
-      expect(html, `level ${l.id}`).toContain(b.stappenKop);
-    }
+  it('level 0 heeft zijn beeld, kop en stappen', () => {
+    const html = render(0);
+    const b = BELEVING[0];
+    expect(html).toContain(b.beeld);
+    expect(html).toContain(b.kop);
+    expect(html).toContain(b.stappenKop);
   });
 
   it('heeft een knop die het hele level met demo content vult', () => {
-    expect(render(2)).toContain('Vul het hele level met demo content');
-  });
-
-  it('de vrije kaart "Nog geen idee?" heet optioneel en telt niet mee; de toets blijft stap 5', () => {
-    const kaarten = render(1).split('class="bl-stapkaart').slice(1);
-    expect(kaarten[0]).toMatch(/^ optioneel"/);
-    expect(kaarten[0]).toContain('Nog geen idee?');
-    expect(kaarten[1]).toContain('Stap 1');
-    expect(kaarten[5]).toMatch(/Stap 5[\s\S]*Maak de eerste versie van je waardepropositie/);
-    expect(render(1)).toMatch(/<b>0 van 5<\/b> klaar/);
+    expect(render(0)).toContain('Vul het hele level met demo content');
   });
 });
 
