@@ -4,7 +4,7 @@ Ondernemen met AI ziet aan de bestanden in je repo welke stappen af zijn, en zet
 
 ### Je ziet niet terug wat je AI deed
 
-Herschrijft de AI je analyse slecht, dan wil je terug kunnen. Git bewaart elke versie, met wie en waarom. Drive heeft wel versies per bestand, maar niet per wijziging aan het hele project.
+Herschrijft je AI je analyse slecht, dan wil je terug kunnen. Git bewaart elke versie, met wie en waarom. Drive heeft wel versies per bestand, maar niet per wijziging aan het hele project.
 
 ### Je kunt niet eerst nakijken
 

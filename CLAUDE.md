@@ -8,6 +8,7 @@ Ontwerp fase 1 (klikbare demo): `docs/superpowers/specs/2026-10-15-klikbare-demo
 
 - `context/` is lokale input (staat in `.gitignore`, gaat nooit naar git). Wat we bouwen staat buiten die map.
 - Repo is `morgenacademy/ondernemenmetai`: werk via feature-branch + pull request, niet direct op main.
+- Alles wat een deelnemer leest (schermen, stapteksten, starter-repo, skills) volgt `docs/schrijfstijl.md`: na het lezen weet je wat je hebt, wat je nu moet doen en wat er daarna gebeurt.
 
 ## Bestaande input
 
