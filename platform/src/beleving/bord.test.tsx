@@ -64,8 +64,8 @@ describe('het speelbord van level 1 tot en met 6', () => {
     }
   });
 
-  it('level 0 houdt zijn stapkaarten', () => {
-    expect(render(0)).toContain('bl-stapkaart');
+  it('level 0 heeft zijn eigen bord: rondjes op een pad, geen werkbladen van level 1 tot en met 6', () => {
+    expect(render(0)).toContain('class="bl-pad"');
     expect(render(0)).not.toContain('class="bl-werkblad');
   });
 

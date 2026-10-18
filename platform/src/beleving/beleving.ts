@@ -29,13 +29,12 @@ export type LevelBeleving = {
   kop: string;
   zin: string;
   scenes: Scene[];
-  stappenKop: string;
   /** Waar de knop op de routekaart mee begint of verdergaat: "Begin met je werkplek", "Ga verder met je werkplek". */
   knop: string;
   slot: { af: string; heb: Heb[] };
   /** Het volgende level, zoals het op het slotscherm van dit level staat. Ontbreekt na level 6. */
   volgende?: { kop: string; zin: string; knop: string };
-  /** Bovenaan het speelbord van level 1 tot en met 6: één vraag en één zin. Level 0 heeft stapkaarten. */
+  /** Bovenaan het speelbord: één vraag (bij level 0 een opdracht) en één zin. */
   bord?: { vraag: string; zin: string };
 };
 
@@ -51,8 +50,8 @@ export const BELEVING: Record<number, LevelBeleving> = {
       { soort: 'beeld', beeld: b('samen.webp'), label: 'Nu', kop: 'Je AI kijkt mee.', zin: 'Dan moet alles wat je verzamelt op één plek staan,', accent: 'waar je AI bij kan.' },
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Die plek heet een repo.', zin: 'Eén map voor je onderneming. Online bewaard en alleen voor jou. Je AI leest erin en werkt erin mee, als een assistent die bij je werk kan.', woord: 'repo', uitleg: 'kort voor repository, Engels voor bewaarplaats', beeld: 'repo' },
     ],
-    stappenKop: 'Zo richt je je werkplek in.',
     knop: 'je werkplek',
+    bord: { vraag: 'Richt je werkplek in.', zin: 'Acht stappen. Na je eerste push is level 0 af.' },
     slot: {
       af: 'Je basiskamp staat.',
       heb: [
@@ -73,7 +72,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     scenes: [
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je AI haalt je antwoorden op.', zin: 'Wat je hier invult, komt op GitHub. Je AI werkt op je computer en haalt het op aan het begin van elke sessie.', woord: 'pull', uitleg: 'ophalen: van GitHub naar je computer', beeld: 'twee-plekken' },
     ],
-    stappenKop: 'Zo zet je je idee neer.',
     knop: 'je idee',
     slot: {
       af: 'Je idee staat.',
@@ -95,7 +93,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     scenes: [
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je AI stelt voor, jij beslist.', zin: 'Je interviews en je analyse komen direct in je repo. Je canvas is van jou: daar doet je AI een voorstel, en jij kijkt het na voordat het meetelt.', woord: 'pull request', uitleg: 'een voorstel tot wijziging, dat je eerst nakijkt', beeld: 'twee-plekken' },
     ],
-    stappenKop: 'Zo vind je je eerste doelgroep.',
     knop: 'probleem-validatie',
     slot: {
       af: 'Je eerste doelgroep staat.',
@@ -116,7 +113,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     scenes: [
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je repo onthoudt elke versie.', zin: 'Je madlib en je canvas hebben nu drie versies: je eerste idee, na je interviews, en voor je oplossing. In GitHub Desktop zie je wat er veranderde, en je kunt terug.', woord: 'geschiedenis', uitleg: 'elke commit is een versie waar je naar terug kunt', beeld: 'versies' },
     ],
-    stappenKop: 'Zo maak je je MVP.',
     knop: 'je prototype',
     slot: {
       af: 'Je MVP staat.',
@@ -138,7 +134,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     scenes: [
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je repo is het geheugen van je AI.', zin: 'Je AI weet nog wat 01-apotheker in level 2 vertelde. Dat onthoudt hij niet zelf: het staat in je repo, en hij leest het.', woord: 'geheugen', uitleg: 'alles wat je vastlegt, kan je AI later gebruiken', beeld: 'geheugen' },
     ],
-    stappenKop: 'Zo haal je je feedback op.',
     knop: 'je feedback',
     slot: {
       af: 'Je eerste ronde staat.',
@@ -160,7 +155,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     scenes: [
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je AI leest eerst AGENTS.md.', zin: 'Elke sessie begint je AI daar. Nu je product staat, schrijf je er zelf bij wie je klanten zijn, wat je verkoopt en voor welke prijs.', woord: 'AGENTS.md', uitleg: 'het bestand waar elke sessie van je AI mee begint', beeld: 'agents' },
     ],
-    stappenKop: 'Zo kom je tot je product.',
     knop: 'je product',
     slot: {
       af: 'Je gaat ervoor.',
@@ -182,7 +176,6 @@ export const BELEVING: Record<number, LevelBeleving> = {
     scenes: [
       { soort: 'begrip', label: 'Nieuw woord', kop: 'Je schrijft je eigen skill.', zin: 'Je AI gebruikte de hele route skills van Morgen. Nu schrijf je er zelf een: de stappen waarmee jij verkoopt, zodat je AI elk volgend gesprek op jouw manier voorbereidt.', woord: 'skill', uitleg: 'vaste stappen die je AI elke keer volgt', beeld: 'skill' },
     ],
-    stappenKop: 'Zo maak je verkopen herhaalbaar.',
     knop: 'je lancering',
     slot: {
       af: 'Proof of Concept.',

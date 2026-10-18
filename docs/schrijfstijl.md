@@ -19,6 +19,7 @@ Al het andere is bijzaak. Wil een tekst ook nog uitleggen waarom, wat er later k
 - **Elke stap zegt wat er daarna gebeurt.** "Dan krijgt deze stap vanzelf een vinkje." Sluit af als er niets meer te doen is: "Je hoeft niets meer te doen."
 - **Elk woord wijst ergens naar.** "Dit", "het", "zo", "verder" en "daar" alleen als in dezelfde zin staat waar het naar verwijst.
 - **Zeg wanneer.** Schrijf niet "straks" of "later", maar het level of de stap: "In level 2 zet je hier de interviews in die je met je doelgroep houdt."
+- **Op slot? Zeg wat je eerst doet.** Een slot noemt de stap die eerst moet, met nummer en wat je daarin doet, en de knop gaat erheen. Niet "Eerst Repo", maar "Eerst stap 2 van dit level: maak je repo." met de knop **Naar stap 2**.
 - **Een stapnummer hoort bij een level.** "Stap 4 van dit level", "stap 2 van level 3". Level en stap lopen anders door elkaar.
 - **Noem knoppen zoals ze heten, en zeg wat ze doen.** "Klik in GitHub Desktop op **Push origin**, of vraag je AI om te pushen. Zo zet je je werk op GitHub."
 - **Laat het je AI doen als dat kan.** Waarom iemand op een knop laten drukken als hun AI het ook kan? Zolang het bewust gebeurt: de deelnemer vraagt erom of keurt het goed.
@@ -45,6 +46,7 @@ Vakwoorden (repo, pull, push, branch, pull request) leg je één keer uit, op de
 | Waardeer je ideeën en kies er één. Je AI vult aan. | Je AI vult je ideeën aan met varianten. Jij geeft ze een score en kiest er één, met waarom. |
 | Je AI bouwt wat digitaal kan. Jij regelt de rest. | Je AI bouwt wat digitaal kan. Jij regelt wat fysiek is, zoals een proefrit. |
 | Straks komen er interviews met echte mensen in. | In level 2 zet je hier de interviews in die je met je doelgroep houdt. |
+| 🔒 Eerst Repo | 🔒 Eerst stap 2 van dit level: maak je repo. |
 
 Het goede patroon staat in "Zo vul je een vak" (`platform/src/beleving/GesprekkenWerkblad.tsx`): zes stappen, elk met wie · waar, wat je doet en wat er dan gebeurt, tot "Je hoeft niets meer te doen."
 
