@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speelborden per level</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Barlow', -apple-system, system-ui, sans-serif; background: #0c0818; color: #f4f1fa; -webkit-font-smoothing: antialiased; }
+  .uitleg-top { color: #a59fb8; font-size: 15px; padding: 22px 4vw 0; max-width: 1240px; margin: 0 auto; }
+  .uitleg-top b { color: #fff; font-weight: 600; }
+
+  .tabs { position: sticky; top: 0; z-index: 5; display: flex; gap: 8px; flex-wrap: wrap; max-width: 1240px; margin: 0 auto; padding: 14px 4vw; background: rgba(12,8,24,.85); backdrop-filter: blur(10px); }
+  .tabs button { font: inherit; font-size: 14px; font-weight: 600; color: #d9d3e8; background: rgba(255,255,255,.06); border: 0; border-radius: 999px; padding: 8px 14px; cursor: pointer; }
+  .tabs button:hover { background: #D8FE56; color: #0c0818; }
+
+  .level { max-width: 1240px; margin: 0 auto 70px; padding: 0 4vw; scroll-margin-top: 70px; }
+  .doek { background: #14102a; border-radius: 28px; overflow: hidden; }
+  .held { min-height: 270px; display: flex; align-items: flex-end; padding: 0 44px 32px; background-size: cover; background-position: center 40%; }
+  .label { color: #D8FE56; font-weight: 600; letter-spacing: .14em; font-size: 12px; text-transform: uppercase; }
+  h1 { font-size: 46px; font-weight: 700; letter-spacing: -.01em; line-height: 1.05; margin: 8px 0; }
+  .zin { font-size: 19px; margin: 0; color: #d9d3e8; }
+  .inhoud { padding: 30px 44px 44px; }
+
+  .klaar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+  .chip { display: flex; gap: 8px; align-items: center; border-radius: 999px; padding: 7px 14px 7px 8px; font-size: 14px; background: rgba(255,255,255,.06); color: #d9d3e8; }
+  .chip .v { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; background: #D8FE56; color: #14102a; }
+  .chip.optie { background: transparent; box-shadow: inset 0 0 0 1px rgba(255,255,255,.18); }
+  .chip.optie .v { background: transparent; color: #D8FE56; box-shadow: inset 0 0 0 1px #D8FE56; }
+
+  /* Actief werkblad: licht. */
+  .werkblad { background: #f5f5f7; color: #1d1d1f; border-radius: 22px; padding: 26px 26px 28px; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+  .kop { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; gap: 16px; }
+  .kop h3 { font-size: 26px; font-weight: 600; margin: 0; }
+  .teller { font-size: 16px; color: #86868b; } .teller b { font-size: 24px; font-weight: 600; color: #1d1d1f; }
+  .balk { height: 4px; border-radius: 99px; background: #e5e5ea; overflow: hidden; margin-bottom: 20px; } .balk i { display: block; height: 100%; background: #5B2D8E; border-radius: 99px; }
+  .knop { border: 0; background: #5B2D8E; color: #fff; font: inherit; font-weight: 600; border-radius: 10px; padding: 10px 16px; cursor: pointer; }
+  .knop.zacht { background: #fff; color: #5B2D8E; box-shadow: inset 0 0 0 1.5px rgba(91,45,142,.4); }
+  .hint { color: #6e6e73; font-size: 14px; }
+  .kaart { background: #fff; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.05); }
+  .leegvak { border-radius: 16px; box-shadow: inset 0 0 0 1.5px #d2d2d7; color: #aeaeb2; display: grid; place-items: center; text-align: center; }
+  .leegvak.volgende { box-shadow: inset 0 0 0 1.5px rgba(91,45,142,.45); color: #5B2D8E; background: rgba(91,45,142,.03); cursor: pointer; }
+  .plus { width: 36px; height: 36px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px currentColor; display: grid; place-items: center; font-size: 20px; margin: 0 auto 8px; }
+
+  /* Gesloten werkbladen: grijs, op slot. */
+  .straks { margin-top: 18px; display: grid; gap: 18px; }
+  .later { position: relative; border-radius: 22px; padding: 24px 26px 26px; overflow: hidden; background: #3a3550; min-height: 150px; }
+  .later > * { filter: grayscale(1); opacity: .35; }
+  .later > .slot { filter: none; opacity: 1; }
+  .later h3 { margin: 0 0 14px; font-size: 24px; font-weight: 600; color: #fff; }
+  .slot { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px; background: rgba(20,16,42,.35); }
+  .slot span { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); display: grid; place-items: center; font-size: 21px; }
+  .slot small { font-size: 13px; font-weight: 600; color: #d9d3e8; }
+  .lijn { height: 10px; border-radius: 99px; background: #cfc9dc; margin: 10px 0; }
+  .vorm { border: 2px solid #cfc9dc; border-radius: 12px; }
+
+  /* Level 1: de zin. */
+  .madlib { font-size: 26px; line-height: 2.1; font-weight: 500; color: #1d1d1f; }
+  .madlib .gat { display: inline-block; min-width: 150px; padding: 0 8px; border-bottom: 2px solid #5B2D8E; color: #5B2D8E; font-weight: 600; line-height: 1.3; }
+  .madlib .gat.leeg { color: #aeaeb2; border-bottom-style: dashed; border-bottom-color: #aeaeb2; font-weight: 400; }
+  .madlib .gat.nu { color: #aeaeb2; border-bottom: 2px solid #5B2D8E; background: rgba(91,45,142,.06); border-radius: 6px 6px 0 0; font-weight: 400; }
+  .madlib-voet { margin-top: 22px; display: flex; gap: 14px; align-items: center; }
+
+  /* Level 3: plakbriefjes. */
+  .briefjes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .briefje { min-height: 110px; padding: 14px; font-size: 15px; line-height: 1.35; border-radius: 14px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 20px rgba(0,0,0,.05); transform: rotate(var(--r, 0deg)); }
+  .briefje small { display: block; color: #86868b; font-size: 12px; margin-bottom: 6px; }
+  .briefjes .leegvak { min-height: 110px; }
+
+  /* Level 4: je mensen. */
+  .mensen { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .mens { padding: 16px; min-height: 170px; display: flex; flex-direction: column; }
+  .mens .wie { font-weight: 600; font-size: 16px; } .mens .uit { color: #86868b; font-size: 13px; }
+  .mens .ant { margin-top: auto; align-self: flex-start; font-size: 13px; font-weight: 600; border-radius: 99px; padding: 4px 10px; }
+  .ant.ja { background: #e8f5e3; color: #2f7d32; } .ant.nee { background: #fbe9e7; color: #b23a2a; } .ant.mis { background: #f0f0f3; color: #6e6e73; }
+  .mens .waarom { font-size: 14px; color: #3a3a3c; margin: 12px 0; line-height: 1.4; }
+  .mensen .leegvak { min-height: 170px; }
+  .drempel { margin-top: 16px; font-size: 14px; color: #6e6e73; } .drempel b { color: #1d1d1f; }
+
+  /* Level 5: rondes. */
+  .rondes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .ronde { padding: 18px; } .ronde .nr { font-size: 12px; font-weight: 600; letter-spacing: .1em; color: #5B2D8E; }
+  .ronde b { display: block; font-size: 17px; font-weight: 600; margin: 6px 0; }
+  .ronde .score { font-size: 30px; font-weight: 600; } .ronde .score small { font-size: 15px; color: #86868b; font-weight: 500; }
+  .ronde p { margin: 6px 0 0; font-size: 14px; color: #6e6e73; }
+  .rondes .leegvak { min-height: 170px; }
+
+  /* Level 6: pijplijn. */
+  .pijplijn { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .kolom { background: #ebebef; border-radius: 16px; padding: 12px; min-height: 220px; }
+  .kolom h4 { margin: 0 0 10px; font-size: 13px; font-weight: 600; color: #6e6e73; display: flex; justify-content: space-between; }
+  .klantkaart { padding: 12px; margin-bottom: 10px; font-size: 14px; } .klantkaart b { display: block; font-weight: 600; } .klantkaart span { color: #86868b; font-size: 13px; }
+  .kolom .leegvak { min-height: 60px; font-size: 13px; }
+  .totaal { margin-top: 14px; font-size: 15px; color: #6e6e73; } .totaal b { color: #1d1d1f; font-size: 18px; }
+
+  .vakken { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .vak { position: relative; border-radius: 18px; padding: 18px 18px 20px; min-height: 210px; display: flex; flex-direction: column; transition: transform .2s; }
+  .vak .nr { font-size: 13px; font-weight: 500; letter-spacing: .04em; }
+  .vak .vink { position: absolute; top: 16px; right: 16px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+  .vak .wie { font-weight: 600; font-size: 17px; margin: 18px 0 3px; line-height: 1.2; }
+  .vak .wanneer { font-size: 13px; }
+  .vak .citaat { margin-top: auto; padding-top: 18px; font-size: 15px; line-height: 1.45; font-weight: 400; }
+  .vak .netbinnen { position: absolute; top: -10px; left: 16px; font-weight: 600; font-size: 11px; letter-spacing: .08em; border-radius: 99px; padding: 3px 9px; }
+  .vak.leeg { align-items: center; justify-content: center; text-align: center; }
+  .vak.leeg .nr { position: absolute; top: 18px; left: 18px; }
+  .vak.leeg .plus { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; font-weight: 400; margin-bottom: 10px; }
+  .vak.leeg .wat { font-size: 14px; }
+  .vak.leeg.volgende .wat { font-weight: 600; }
+  #l2 .werkblad .vak.vol { background: #fff; backdrop-filter: none; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.05); }
+  #l2 .werkblad .vak.vol .nr { color: #86868b; } #l2 .werkblad .vak .vink { background: #5B2D8E; color: #fff; }
+  #l2 .werkblad .vak .wanneer { color: #86868b; } #l2 .werkblad .vak .citaat { color: #3a3a3c; }
+  #l2 .werkblad .vak.net { box-shadow: 0 0 0 2px #5B2D8E, 0 10px 30px rgba(91,45,142,.18); }
+  #l2 .werkblad .vak .netbinnen { background: #5B2D8E; color: #fff; }
+  #l2 .werkblad .vak.leeg { background: transparent; box-shadow: inset 0 0 0 1.5px #d2d2d7; color: #aeaeb2; }
+  #l2 .werkblad .vak.leeg .nr { color: #c7c7cc; } #l2 .werkblad .vak.leeg .plus { box-shadow: inset 0 0 0 1.5px #d2d2d7; color: #aeaeb2; }
+  #l2 .werkblad .vak.leeg.volgende { box-shadow: inset 0 0 0 1.5px rgba(91,45,142,.45); background: rgba(91,45,142,.03); color: #5B2D8E; }
+  #l2 .werkblad .vak.leeg.volgende .plus { box-shadow: inset 0 0 0 1.5px #5B2D8E; color: #5B2D8E; }
+
+  button.vak { font: inherit; text-align: center; border: 0; cursor: pointer; }
+  #l2 .werkblad button.vak.leeg:hover { background: rgba(91,45,142,.06); }
+  #l2 .werkblad button.vak.leeg:hover .plus { transform: scale(1.08); }
+  #l2 .werkblad button.vak.leeg.open { box-shadow: inset 0 0 0 2px #5B2D8E; background: rgba(91,45,142,.06); }
+  #l2 .werkblad button.vak.leeg:focus-visible { outline: 2px solid #5B2D8E; outline-offset: 3px; }
+  .vak .plus { transition: transform .15s; }
+  .vul { margin-top: 18px; background: #fff; border-radius: 18px; padding: 22px 24px 24px; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.06); animation: open .25s ease-out; }
+  @keyframes open { from { opacity: 0; transform: translateY(-6px); } }
+  @media (prefers-reduced-motion: reduce) { .vul { animation: none; } }
+  .vul-kop { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .vul-nr { font-size: 12px; font-weight: 600; letter-spacing: .12em; color: #5B2D8E; }
+  .vul h4 { margin: 4px 0 0; font-size: 21px; font-weight: 600; }
+  .sluit { border: 0; background: #f0f0f3; width: 30px; height: 30px; border-radius: 50%; font-size: 18px; cursor: pointer; color: #1d1d1f; }
+  .vul-stappen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .vul-stappen li { display: flex; gap: 12px; }
+  .vul-stappen .n { flex: none; width: 26px; height: 26px; border-radius: 50%; background: #5B2D8E; color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 600; }
+  .vul-stappen .waar { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #5B2D8E; }
+  .vul-stappen b { display: block; font-size: 15px; font-weight: 600; margin: 3px 0 4px; color: #1d1d1f; }
+  .vul-stappen p { margin: 0; font-size: 14px; line-height: 1.45; color: #6e6e73; }
+  .vul-stappen code { background: #f0f0f3; border-radius: 5px; padding: 1px 5px; font-size: 13px; }
+  .vul-stappen a { color: #5B2D8E; font-weight: 600; }
+  .vul-kopieer { margin-top: 6px; display: flex; gap: 8px; align-items: center; background: #f5f5f7; border-radius: 10px; padding: 6px 6px 6px 10px; font-size: 13px; color: #1d1d1f; }
+  .vul-kopieer span { flex: 1; } .vul-kopieer button { border: 0; background: #5B2D8E; color: #fff; font: inherit; font-weight: 600; font-size: 12px; border-radius: 8px; padding: 5px 9px; }
+  .vul-ander { margin-top: 20px; border-top: 1px solid #ececf0; padding-top: 14px; color: #1d1d1f; }
+  .vul-ander summary { cursor: pointer; font-weight: 600; font-size: 15px; color: #5B2D8E; }
+  .vul-ander label { display: block; margin-top: 12px; font-size: 13px; color: #3a3a3c; font-weight: 500; }
+  .vul-ander input, .vul-ander textarea { display: block; width: 100%; margin-top: 5px; font: inherit; font-size: 15px; border: 1px solid #d2d2d7; border-radius: 10px; padding: 9px 12px; color: #1d1d1f; background: #fff; }
+  .vul-ander .zet { margin-top: 12px; border: 0; background: #5B2D8E; color: #fff; font: inherit; font-weight: 600; border-radius: 10px; padding: 9px 16px; }
+  @media (max-width: 900px) { .vul-stappen { grid-template-columns: 1fr; } }
+  .iframe { width: 100%; height: 1450px; border: 0; border-radius: 28px; }
+  @media (max-width: 900px) { #l2 .vakken { grid-template-columns: repeat(2, 1fr); } .briefjes, .mensen, .pijplijn { grid-template-columns: repeat(2, 1fr); } .rondes { grid-template-columns: 1fr; } .held, .inhoud { padding-left: 22px; padding-right: 22px; } h1 { font-size: 34px; } .madlib { font-size: 20px; } }
+</style>
+</head>
+<body>
+<p class="uitleg-top"><b>Een speelbord per level, achter elkaar.</b> Wat af is staat bovenaan als vinkje. Het werkblad waar je nu bent is licht. De werkbladen die nog komen liggen eronder, grijs en op slot. Elk werkblad heeft de vorm die bij het level past. Schets van 18 oktober.</p>
+
+<nav class="tabs" aria-label="Naar een level">
+  <button type="button" data-l="1">1 · Idee</button>
+  <button type="button" data-l="2">2 · Probleem-validatie</button>
+  <button type="button" data-l="3">3 · Prototype</button>
+  <button type="button" data-l="4">4 · Markt feedback</button>
+  <button type="button" data-l="5">5 · Product-validatie</button>
+  <button type="button" data-l="6">6 · Lancering</button>
+</nav>
+
+<!-- ============ 1 ============ -->
+<section class="level" id="l1">
+  <div class="doek">
+    <div class="held" style="background-image: linear-gradient(0deg, #14102a 2%, rgba(20,16,42,.25) 55%, rgba(20,16,42,.55)), url('../../../../platform/public/beelden/idee.webp')"><div><div class="label">Level 1 · Idee</div><h1>Wat is je idee?</h1><p class="zin">Zet je idee neer, en zie wat je daarbij aanneemt.</p></div></div>
+    <div class="inhoud">
+      <div class="klaar">
+        <div class="chip"><span class="v">✓</span>Je idee: spoedbezorging per bakfiets</div>
+        <div class="chip"><span class="v">✓</span>Je visie</div>
+        <div class="chip optie"><span class="v">?</span>Nog geen idee? Laat je AI er tien bedenken</div>
+      </div>
+      <div class="werkblad">
+        <div class="kop"><h3>Je idee in één zin</h3><div class="teller"><b>4</b> van 5</div></div>
+        <div class="balk"><i style="width:80%"></i></div>
+        <p class="madlib">Mijn bedrijf, <span class="gat">Trapzorg</span>, biedt <span class="gat">spoedbezorging per bakfiets</span> voor <span class="gat">apotheken in Utrecht</span> die <span class="gat">spoedrecepten niet op tijd bij de patiënt krijgen</span> met <span class="gat nu">wat maakt jou anders?</span>.</p>
+        <div class="madlib-voet"><button class="knop" type="button">Zet in je repo</button><span class="hint">Je kunt hem later nog aanpassen; je repo onthoudt elke versie.</span></div>
+      </div>
+      <div class="straks">
+        <div class="later"><h3>Je aannames</h3><div class="lijn" style="width:80%"></div><div class="lijn" style="width:62%"></div><div class="lijn" style="width:70%"></div><div class="slot"><span>🔒</span><small>eerst je zin</small></div></div>
+        <div class="later"><h3>Je waardepropositie</h3><div style="display:flex;gap:30px;justify-content:center"><div class="vorm" style="width:120px;height:120px"></div><div class="vorm" style="width:120px;height:120px;border-radius:50%"></div></div><div class="slot"><span>🔒</span><small>eerst je aannames</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section class="level" id="l2">
+  <div class="doek">
+    <div class="held" style="background-image: linear-gradient(0deg, #14102a 2%, rgba(20,16,42,.25) 55%, rgba(20,16,42,.55)), url('../../../../platform/public/beelden/markt.webp')"><div><div class="label">Level 2 · Probleem-validatie</div><h1>Hebben ze dit probleem?</h1><p class="zin">Praat met je doelgroep. Elk gesprek vult een vak.</p></div></div>
+    <div class="inhoud">
+      <div class="klaar">
+        <div class="chip"><span class="v">✓</span>Apotheken in Utrecht · bedrijven, dus 5 gesprekken</div>
+        <div class="chip"><span class="v">✓</span>Interviewvragen</div>
+      </div>
+      <div class="werkblad">
+        <div class="kop"><h3>Je gesprekken</h3><div class="teller"><b id="aantal">3</b> van 5</div></div>
+        <div class="balk"><i style="width:60%"></i></div>
+      <div class="vakken">
+        <div class="vak vol"><span class="vink">✓</span><div class="nr">01</div><div class="wie">Apotheker, Utrecht</div><div class="wanneer">12 okt · 24 min</div><div class="citaat">“Om elf uur staat de bezorger er nog niet.”</div></div>
+        <div class="vak vol"><span class="vink">✓</span><div class="nr">02</div><div class="wie">Assistent, Zeist</div><div class="wanneer">13 okt · 18 min</div><div class="citaat">“Ik loop zelf twee keer per dag naar buiten.”</div></div>
+        <div class="vak vol net"><span class="netbinnen">NET BINNEN</span><span class="vink">✓</span><div class="nr">03</div><div class="wie">Apotheker, Nieuwegein</div><div class="wanneer">vandaag · 31 min</div><div class="citaat">“Spoedrecepten zijn ons grootste gedoe.”</div></div>
+        <button type="button" class="vak leeg volgende" onclick="open4()" aria-expanded="false"><div class="nr">04</div><div class="plus">+</div><div class="wat">Je volgende gesprek</div></button>
+        <button type="button" class="vak leeg" onclick="open4()"><div class="nr">05</div><div class="plus">+</div><div class="wat">Nog leeg</div></button>
+      </div>
+      <div class="vul" id="vul" hidden>
+        <div class="vul-kop"><div><h4>Zo vul je een vak</h4></div><button type="button" class="sluit" onclick="sluit4()" aria-label="Sluiten">×</button></div>
+        <ol class="vul-stappen">
+          <li><span class="n">1</span><div><div class="waar">Buiten</div><b>Neem het gesprek op</b><p>Vraag eerst of je mag opnemen.</p></div></li>
+          <li><span class="n">2</span><div><div class="waar">Je computer</div><b>Zet de opname in je map</b><p>In <code>interviews/</code> in je repo. Hij blijft op je computer.</p></div></li>
+          <li><span class="n">3</span><div><div class="waar">AI-app</div><b>Vraag je AI om hem uit te schrijven</b><div class="vul-kopieer"><span>Schrijf mijn nieuwe interviews uit.</span><button type="button">Kopieer</button></div></div></li>
+          <li><span class="n">4</span><div><div class="waar">Hier</div><b>Het vak gaat vanzelf aan</b><p>Zodra je AI het interview pusht en je terug bent in dit tabblad. <a href="#" onclick="return false">Ververs</a></p></div></li>
+        </ol>
+        <details class="vul-ander"><summary>Geen opname, wel aantekeningen?</summary>
+          <label>Met wie sprak je?<input id="wie" placeholder="Bijvoorbeeld: apotheker, Houten"></label>
+          <label>Je aantekeningen<textarea id="notities" rows="4" placeholder="Plak hier wat je opschreef tijdens het gesprek."></textarea></label>
+          <button type="button" class="zet" onclick="zet()">Zet bij je gesprekken</button>
+        </details>
+      </div>
+      </div>
+      <div class="straks">
+        <div class="later"><h3>Je analyse</h3><div class="lijn" style="width:90%"></div><div class="lijn" style="width:64%"></div><div class="lijn" style="width:44%"></div><div class="slot"><span>🔒</span><small>nog 2 gesprekken</small></div></div>
+        <div class="later"><h3>Je canvas</h3><div style="display:flex;gap:30px;justify-content:center"><div class="vorm" style="width:120px;height:120px"></div><div class="vorm" style="width:120px;height:120px;border-radius:50%"></div></div><div class="slot"><span>🔒</span><small>nog 2 gesprekken</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section class="level" id="l3">
+  <div class="doek">
+    <div class="held" style="background-image: linear-gradient(0deg, #14102a 2%, rgba(20,16,42,.25) 55%, rgba(20,16,42,.55)), url('../../../../platform/public/beelden/prototype.webp')"><div><div class="label">Level 3 · Prototype</div><h1>Welke oplossing past het best?</h1><p class="zin">Bedenk er veel, kies er één, en maak er een eerste versie van.</p></div></div>
+    <div class="inhoud">
+      <div class="klaar"><div class="chip"><span class="v">✓</span>Je probleem: spoedrecepten komen te laat</div></div>
+      <div class="werkblad">
+        <div class="kop"><h3>Je oplossingen</h3><div class="teller"><b>7</b> van 10</div></div>
+        <div class="balk"><i style="width:70%"></i></div>
+        <div class="briefjes">
+          <div class="briefje" style="--r:-1deg"><small>01</small>Bakfiets die om 11 uur ophaalt</div>
+          <div class="briefje" style="--r:.8deg"><small>02</small>Kluisjes bij de huisarts</div>
+          <div class="briefje" style="--r:-.5deg"><small>03</small>Vrijwilligers uit de wijk</div>
+          <div class="briefje" style="--r:1deg"><small>04</small>Samen met de thuiszorg</div>
+          <div class="briefje" style="--r:-.8deg"><small>05</small>Een app voor de assistent</div>
+          <div class="briefje" style="--r:.6deg"><small>06</small>Taxi op rekening</div>
+          <div class="briefje" style="--r:-.4deg"><small>07</small>Ophaalpunt in de supermarkt</div>
+          <div class="leegvak volgende"><div><div class="plus">+</div>Nog een idee</div></div>
+          <div class="leegvak"><div>08</div></div>
+          <div class="leegvak"><div>09</div></div>
+        </div>
+      </div>
+      <div class="straks">
+        <div class="later"><h3>Kies je oplossing</h3><div class="lijn" style="width:90%"></div><div class="lijn" style="width:55%"></div><div class="lijn" style="width:35%"></div><div class="slot"><span>🔒</span><small>nog 3 ideeën</small></div></div>
+        <div class="later"><h3>Je MVP</h3><div class="vorm" style="height:130px;max-width:520px;margin:0 auto"></div><div class="slot"><span>🔒</span><small>eerst je keuze</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section class="level" id="l4">
+  <div class="doek">
+    <div class="held" style="background-image: linear-gradient(0deg, #14102a 2%, rgba(20,16,42,.25) 55%, rgba(20,16,42,.55)), url('../../../../platform/public/beelden/feedback.webp')"><div><div class="label">Level 4 · Markt feedback</div><h1>Willen ze het, tegen jouw prijs?</h1><p class="zin">Laat je MVP proberen, en doe je voorstel.</p></div></div>
+    <div class="inhoud">
+      <div class="klaar">
+        <div class="chip"><span class="v">✓</span>Je prijs: €40 per maand</div>
+        <div class="chip"><span class="v">✓</span>Je testkaart: 3 van de 5 zeggen ja</div>
+        <div class="chip"><span class="v">✓</span>Terugbelgesprekken voorbereid</div>
+      </div>
+      <div class="werkblad">
+        <div class="kop"><h3>Je voorstellen · ronde 1</h3><div class="teller"><b>3</b> van 5 gesproken</div></div>
+        <div class="balk"><i style="width:60%"></i></div>
+        <div class="mensen">
+          <div class="mens kaart"><div class="wie">Apotheker, Utrecht</div><div class="uit">2 weken geprobeerd</div><div class="waarom">“Als het om elf uur echt komt, doe ik mee.”</div><span class="ant ja">Ja</span></div>
+          <div class="mens kaart"><div class="wie">Assistent, Zeist</div><div class="uit">1 week geprobeerd</div><div class="waarom">“Mijn baas beslist, en die vindt €40 veel.”</div><span class="ant nee">Nee</span></div>
+          <div class="mens kaart"><div class="wie">Apotheker, Nieuwegein</div><div class="uit">2 weken geprobeerd</div><div class="waarom">“Eerst een maand gratis, dan beslis ik.”</div><span class="ant mis">Misschien</span></div>
+          <div class="leegvak volgende"><div><div class="plus">+</div>Apotheker, Houten</div></div>
+          <div class="leegvak"><div>Assistent, Utrecht</div></div>
+        </div>
+        <p class="drempel">Je drempel: <b>3 keer ja</b>. Nu: 1.</p>
+      </div>
+      <div class="straks">
+        <div class="later"><h3>Lees je ronde</h3><div style="display:flex;gap:16px;align-items:center"><div class="vorm" style="width:140px;height:140px;border-radius:50%"></div><div style="flex:1"><div class="lijn" style="width:80%"></div><div class="lijn" style="width:60%"></div></div></div><div class="slot"><span>🔒</span><small>nog 2 voorstellen</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section class="level" id="l5">
+  <div class="doek">
+    <div class="held" style="background-image: linear-gradient(0deg, #14102a 2%, rgba(20,16,42,.25) 55%, rgba(20,16,42,.55)), url('../../../../platform/public/beelden/product.webp')"><div><div class="label">Level 5 · Product-validatie</div><h1>Wat moet er beter?</h1><p class="zin">Pas aan op de redenen van nee, en ga terug. Tot je zegt: hier ga ik voor.</p></div></div>
+    <div class="inhoud">
+      <div class="klaar"><div class="chip"><span class="v">✓</span>Ronde 1 uit level 4: 1 van 5 ja</div></div>
+      <div class="werkblad">
+        <div class="kop"><h3>Je rondes</h3><div class="teller">doel: <b>3</b> keer ja</div></div>
+        <div class="rondes">
+          <div class="ronde kaart"><div class="nr">RONDE 1</div><b>€40 per maand</b><div class="score">1<small> van 5 ja</small></div><p>Meest gehoord: te duur om te proberen.</p></div>
+          <div class="ronde kaart"><div class="nr">RONDE 2</div><b>Eerste maand gratis</b><div class="score">3<small> van 5 ja</small></div><p>Je AI paste je landingspagina aan in een pull request.</p></div>
+          <div class="leegvak volgende"><div><div class="plus">+</div>Nieuwe ronde</div></div>
+        </div>
+      </div>
+      <div class="straks">
+        <div class="later"><h3>Ga je ervoor?</h3><div style="display:flex;gap:16px"><div class="vorm" style="flex:1;height:64px"></div><div class="vorm" style="flex:1;height:64px"></div></div><div class="slot"><span>🔒</span><small>eerst 3 keer ja</small></div></div>
+        <div class="later"><h3>Je businessmodel</h3><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px"><div class="vorm" style="height:46px"></div><div class="vorm" style="height:46px"></div><div class="vorm" style="height:46px"></div><div class="vorm" style="height:46px"></div><div class="vorm" style="height:46px"></div></div><div class="slot"><span>🔒</span><small>eerst je besluit</small></div></div>
+        <div class="later"><h3>Wie je onderneming is</h3><div class="lijn" style="width:70%"></div><div class="lijn" style="width:50%"></div><div class="slot"><span>🔒</span><small>eerst je businessmodel</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section class="level" id="l6">
+  <div class="doek">
+    <div class="held" style="background-image: linear-gradient(0deg, #14102a 2%, rgba(20,16,42,.25) 55%, rgba(20,16,42,.55)), url('../../../../platform/public/beelden/klanten.webp')"><div><div class="label">Level 6 · Lancering</div><h1>Je hebt een klant. Wat nu?</h1><p class="zin">Leg vast hoe je verkocht, en houd je volgende klanten bij.</p></div></div>
+    <div class="inhoud">
+      <div class="klaar">
+        <div class="chip"><span class="v">✓</span>Je eerste klant: apotheker Tilburg (R.)</div>
+        <div class="chip"><span class="v">✓</span>Je verkoopaanpak, als skill</div>
+      </div>
+      <div class="werkblad">
+        <div class="kop"><h3>Je pijplijn</h3><div class="teller">verwacht: <b>€1.320</b> per jaar</div></div>
+        <div class="pijplijn">
+          <div class="kolom"><h4>Contact <span>10%</span></h4><div class="klantkaart kaart"><b>Apotheek Houten</b><span>€480</span></div><div class="klantkaart kaart"><b>Apotheek Zeist</b><span>€480</span></div></div>
+          <div class="kolom"><h4>Gesprek <span>25%</span></h4><div class="klantkaart kaart"><b>Apotheek Nieuwegein</b><span>€480</span></div></div>
+          <div class="kolom"><h4>Voorstel <span>50%</span></h4><div class="klantkaart kaart"><b>Apotheek De Bilt</b><span>€960</span></div></div>
+          <div class="kolom"><h4>Akkoord <span>75%</span></h4><div class="leegvak volgende"><div><div class="plus" style="width:28px;height:28px;font-size:16px;margin-bottom:4px">+</div>Klant</div></div></div>
+          <div class="kolom"><h4>Opdracht <span>100%</span></h4><div class="klantkaart kaart"><b>Apotheek Tilburg</b><span>€480</span></div></div>
+        </div>
+      </div>
+      <div class="straks">
+        <div class="later"><h3>Je impact</h3><div style="display:flex;gap:16px"><div class="vorm" style="flex:1;height:80px"></div><div class="vorm" style="flex:1;height:80px"></div><div class="vorm" style="flex:1;height:80px"></div></div><div class="slot"><span>🔒</span><small>eerst 3 klanten in je pijplijn</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.tabs button').forEach((b) => b.addEventListener('click', () => {
+    document.getElementById('l' + b.dataset.l).scrollIntoView({ behavior: 'smooth' });
+  }));
+  // Level 2: een leeg vak openen, en aantekeningen in een vak zetten.
+  const l2 = (q) => document.querySelector('#l2 ' + q);
+  function open4() { l2('#vul').hidden = false; l2('button.vak.volgende')?.classList.add('open'); l2('#vul').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+  function sluit4() { l2('#vul').hidden = true; l2('button.vak.volgende')?.classList.remove('open'); }
+  function zet() {
+    const wie = l2('#wie').value.trim() || 'Apotheker, Houten';
+    const tekst = l2('#notities').value.trim() || 'Bezorgen na vier uur is te laat voor spoed.';
+    const eerste = tekst.split(/(?<=[.!?])\s/)[0].slice(0, 90);
+    const vak = l2('button.vak.volgende');
+    if (!vak) return;
+    document.querySelectorAll('#l2 .vak.net').forEach((v) => { v.classList.remove('net'); v.querySelector('.netbinnen')?.remove(); });
+    const vol = document.createElement('div');
+    vol.className = 'vak vol net';
+    vol.innerHTML = '<span class="netbinnen">NET BINNEN</span><span class="vink">✓</span><div class="nr"></div><div class="wie"></div><div class="wanneer">vandaag · aantekeningen</div><div class="citaat"></div>';
+    vol.querySelector('.nr').textContent = vak.querySelector('.nr').textContent;
+    vol.querySelector('.wie').textContent = wie.charAt(0).toUpperCase() + wie.slice(1);
+    vol.querySelector('.citaat').textContent = '“' + eerste + '”';
+    vak.replaceWith(vol);
+    const volgende = l2('button.vak.leeg');
+    if (volgende) { volgende.classList.add('volgende'); volgende.querySelector('.wat').textContent = 'Je volgende gesprek'; }
+    const n = document.querySelectorAll('#l2 .vak.vol').length;
+    l2('#aantal').textContent = n;
+    l2('.werkblad .balk i').style.width = (n / 5) * 100 + '%';
+    const nog = 5 - n;
+    document.querySelectorAll('#l2 .slot small').forEach((s) => { s.textContent = nog <= 0 ? 'open' : nog === 1 ? 'nog 1 gesprek' : 'nog ' + nog + ' gesprekken'; });
+    sluit4();
+    vol.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+</script>
+</body>
+</html>
