@@ -16,7 +16,7 @@ Je helpt de eigenaar van geen idee naar een idee dat ze morgen kunnen testen. Je
 5. Vraag: "Welke spreekt je het meest aan, en zou je die morgen kunnen testen?"
 6. Stel de checkvraag: "Stel dat je dit idee morgen test bij een echte gebruiker. Wat wil je dan zien gebeuren? Denk aan wat iemand doet."
 7. Vraag door tot het concreet is: wie is de doelgroep, wat wil je bij hen zien gebeuren, en hoe ziet een eerste klein experiment eruit, online of offline?
-8. Zet de drie richtingen in `level-1-idee/ideeen.md`, met de keuze van de eigenaar en het antwoord op de checkvraag. Leg het vast met een commit en vraag de eigenaar te pushen in GitHub Desktop.
+8. Zet de drie richtingen in `level-1-idee/ideeen.md`, met de keuze van de eigenaar en het antwoord op de checkvraag. Leg het vast met een commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen. Dan staan je richtingen op GitHub."
 
 ### Pad 1: vanuit wat je ziet of ervaart
 
@@ -84,4 +84,4 @@ Wat een echte gebruiker doet als het idee klopt.
 
 ## Daarna
 
-De eigenaar zet het gekozen idee op het platform uiteen: idee, visie, madlib en aannames (level 1, stap 1 tot en met 4). Daarna toetst skill `propositie-validator` de waardepropositie en maakt het eerste canvas.
+De eigenaar zet het gekozen idee in Ondernemen met AI uiteen: idee, visie, madlib en aannames (level 1, stap 1 tot en met 4). Daarna toetst skill `propositie-validator` de waardepropositie en maakt het eerste canvas.

@@ -34,14 +34,14 @@ Richtlijn: een getal waarmee je kunt beslissen, gebaseerd op vergelijkbare tests
 
 **5. Tijd en aantal**
 Vraag: "Hoeveel tijd geef je jezelf, en met hoeveel mensen wil je minimaal testen?"
-Richtlijn: minstens 5 mensen als je met ze praat, of 50 als je telt via bijvoorbeeld een landingspagina. Het platform wil feedback van minstens 3 (B2B) of 10 (B2C) mensen. Zo kort als je MVP toelaat: een voorstel doe je in een week; vraagt je MVP een proefperiode, dan duurt het langer, soms een maand. Schrijf dan op waarom.
+Richtlijn: minstens 5 mensen als je met ze praat, of 50 als je telt via bijvoorbeeld een landingspagina. Ondernemen met AI wil feedback van minstens 3 (B2B) of 10 (B2C) mensen. Zo kort als je MVP toelaat: een voorstel doe je in een week; vraagt je MVP een proefperiode, dan duurt het langer, soms een maand. Schrijf dan op waarom.
 
 ## Na de vijf blokken
 
 1. Toets kritisch: "Test dit de echte hypothese?" Kan de uitkomst ook aan het kanaal, de boodschap of de verkeerde mensen liggen? Stel bij twijfel verdiepende vragen.
 2. Laat het overzicht zien en vraag de eigenaar actief akkoord te geven of iets aan te passen. Bied geen "maak maar af" aan.
 3. Vraag naar de startdatum en de einddatum.
-4. Schrijf `level-4-marktfeedback/testkaarten/ronde-N.md` (format hieronder). Leg het vast met een commit en vraag de eigenaar te pushen.
+4. Schrijf `level-4-marktfeedback/testkaarten/ronde-N.md` (format hieronder). Leg het vast met een commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen." Bij ronde 1 zeg je erbij: "Dan krijgt de stap 'Maak je testkaart' een vinkje in Ondernemen met AI."
 
 ## testkaarten/ronde-N.md
 

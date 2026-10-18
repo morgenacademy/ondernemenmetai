@@ -78,7 +78,7 @@ export const Werkblad = forwardRef<HTMLHeadingElement, Props>(function Werkblad(
             </button>
           ) : (
             <p className="bl-wb-hint">
-              Dit gaat vanzelf door zodra je repo het laat zien.{' '}
+              Staat je wijziging op GitHub, dan krijgt deze stap vanzelf een vinkje.{' '}
               <button type="button" className="bl-linkknop" onClick={onVervers}>
                 Ververs
               </button>

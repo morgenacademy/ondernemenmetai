@@ -34,7 +34,7 @@ Stel bij elk blok eerst een open vraag. Geef voorbeelden alleen als de eigenaar 
    - **doorgaan:** de aanname staat. Je toetst de volgende aanname, of je gaat naar meer mensen.
    - **doorontwikkelen:** je past je MVP of je voorstel aan en komt terug met een nieuwe ronde. Moeten klantsegment of waardepropositie wezenlijk anders, dan is het een pivot; zeg dat dan.
    - **stoppen:** de aanname zinkt. Loslaten is ook een uitkomst van een ronde die werkt. Bespreek wat de eigenaar meeneemt naar een andere oplossing (level 3) of een andere doelgroep (level 2).
-5. Schrijf `level-4-marktfeedback/resultaten/ronde-N.md` (format hieronder). Laat de eigenaar lezen, leg het vast met een commit en vraag de eigenaar te pushen.
+5. Schrijf `level-4-marktfeedback/resultaten/ronde-N.md` (format hieronder). Laat de eigenaar lezen, leg het vast met een commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen." Zeg erbij welke stap dan een vinkje krijgt: bij ronde 1 de stap 'Lees je ronde' een vinkje in Ondernemen met AI, vanaf ronde 2 de stap 'Ga terug naar de markt'.
 
 ## resultaten/ronde-N.md
 
@@ -91,4 +91,4 @@ Doorontwikkelen, omdat ...
 - **Doorgaan:** maak met skill `testkaart` een volgende ronde, of kies in level 5 of je ervoor gaat.
 - **Stoppen:** bespreek met de eigenaar welk level ze opnieuw openen.
 
-Koopt iemand echt, wijs dan op de knop "Ik heb een klant" op het platform.
+Koopt iemand echt, wijs dan op de knop "Ik heb een klant" op de routekaart in Ondernemen met AI.

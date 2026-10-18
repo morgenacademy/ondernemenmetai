@@ -9,4 +9,4 @@ Achter elke regel staat "(aanname)". In level 2 toets je die bij je doelgroep.
 
 Je AI gebruikt hier skill `propositie-validator`: hij stelt je vijf vragen, zet je antwoorden in één zin en toetst die met twaalf kritische vragen. Je vindt de skill in je repo, in `skills/propositie-validator/SKILL.md`.
 
-Je AI legt de bestanden vast. Push ze daarna in GitHub Desktop met **Push origin**; dan ziet het platform ze.
+Je AI legt de bestanden vast. Klik daarna in GitHub Desktop op **Push origin**, of vraag je AI om te pushen. Zo zet je je werk op GitHub, en krijgt deze stap vanzelf een vinkje.

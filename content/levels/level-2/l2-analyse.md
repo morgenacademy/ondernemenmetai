@@ -13,3 +13,5 @@ Je conclusie komt in `eerste-doelgroep.md`: welke groep ervaart allemaal hetzelf
 - Stel je idee bij in level 1.
 
 Je AI gebruikt hier skill `interview-analyse`: hij legt je interviews naast elkaar, telt hoe vaak een klacht terugkomt en zoekt de citaten erbij. Je vindt de skill in je repo, in `skills/interview-analyse/SKILL.md`.
+
+Klik daarna in GitHub Desktop op **Push origin**, of vraag je AI om te pushen. Zo zet je je werk op GitHub, en krijgt deze stap vanzelf een vinkje.

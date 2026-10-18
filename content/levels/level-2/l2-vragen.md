@@ -6,3 +6,5 @@ Je gebruikt een gestructureerd interview van 8 vragen. Zo kun je de antwoorden v
 Je AI helpt je vraag 5 tot en met 8 zo te formuleren dat ze bij jouw doelgroep passen.
 
 Je AI gebruikt hier skill `interviewhulp`: hij formuleert je vragen volgens de Mom Test, zodat ze over vandaag gaan en je idee buiten het gesprek blijft. Je vindt de skill in je repo, in `skills/interviewhulp/SKILL.md`.
+
+Klik daarna in GitHub Desktop op **Push origin**, of vraag je AI om te pushen. Zo zet je je werk op GitHub, en krijgt deze stap vanzelf een vinkje.

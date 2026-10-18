@@ -15,7 +15,7 @@ De eigenaar moet op elk moment weten of er iets te doen is. Zeg dat bij elke sta
 2. **De eerste keer, voor je `uv` installeert of de 900 MB ophaalt.** "Om je opname op je eigen computer uit te schrijven, haal ik één keer ongeveer 900 MB op. Het kost niets en je opname gaat de deur niet uit. Vraagt je AI-app om toestemming, klik dan op Toestaan."
 3. **Je schrijft uit.** "Dit duurt ongeveer 5 minuten. Je hoeft nu niets te doen."
 4. **Het interview staat klaar.** "Je interview staat klaar: `03-apotheker-breda.md`. Lees het. Klopt het, zeg dan 'klopt'. Moet er iets anders, zeg het me."
-5. **Na de push.** "Klaar. Je interview staat op GitHub en vak 3 op het platform is vol. Je hoeft niets meer te doen."
+5. **Na de push.** "Klaar. Je interview staat op GitHub en vak 3 in Ondernemen met AI is vol. Je hoeft niets meer te doen."
 6. **Pushen lukt niet.** "Het lukt me niet om je interview op GitHub te zetten. Open GitHub Desktop en klik op Push origin. Daarna is vak 3 vol."
 
 Wacht na zin 2 en zin 4 op antwoord. Na de andere zinnen ga je meteen door.
@@ -101,7 +101,7 @@ terugbellen: ja
 
 Vul elke sectie met wat de geïnterviewde zei, zo letterlijk mogelijk. Onder "Opvallend" zet je wat je niet verwachtte.
 
-`duur` is de lengte van het gesprek in minuten: neem die over uit wat het script meldt. Bij een transcript uit Teams of Zoom staat de duur in de tijden; staat hij er niet, vraag het de eigenaar. `uitspraak` is de mooiste uitspraak uit het gesprek, letterlijk en zonder namen: die staat op het platform in het vak van dit gesprek.
+`duur` is de lengte van het gesprek in minuten: neem die over uit wat het script meldt. Bij een transcript uit Teams of Zoom staat de duur in de tijden; staat hij er niet, vraag het de eigenaar. `uitspraak` is de mooiste uitspraak uit het gesprek, letterlijk en zonder namen: die staat in Ondernemen met AI in het vak van dit gesprek.
 
 `terugbellen` is het antwoord op de slotvraag "Mag ik je bellen als ik iets heb wat hierbij helpt?": `ja` of `nee`. Staat het antwoord niet in het transcript, vraag het de eigenaar.
 

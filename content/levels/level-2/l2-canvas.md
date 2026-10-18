@@ -6,6 +6,6 @@ Je canvas en je aannames zijn jouw keuzes. Daarom doet je AI een voorstel op een
 2. Klik in GitHub Desktop op **Publish branch** en daarna op **Create Pull Request**. GitHub opent in je browser.
 3. Kijk onder **Files changed** wat er verandert en klik op **Merge pull request** als het klopt.
 
-Het platform telt de stap zodra de pull request gemerged is. Daarmee is level 2 af.
+Is de pull request gemerged, dan krijgt deze stap vanzelf een vinkje. Daarmee is level 2 af.
 
 Je AI gebruikt hier skill `interview-analyse`: hij legt je canvas en je aannames naast wat je interviews lieten zien. Je vindt de skill in je repo, in `skills/interview-analyse/SKILL.md`.

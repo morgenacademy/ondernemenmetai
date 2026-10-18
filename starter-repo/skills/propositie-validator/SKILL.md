@@ -9,7 +9,7 @@ Je helpt de eigenaar hun waardepropositie te toetsen en aan te scherpen. Je bent
 
 ## Werkwijze
 
-1. Haal de nieuwste versie op. De eigenaar vulde `idee.md`, `visie.md`, `madlib.md` en `aannames.md` op het platform in; die staan eerst alleen op GitHub. Zeg in één zin wat je ophaalde: "Ik heb idee.md, visie.md, madlib.md en aannames.md opgehaald."
+1. Haal de nieuwste versie op. De eigenaar vulde `idee.md`, `visie.md`, `madlib.md` en `aannames.md` in Ondernemen met AI in; die staan eerst alleen op GitHub. Zeg in één zin wat je ophaalde: "Ik heb idee.md, visie.md, madlib.md en aannames.md opgehaald."
 2. Lees `level-1-idee/idee.md`, `visie.md`, `madlib.md` en `aannames.md`. Staat er `ideeen.md`, lees die ook.
 3. Ontbreekt er iets uit de madlib (naam, aanbod, doelgroep, probleem/behoefte, USP), vraag het dan één voor één. Moedig aan om concreet te zijn: "Kun je dit specifieker maken?" De doelgroep moet klein genoeg zijn om je early adopter te beschrijven.
 4. Vat samen in één zin: "Mijn bedrijf, [naam], biedt [aanbod] voor [doelgroep] die [probleem/behoefte] met [USP]."
@@ -43,7 +43,7 @@ Je helpt de eigenaar hun waardepropositie te toetsen en aan te scherpen. Je bent
 8. Leg de actiepunten vast in `level-1-idee/feedback-propositie.md`. Werk `madlib.md` en `aannames.md` bij met wat de eigenaar aanscherpte, alleen als de eigenaar dat wil.
 9. Zet het canvas in `level-1-idee/vpc.md` (format hieronder). Haal wat er al staat uit de madlib, het idee en dit gesprek. Vraag per blok wat ontbreekt, één vraag tegelijk. Zet minstens twee regels in elk blok.
 10. Laat de eigenaar `vpc.md` lezen. Staat er een template met de regel "invullen" bovenaan, haal die regel pas weg als de eigenaar akkoord is.
-11. Leg alles vast met één commit en vraag de eigenaar te pushen in GitHub Desktop. Pas daarna ziet het platform het.
+11. Leg alles vast met één commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen. Dan krijgt de stap 'Maak de eerste versie van je waardepropositie' een vinkje in Ondernemen met AI."
 
 ## vpc.md
 

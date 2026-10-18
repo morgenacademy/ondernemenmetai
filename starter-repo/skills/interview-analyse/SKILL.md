@@ -12,7 +12,7 @@ Je werkt in twee delen. De analyse en de eerste doelgroep zijn nieuw materiaal: 
 ## Deel 1: analyse en eerste doelgroep
 
 1. Lees `level-2-probleemvalidatie/doelgroep.md`, `interviewvragen.md` en alle interviews direct in `interviews/`. Submappen als `interviews/ronde-1/` horen bij een eerdere doelgroep; lees ze alleen als de eigenaar daarom vraagt.
-2. Tel de interviews. Het platform vraagt er 5 bij B2B en 15 bij B2C (`type` in `doelgroep.md`). Zijn het er minder, zeg dat dan, en noem je conclusie voorlopig.
+2. Tel de interviews. Ondernemen met AI vraagt er 5 bij B2B en 15 bij B2C (`type` in `doelgroep.md`). Zijn het er minder, zeg dat dan, en noem je conclusie voorlopig.
 3. Vul de tabel in `analyse.md`: één regel per interview, met doelgroep, geïnterviewde (nummer, rol en initialen), kernactiviteit (5), alternatief (6), overwegingen (7) en meest genoemde klachten (8).
 4. Zoek patronen per doelgroep. Welke klachten komen steeds terug, en in hoeveel interviews? Welke alternatieven? Zoek per patroon de citaten. Benoem ook wat je niet verwachtte.
 5. Schrijf het inzicht in deze vorm:
@@ -21,7 +21,7 @@ Je werkt in twee delen. De analyse en de eerste doelgroep zijn nieuw materiaal: 
 
 6. Beantwoord de vraag van de mijlpaal: is er een eerste doelgroep die allemaal hetzelfde probleem ervaart? Zet het antwoord onder "Eerste doelgroep" in `analyse.md`.
 7. Schrijf `eerste-doelgroep.md` (format hieronder). `gevonden: ja` alleen als de interviews het laten zien; de eigenaar beslist.
-8. Laat de eigenaar `analyse.md` en `eerste-doelgroep.md` lezen. Haal pas daarna de markering bovenaan weg, leg beide vast met een commit en vraag de eigenaar te pushen in GitHub Desktop.
+8. Laat de eigenaar `analyse.md` en `eerste-doelgroep.md` lezen. Haal pas daarna de markering bovenaan weg, leg beide vast met een commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen. Dan krijgt de stap 'Analyseer je interviews' een vinkje in Ondernemen met AI."
 
 ### eerste-doelgroep.md
 
@@ -48,7 +48,7 @@ probleem: bestellingen bij groothandels kosten elke dag een uur handwerk
 
 Leg de eigenaar drie routes voor en laat ze kiezen:
 
-- **Een andere doelgroep.** Verplaats dan de interviews naar `interviews/ronde-1/`. Het platform telt alleen bestanden direct in `interviews/`, dus de teller begint weer bij 0. De nummers lopen door.
+- **Een andere doelgroep.** Verplaats dan de interviews naar `interviews/ronde-1/`. Ondernemen met AI telt alleen bestanden direct in `interviews/`, dus de teller begint weer bij 0. De nummers lopen door.
 - **Meer interviews** bij dezelfde doelgroep, eventueel met scherpere vragen (skill `interviewhulp`).
 - **Het idee bijstellen** in level 1.
 

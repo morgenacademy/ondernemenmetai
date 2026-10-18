@@ -32,10 +32,10 @@ export function TweePlekken({ level }: { level: number }) {
         </ul>
         <div className="plek">
           <p className="plek-naam">GitHub</p>
-          <p className="plek-rol">Hier kijkt het platform mee</p>
+          <p className="plek-rol">Hier kijkt Ondernemen met AI mee</p>
           <ul>
             <li>je repo, na elke push</li>
-            {level >= 1 && <li>wat je op het platform invult</li>}
+            {level >= 1 && <li>wat je hier invult</li>}
             {level >= 2 && <li>een zijspoor (branch) dat je met Merge samenvoegt</li>}
           </ul>
         </div>

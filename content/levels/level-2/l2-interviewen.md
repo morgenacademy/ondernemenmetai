@@ -7,4 +7,4 @@ Vraag aan het begin toestemming om het gesprek op te nemen of uit te schrijven, 
 
 Sluit af met: "Mag ik je bellen als ik iets heb wat hierbij helpt?" In level 4 ga je met je MVP terug naar de mensen die ja zeiden.
 
-Deze stap doe je buiten het platform. Hij telt via de interviews die in je repo komen.
+Deze stap doe je buiten, bij je doelgroep. Hij krijgt een vinkje zodra er genoeg interviews in je repo staan: 5 bij B2B, 15 bij B2C.

@@ -6,3 +6,5 @@ Je AI vult je ideeën aan met varianten: wat als je iets weglaat, omdraait, comb
 Je AI legt elk idee naast de pains en gains die in level 2 bevestigd zijn. Jij kiest. De keuze komt in `oplossing.md`, met waarom, en met wat afviel.
 
 Je AI gebruikt hier skill `oplossing-kiezen`: hij vult aan met varianten, groepeert en helpt je waarderen tot je er één kiest. Je vindt de skill in je repo, in `skills/oplossing-kiezen/SKILL.md`.
+
+Klik daarna in GitHub Desktop op **Push origin**, of vraag je AI om te pushen. Zo zet je je werk op GitHub, en krijgt deze stap vanzelf een vinkje.

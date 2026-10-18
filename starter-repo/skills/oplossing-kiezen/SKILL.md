@@ -13,7 +13,7 @@ Je helpt de eigenaar van een lijst ideeën naar één oplossing die het probleem
 
 1. Lees `level-2-probleemvalidatie/eerste-doelgroep.md`, `analyse.md`, `level-1-idee/vpc.md` en `level-3-prototype/oplossingen.md`.
 2. Zet de vraag bovenaan: "Hoe kunnen we [doelgroep] helpen met [probleem]?" Stel er twee of drie varianten naast vanuit een andere hoek, bijvoorbeeld het product, het kanaal of de betaling. Elke vraag opent andere oplossingen.
-3. Staan er minder dan 10 ideeën in `oplossingen.md`, vraag de eigenaar dan eerst zelf aan te vullen op het platform. De eerste ingeving is zelden de beste, en `oplossingen.md` blijft van de eigenaar.
+3. Staan er minder dan 10 ideeën in `oplossingen.md`, vraag de eigenaar dan eerst zelf aan te vullen in Ondernemen met AI. De eerste ingeving is zelden de beste, en `oplossingen.md` blijft van de eigenaar.
 4. Vraag of de eigenaar wil dat je aanvult. Zo ja, loop SCAMPER langs op het huidige alternatief van de doelgroep (vraag 6 uit de interviews) en op de ideeën van de eigenaar:
    - **Vervangen:** welk onderdeel, materiaal, proces of welke rol kan anders?
    - **Combineren:** welke twee producten, functies of diensten kun je samenvoegen?
@@ -24,7 +24,7 @@ Je helpt de eigenaar van een lijst ideeën naar één oplossing die het probleem
    - **Omkeren:** wat als je de volgorde omdraait of het tegenovergestelde doet?
 5. Kijk ook verder dan het product. Wat moet er naast het product zijn voordat de klant ja zegt: financiering, training, service, vertrouwen, logistiek? Een andere manier van betalen of een partner kan het verschil maken.
 6. Zet je aanvullingen met "(AI)" erachter, zodat zichtbaar blijft welke ideeën van de eigenaar zijn. Jouw ideeën zijn een vertrekpunt. Jij weet niet wat voor de eigenaar haalbaar is of welke partners ze al hebben.
-7. Groepeer alle ideeën, die van de eigenaar en die van jou, in drie tot zes richtingen. Laat de eigenaar de groepering bekijken. De richtingen komen straks in `oplossing.md`; `oplossingen.md` laat je zoals de eigenaar hem invulde.
+7. Groepeer alle ideeën, die van de eigenaar en die van jou, in drie tot zes richtingen. Laat de eigenaar de groepering bekijken. De richtingen komen in stap 13 in `oplossing.md`; `oplossingen.md` laat je zoals de eigenaar hem invulde.
 
 ### Smal: waarderen en kiezen
 
@@ -34,8 +34,8 @@ Je helpt de eigenaar van een lijst ideeën naar één oplossing die het probleem
    - **Impact/effort-matrix.** Zet elke richting in een kwadrant: grote kans (veel impact, weinig moeite: begin hier), strategisch project (veel impact, veel moeite: plan het), lage prioriteit (weinig impact, weinig moeite) of verspilling (weinig impact, veel moeite: schrappen of herformuleren).
 10. Stel bij de scores vragen. Ga niet zelf beslissen: de eigenaar kent hun mogelijkheden beter dan jij.
 11. Laat de eigenaar kiezen. Vraag waarom, en wat er afvalt.
-12. Vraag: "Welke aanname onder deze oplossing is het kwetsbaarst? Als die niet klopt, valt alles om." Die toets je straks met je MVP.
-13. Schrijf `level-3-prototype/oplossing.md` (format hieronder). Laat de eigenaar het lezen, leg het vast met een commit en vraag de eigenaar te pushen in GitHub Desktop.
+12. Vraag: "Welke aanname onder deze oplossing is het kwetsbaarst? Als die niet klopt, valt alles om." Die toets je met je MVP, in de stap 'Kies je MVP'.
+13. Schrijf `level-3-prototype/oplossing.md` (format hieronder). Laat de eigenaar het lezen, leg het vast met een commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen. Dan krijgt de stap 'Waardeer en kies je oplossing' een vinkje in Ondernemen met AI."
 
 Bestaat `oplossing.md` al, met een eerdere keuze van de eigenaar, maak dan een branch en stel de wijziging voor in een pull request.
 

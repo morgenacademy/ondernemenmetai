@@ -14,7 +14,7 @@ Je helpt de eigenaar hun businessmodel op één pagina te zetten. Een groot deel
 3. Sluit elk blok af met een samenvatting die op een post-it past.
 4. Check na elk blok of het aansluit op de vorige blokken (zie "Samenhang"). Sluit iets niet aan, stel dan een verduidelijkende vraag.
 5. Vraag aan het eind of de eigenaar de twee extra blokken van het Sustainable Business Model Canvas wil invullen: ecologische kosten en baten, en sociale kosten en baten. Dat is optioneel.
-6. Schrijf `level-5-productvalidatie/bmc.md` (format hieronder). Laat de eigenaar lezen, leg het vast met een commit en vraag de eigenaar te pushen.
+6. Schrijf `level-5-productvalidatie/bmc.md` (format hieronder). Laat de eigenaar lezen, leg het vast met een commit en zeg: "Klik in GitHub Desktop op Push origin, of vraag mij om te pushen. Dan krijgt de stap 'Breng je businessmodel in kaart' een vinkje in Ondernemen met AI."
 
 ## De bouwstenen
 

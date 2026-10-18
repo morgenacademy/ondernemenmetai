@@ -9,3 +9,5 @@ Een testkaart legt vooraf vast wat je van deze ronde verwacht. Zo praat je achte
 Meet wat mensen doen: een aanbetaling, een bestelling, of het langer willen gebruiken. Likes en bezoekers tellen niet.
 
 Je AI gebruikt hier skill `testkaart`: hij vraagt de vijf blokken één voor één uit en bewaakt dat je meet wat mensen doen. Je vindt de skill in je repo, in `skills/testkaart/SKILL.md`.
+
+Klik daarna in GitHub Desktop op **Push origin**, of vraag je AI om te pushen. Zo zet je je werk op GitHub, en krijgt deze stap vanzelf een vinkje.

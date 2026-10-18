@@ -1,4 +1,4 @@
-Leg je ronde naast je testkaart. Je AI zet het op een resultaatkaart in vijf blokken: wat je mat, hoe dat zich verhoudt tot je drempel, wat je zag, wat je verraste, en je conclusie.
+Leg je ronde naast je testkaart. Je AI zet je ronde op een resultaatkaart in vijf blokken: wat je mat, hoe dat zich verhoudt tot je drempel, wat je zag, wat je verraste, en je conclusie.
 
 Daarna kies je:
 
@@ -9,3 +9,5 @@ Daarna kies je:
 In de eerste ronde koopt zelden iemand. Kocht iemand wel, dan was je misschien te laat met de markt op.
 
 Je AI gebruikt hier skill `resultaatkaart`: hij leest je ronde, telt de antwoorden en zet de redenen van nee op een rij. Je vindt de skill in je repo, in `skills/resultaatkaart/SKILL.md`.
+
+Klik daarna in GitHub Desktop op **Push origin**, of vraag je AI om te pushen. Zo zet je je werk op GitHub, en krijgt deze stap vanzelf een vinkje.

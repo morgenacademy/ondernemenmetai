@@ -1,4 +1,4 @@
-Op GitHub komt je onderneming te wonen. Al je notities, interviews en analyses staan straks in één map die je AI kan lezen.
+Op GitHub komt je onderneming te wonen. Al je notities, interviews en analyses komen in één map die je AI kan lezen: je repo.
 
 1. Ga naar github.com en kies **Sign up**.
 2. Gebruik een e-mailadres dat je blijft gebruiken, ook na dit programma.
