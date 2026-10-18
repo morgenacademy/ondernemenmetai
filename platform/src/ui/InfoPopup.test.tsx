@@ -52,7 +52,7 @@ describe('pop-up "Wat haalde mijn AI op?" (level 1)', () => {
   it('het plaatje heeft in level 1 pull erbij, maar nog geen map die alleen op je computer staat', () => {
     expect(plaatje).toMatch(/commit en push/i);
     expect(plaatje).toMatch(/pull/i);
-    expect(plaatje).not.toContain('opnames/');
+    expect(plaatje).not.toMatch(/opname/i);
   });
 
   it('noemt de vraag die altijd werkt', () => {
@@ -64,8 +64,10 @@ describe('pop-up "Wat is een pull request?" (level 2)', () => {
   const popup = popupVan(level2, 'l2-canvas');
   const plaatje = popup.match(/<figure[\s\S]*?<\/figure>/)?.[0] ?? '';
 
-  it('het plaatje krijgt een map die alleen op je computer staat, en merge', () => {
-    expect(plaatje).toContain('opnames/');
+  it('het plaatje krijgt je opnames, die alleen op je computer staan, en merge', () => {
+    expect(plaatje).toMatch(/je opnames/i);
+    expect(plaatje).toContain('interviews/');
+    expect(plaatje).not.toContain('opnames/');
     expect(plaatje).toMatch(/merge/i);
     expect(plaatje).toMatch(/pull/i);
   });

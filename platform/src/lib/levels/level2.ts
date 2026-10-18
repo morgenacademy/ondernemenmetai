@@ -8,6 +8,8 @@ export const VRAGEN_PATH = 'level-2-probleemvalidatie/interviewvragen.md';
 export const ANALYSE_PATH = 'level-2-probleemvalidatie/analyse.md';
 export const EERSTE_DOELGROEP_PATH = 'level-2-probleemvalidatie/eerste-doelgroep.md';
 export const INTERVIEWS_DIR = 'level-2-probleemvalidatie/interviews';
+/** Wat je je AI vraagt na een gesprek. De opname staat dan al in interviews/. */
+export const UITSCHRIJF_OPDRACHT = 'Schrijf mijn nieuwe interviews uit.';
 
 /** Verkoop je aan bedrijven, dan spreek je er 5; verkoop je aan consumenten, dan 15. */
 export function defaultInterviews(type: unknown): number {
@@ -99,7 +101,7 @@ export const level2: LevelDef = {
       waar: ['ai-app', 'github-desktop'],
       folder: INTERVIEWS_DIR,
       required: requiredInterviews,
-      aiPrompt: 'Gebruik skill transcriberen. Zet het nieuwe interview in opnames/ om.',
+      aiPrompt: UITSCHRIJF_OPDRACHT,
     },
     {
       id: 'l2-analyse',

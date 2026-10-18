@@ -32,7 +32,7 @@ Je helpt de eigenaar doelgroepinterviews voor te bereiden waarmee ze hun waardep
 
 ## Na het gesprek
 
-Zet de opname of het transcript in de map `opnames/` in je repomap. Die map komt nooit op GitHub. Vraag daarna je AI: "Gebruik skill transcriberen. Zet het nieuwe interview in opnames/ om."
+Zet de opname of het transcript in `level-2-probleemvalidatie/interviews/` in je repomap. Git slaat opnames over, dus ze komen nooit op GitHub. Vraag daarna je AI: "Schrijf mijn nieuwe interviews uit."
 
 ## Voorbeeld
 

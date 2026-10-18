@@ -12,7 +12,7 @@ Deze repo is de werkmap van een startende onderneming. De eigenaar volgt het pro
 - `level-5-productvalidatie/`: het product met het besluit van de eigenaar (`product.md`) en het Business Model Canvas (`bmc.md`).
 - `level-6-lancering/`: klanten, pijplijn en impact. De eigen verkoopaanpak staat als skill in `skills/verkoopaanpak/`.
 - `skills/`: werkwijzen die je volgt als de eigenaar erom vraagt.
-- `opnames/`: opnames en ruwe transcripts van interviews. Deze map staat alleen op de computer van de eigenaar: hij staat in `.gitignore` en komt nooit op GitHub.
+- `level-2-probleemvalidatie/interviews/`: een `.md`-bestand per interview, zonder namen. De opname en het ruwe transcript staan ernaast, maar alleen op de computer van de eigenaar: `.gitignore` houdt alles behalve de `.md`-bestanden buiten git.
 
 Elk level bouwt voort op het vorige. Lees eerst de bestanden van eerdere levels voordat je aan een nieuw level werkt.
 
@@ -35,7 +35,7 @@ In `skills/` staat per skill een map met een `SKILL.md`. Lees aan het begin van 
 - Stel vragen één voor één en wacht op antwoord.
 - Verzin geen marktinformatie. Wat niet uit de repo of van de eigenaar komt, benoem je als aanname.
 - Leg wijzigingen vast met een duidelijke commit; de eigenaar pusht via GitHub Desktop.
-- Vraagt de eigenaar "Is alles in sync?" of "Staat mijn interview al in de repo?", kijk dan met `git fetch` en `git status` en antwoord in één zin: wat nog alleen op de computer staat (niet vastgelegd of niet gepusht), wat nog op GitHub klaarstaat om op te halen, en wat bewust op de computer blijft, zoals `opnames/`.
+- Vraagt de eigenaar "Is alles in sync?" of "Staat mijn interview al in de repo?", kijk dan met `git fetch` en `git status` en antwoord in één zin: wat nog alleen op de computer staat (niet vastgelegd of niet gepusht), wat nog op GitHub klaarstaat om op te halen, en wat bewust op de computer blijft, zoals de opnames in `interviews/`.
 - Schrijf kort en concreet, zonder vage claims.
 
 ## Keuzes en materiaal
@@ -51,4 +51,4 @@ Tot die tijd leg je alles direct vast op `main`, zonder branches.
 
 - De repo hoort privé te zijn. Is hij openbaar, waarschuw dan voordat je interviews toevoegt.
 - Gebruik in transcripts en analyses nooit volledige namen van geïnterviewden. Een rol en initialen zijn genoeg.
-- Opnames en ruwe transcripts horen in `opnames/`. Die map staat in `.gitignore`, dus git ziet hem niet. Lees daaruit en zet alleen het interview zonder namen in `interviews/`.
+- Opnames en ruwe transcripts staan in `level-2-probleemvalidatie/interviews/`, naast het interview. Git slaat ze over, dus ze komen nooit op GitHub. Lees daaruit en zet alleen het interview zonder namen als `.md`-bestand in dezelfde map.
