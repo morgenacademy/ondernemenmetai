@@ -28,7 +28,7 @@ describe('pop-up "Waarom een repo?"', () => {
   });
 
   it('bevat de vier redenen', () => {
-    for (const kop of ['Ondernemen met AI kan niet in je map meekijken', 'Je ziet niet terug wat je AI deed', 'Je kunt niet eerst nakijken', 'Je AI kan er niet in de cloud in werken']) {
+    for (const kop of ['Dit platform kan niet in je map meekijken', 'Je ziet niet terug wat je AI deed', 'Je kunt niet eerst nakijken', 'Je AI kan er niet in de cloud in werken']) {
       expect(html).toContain(`<h3>${kop}</h3>`);
     }
   });

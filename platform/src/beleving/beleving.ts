@@ -57,7 +57,7 @@ export const BELEVING: Record<number, LevelBeleving> = {
       heb: [
         { stepId: 'l0-github-desktop', tekst: '<b>GitHub Desktop</b>, waarmee je je werk online zet zonder iets te typen' },
         { stepId: 'l0-repo', tekst: 'Een eigen, privé <b>repo</b> op GitHub' },
-        { stepId: 'l0-koppelen', tekst: '<b>Ondernemen met AI</b>, dat in die ene repo meekijkt' },
+        { stepId: 'l0-koppelen', tekst: '<b>Dit platform</b>, Ondernemen met AI, dat in je repo op GitHub meekijkt' },
         { stepId: 'l0-clonen', tekst: 'Je <b>AI-app</b> op je computer, die in je repo kan lezen en schrijven' },
         { stepId: 'l0-eerste-opdracht', tekst: 'Je <b>eerste wijziging online</b>: werkplek.md' },
       ],

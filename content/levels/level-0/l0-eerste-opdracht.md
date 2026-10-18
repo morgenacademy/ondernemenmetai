@@ -5,4 +5,4 @@ Tijd voor je eerste echte opdracht. Je AI vult `werkplek.md` samen met je in. Da
 3. Typ linksonder een korte beschrijving, bijvoorbeeld "Werkplek ingevuld", en klik op **Commit to main**. Een commit is een opgeslagen versie van je werk.
 4. Klik bovenaan op **Push origin**. Je wijziging staat nu online, in je repo op GitHub.
 
-Ondernemen met AI ziet dan dat `werkplek.md` is ingevuld, en daarmee is level 0 af. Branches en pull requests komen in level 2.
+Dit platform ziet dan dat `werkplek.md` is ingevuld, en daarmee is level 0 af. Branches en pull requests komen in level 2.

@@ -58,16 +58,16 @@ function Koppelen({ af, onKlaar }: { af: boolean; onKlaar: () => void }) {
   if (af)
     return (
       <div className="bl-paneel-echt" style={{ textAlign: 'center' }}>
-        {kop(3, 'Terug in Ondernemen met AI')}
+        {kop(3, 'Terug op dit platform')}
         <p className="bl-gelukt">✓ Gekoppeld met jij/mijn-onderneming</p>
-        <p className="bl-hint">Ondernemen met AI kan nu in die ene repo kijken en er je keuzes in zetten.</p>
+        <p className="bl-hint">Dit platform kan nu in die ene repo kijken en er je keuzes in zetten.</p>
       </div>
     );
   if (fase === 1)
     return (
       <div className="bl-paneel-echt" style={{ textAlign: 'center' }}>
-        {kop(1, 'Hier, in Ondernemen met AI')}
-        <p className="bl-veldlabel">Ondernemen met AI vraagt GitHub om toegang tot één repo.</p>
+        {kop(1, 'Hier, op dit platform')}
+        <p className="bl-veldlabel">Dit platform vraagt GitHub om toegang tot één repo.</p>
         <button type="button" className="bl-vknop p bl-markeer-knop" onClick={() => setFase(2)}>
           Verbind met GitHub
         </button>
