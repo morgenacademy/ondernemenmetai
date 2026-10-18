@@ -21,42 +21,42 @@ const ZELFDE_CHECK: Record<string, string> = { 'l2-interviewen': 'l2-interviews'
 /** Het vlak dat door de grijze laag van een gesloten werkblad schemert. */
 export type Vorm = 'lijnen' | 'canvas' | 'blok' | 'ronde' | 'keuze' | 'bmc' | 'drie' | 'vakken';
 
-/** naam: de kop van het werkblad. kort: zoals het op een slotje staat, na "eerst". */
-const WERKBLAD: Record<string, { naam: string; kort: string; vorm?: Vorm }> = {
-  'l1-idee': { naam: 'Je idee', kort: 'je idee' },
-  'l1-visie': { naam: 'Je visie', kort: 'je visie' },
-  'l1-madlib': { naam: 'Je idee in één zin', kort: 'je zin' },
-  'l1-aannames': { naam: 'Je aannames', kort: 'je aannames' },
-  'l1-propositie': { naam: 'Je waardepropositie', kort: 'je waardepropositie', vorm: 'canvas' },
+/** naam: de kop van het werkblad. doe: wat je erop doet, zoals het op een slotje staat: "Eerst stap 3 van dit level: vat je idee samen in één zin." */
+const WERKBLAD: Record<string, { naam: string; doe: string; vorm?: Vorm }> = {
+  'l1-idee': { naam: 'Je idee', doe: 'zet je idee uiteen' },
+  'l1-visie': { naam: 'Je visie', doe: 'formuleer je visie' },
+  'l1-madlib': { naam: 'Je idee in één zin', doe: 'vat je idee samen in één zin' },
+  'l1-aannames': { naam: 'Je aannames', doe: 'markeer je aannames' },
+  'l1-propositie': { naam: 'Je waardepropositie', doe: 'maak je waardepropositie', vorm: 'canvas' },
 
-  'l2-doelgroep': { naam: 'Je doelgroep', kort: 'je doelgroep' },
-  'l2-vragen': { naam: 'Je interviewvragen', kort: 'je vragen' },
-  'l2-interviews': { naam: 'Je gesprekken', kort: 'je gesprekken', vorm: 'vakken' },
-  'l2-analyse': { naam: 'Je analyse', kort: 'je analyse' },
-  'l2-canvas': { naam: 'Je canvas', kort: 'je canvas', vorm: 'canvas' },
+  'l2-doelgroep': { naam: 'Je doelgroep', doe: 'kies je doelgroep' },
+  'l2-vragen': { naam: 'Je interviewvragen', doe: 'maak je interviewvragen' },
+  'l2-interviews': { naam: 'Je gesprekken', doe: 'voer je gesprekken', vorm: 'vakken' },
+  'l2-analyse': { naam: 'Je analyse', doe: 'analyseer je gesprekken' },
+  'l2-canvas': { naam: 'Je canvas', doe: 'werk je canvas bij', vorm: 'canvas' },
 
-  'l3-oplossingen': { naam: 'Je oplossingen', kort: 'je oplossingen', vorm: 'vakken' },
-  'l3-kiezen': { naam: 'Kies je oplossing', kort: 'je keuze' },
-  'l3-verwoorden': { naam: 'Je oplossing in woorden', kort: 'je woorden' },
-  'l3-mvp-kiezen': { naam: 'Kies je MVP', kort: 'je MVP-keuze' },
-  'l3-bouwen': { naam: 'Je MVP', kort: 'je MVP', vorm: 'blok' },
+  'l3-oplossingen': { naam: 'Je oplossingen', doe: 'bedenk je oplossingen', vorm: 'vakken' },
+  'l3-kiezen': { naam: 'Kies je oplossing', doe: 'kies je oplossing' },
+  'l3-verwoorden': { naam: 'Je oplossing in woorden', doe: 'zet je oplossing in woorden' },
+  'l3-mvp-kiezen': { naam: 'Kies je MVP', doe: 'kies je MVP' },
+  'l3-bouwen': { naam: 'Je MVP', doe: 'bouw je MVP', vorm: 'blok' },
 
-  'l4-prijs': { naam: 'Je prijs', kort: 'je prijs' },
-  'l4-testkaart': { naam: 'Je testkaart', kort: 'je testkaart' },
-  'l4-terugbellen': { naam: 'Je terugbelgesprekken', kort: 'je spiekbriefjes' },
-  'l4-voorstel': { naam: 'Je voorstellen', kort: 'je voorstellen', vorm: 'vakken' },
-  'l4-resultaat': { naam: 'Lees je ronde', kort: 'je ronde', vorm: 'ronde' },
+  'l4-prijs': { naam: 'Je prijs', doe: 'bepaal je prijs' },
+  'l4-testkaart': { naam: 'Je testkaart', doe: 'maak je testkaart' },
+  'l4-terugbellen': { naam: 'Je terugbelgesprekken', doe: 'bel je mensen terug' },
+  'l4-voorstel': { naam: 'Je voorstellen', doe: 'doe je voorstellen', vorm: 'vakken' },
+  'l4-resultaat': { naam: 'Lees je ronde', doe: 'lees je ronde', vorm: 'ronde' },
 
-  'l5-doorontwikkelen': { naam: 'Je betere versie', kort: 'je betere versie' },
-  'l5-terug': { naam: 'Je tweede ronde', kort: 'je tweede ronde' },
-  'l5-besluit': { naam: 'Ga je ervoor?', kort: 'je besluit', vorm: 'keuze' },
-  'l5-bmc': { naam: 'Je businessmodel', kort: 'je businessmodel', vorm: 'bmc' },
-  'l5-agents': { naam: 'Wie je onderneming is', kort: 'je AGENTS.md' },
+  'l5-doorontwikkelen': { naam: 'Je betere versie', doe: 'maak je betere versie' },
+  'l5-terug': { naam: 'Je tweede ronde', doe: 'doe je tweede ronde' },
+  'l5-besluit': { naam: 'Ga je ervoor?', doe: 'besluit of je ervoor gaat', vorm: 'keuze' },
+  'l5-bmc': { naam: 'Je businessmodel', doe: 'vul je businessmodel', vorm: 'bmc' },
+  'l5-agents': { naam: 'Wie je onderneming is', doe: 'schrijf je AGENTS.md bij' },
 
-  'l6-klant': { naam: 'Je eerste klant', kort: 'je eerste klant' },
-  'l6-verkoopaanpak': { naam: 'Je verkoopaanpak', kort: 'je verkoopaanpak' },
-  'l6-pijplijn': { naam: 'Je pijplijn', kort: 'je pijplijn', vorm: 'vakken' },
-  'l6-impact': { naam: 'Je impact', kort: 'je impact', vorm: 'drie' },
+  'l6-klant': { naam: 'Je eerste klant', doe: 'zet je eerste klant in je repo' },
+  'l6-verkoopaanpak': { naam: 'Je verkoopaanpak', doe: 'leg je verkoopaanpak vast' },
+  'l6-pijplijn': { naam: 'Je pijplijn', doe: 'vul je pijplijn', vorm: 'vakken' },
+  'l6-impact': { naam: 'Je impact', doe: 'beschrijf je impact', vorm: 'drie' },
 };
 
 export function werkbladNaam(id: string, fallback = id): string {
@@ -67,8 +67,8 @@ export function werkbladVorm(id: string): Vorm {
   return WERKBLAD[id]?.vorm ?? 'lijnen';
 }
 
-function kort(w: Werkblad): string {
-  return WERKBLAD[w.id]?.kort ?? w.stappen[0].title.toLowerCase();
+function doe(w: Werkblad): string {
+  return WERKBLAD[w.id]?.doe ?? w.stappen[0].title.toLowerCase();
 }
 
 /** Deelt de stappen van een level in: wat af is, het ene werkblad waar je nu bent, wat op slot ligt, en de optionele regels. */
@@ -109,19 +109,21 @@ function aftellen(w: Werkblad, s: RepoSnapshot): string | null {
   return nog === 1 ? 'nog 1 gesprek' : `nog ${nog} gesprekken`;
 }
 
+/** Het slot van een werkblad dat nog komt: de stap die eerst moet, en wat je daar doet. */
+export type Slot = { nummer: number; reden: string };
+
 /**
- * De korte reden op het slotje van elk gesloten werkblad: "eerst" en het werkblad ervoor.
- * Telt het werkblad waar je nu bent af, zoals je gesprekken, dan wacht alles daarop: "nog 2 gesprekken".
+ * Alles wat op slot ligt, wacht op het werkblad waar je nu bent. Het slotje noemt die stap met nummer en wat je er doet:
+ * "Eerst stap 3 van dit level: vat je idee samen in één zin." Telt dat werkblad af, zoals je gesprekken: "…: nog 2 gesprekken."
+ * Zo schrijft docs/schrijfstijl.md het voor.
  */
-export function slotRedenen(bord: Bord, s: RepoSnapshot): Record<string, string> {
-  const telling = bord.nu ? aftellen(bord.nu, s) : null;
-  const redenen: Record<string, string> = {};
-  let vorige = bord.nu;
-  for (const w of bord.straks) {
-    redenen[w.id] = telling ?? (vorige ? `eerst ${kort(vorige)}` : 'eerst de stap hiervoor');
-    vorige = w;
-  }
-  return redenen;
+export function slotRedenen(level: LevelDef, bord: Bord, s: RepoSnapshot): Record<string, Slot> {
+  const slots: Record<string, Slot> = {};
+  if (!bord.nu) return slots;
+  const nummer = level.steps.filter((x) => !x.optional).indexOf(bord.nu.stappen[0]) + 1;
+  const reden = `Eerst stap ${nummer} van dit level: ${aftellen(bord.nu, s) ?? doe(bord.nu)}.`;
+  for (const w of bord.straks) slots[w.id] = { nummer, reden };
+  return slots;
 }
 
 /** De eerste regel tekst onder een kop, zonder punt aan het eind. */

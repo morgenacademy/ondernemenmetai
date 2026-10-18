@@ -66,27 +66,35 @@ describe('van stap naar werkblad', () => {
 });
 
 describe('de reden op het slotje', () => {
-  it('eerst het werkblad ervoor', () => {
+  it('alles op slot wacht op de stap van nu: met nummer en wat je daar doet', () => {
     const s = snap({ ...IDEE, ...VISIE });
     const b = bordVan(level1, stapStatussen(level1, evaluateLevel(level1, s), new Set(), false));
-    expect(slotRedenen(b, s)).toEqual({ 'l1-aannames': 'eerst je zin', 'l1-propositie': 'eerst je aannames' });
+    const slot = { nummer: 3, reden: 'Eerst stap 3 van dit level: vat je idee samen in één zin.' };
+    expect(slotRedenen(level1, b, s)).toEqual({ 'l1-aannames': slot, 'l1-propositie': slot });
+  });
+
+  it('is het level af, dan is er niets op slot', () => {
+    const s = snap();
+    const b = bordVan(level1, stapStatussen(level1, evaluateLevel(level1, s), new Set(), true));
+    expect(slotRedenen(level1, b, s)).toEqual({});
   });
 
   it('bij je gesprekken telt het slotje af: nog 2 gesprekken, nog 1 gesprek', () => {
     const files = { ...DOELGROEP('B2B'), ...VRAGEN, ...gesprekken(3) };
     const s = snap(files);
     const b = bordVan(level2, stapStatussen(level2, evaluateLevel(level2, s), new Set(), false));
-    expect(slotRedenen(b, s)).toEqual({ 'l2-analyse': 'nog 2 gesprekken', 'l2-canvas': 'nog 2 gesprekken' });
+    const slot = { nummer: 3, reden: 'Eerst stap 3 van dit level: nog 2 gesprekken.' };
+    expect(slotRedenen(level2, b, s)).toEqual({ 'l2-analyse': slot, 'l2-canvas': slot });
 
     const s4 = snap({ ...files, ...gesprekken(4) });
     const b4 = bordVan(level2, stapStatussen(level2, evaluateLevel(level2, s4), new Set(), false));
-    expect(slotRedenen(b4, s4)['l2-analyse']).toBe('nog 1 gesprek');
+    expect(slotRedenen(level2, b4, s4)['l2-analyse'].reden).toBe('Eerst stap 3 van dit level: nog 1 gesprek.');
   });
 
   it('verkoop je aan consumenten, dan telt het af vanaf 15', () => {
     const s = snap({ ...DOELGROEP('B2C'), ...VRAGEN, ...gesprekken(3) });
     const b = bordVan(level2, stapStatussen(level2, evaluateLevel(level2, s), new Set(), false));
-    expect(slotRedenen(b, s)['l2-canvas']).toBe('nog 12 gesprekken');
+    expect(slotRedenen(level2, b, s)['l2-canvas'].reden).toBe('Eerst stap 3 van dit level: nog 12 gesprekken.');
   });
 });
 

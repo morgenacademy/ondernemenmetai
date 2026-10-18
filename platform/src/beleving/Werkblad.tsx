@@ -11,7 +11,7 @@ import { KORT } from './kort';
 import { MadlibWerkblad } from './MadlibWerkblad';
 import { aiBestand, aiResultaat } from './resultaat';
 import { DemoRegel, Uitleg, WerkbladKader } from './WerkbladDelen';
-import { werkbladNaam, werkbladVorm, type Vorm, type Werkblad as WerkbladData } from './werkbladen';
+import { werkbladNaam, werkbladVorm, type Slot, type Vorm, type Werkblad as WerkbladData } from './werkbladen';
 
 type Props = {
   level: LevelDef;
@@ -117,8 +117,8 @@ function VormVlak({ vorm }: { vorm: Vorm }) {
   return <div className="bl-vorm">{n(3, 'lijn')}</div>;
 }
 
-/** Een werkblad dat nog komt: grijs, op slot, met een korte reden. Er valt niets te bedienen. */
-export function GeslotenWerkblad({ id, naam, reden }: { id: string; naam: string; reden: string }) {
+/** Een werkblad dat nog komt: grijs, op slot. Het slotje zegt welke stap eerst moet, en de knop brengt je erheen. */
+export function GeslotenWerkblad({ id, naam, slot, onNaar }: { id: string; naam: string; slot?: Slot; onNaar: () => void }) {
   return (
     <section className="bl-gesloten">
       <h3>{naam}</h3>
@@ -130,7 +130,14 @@ export function GeslotenWerkblad({ id, naam, reden }: { id: string; naam: string
           🔒
         </span>
         <span className="sr-only">Op slot: </span>
-        <span className="bl-slot-reden">{reden}</span>
+        {slot && (
+          <>
+            <span className="bl-slot-reden">{slot.reden}</span>
+            <button type="button" className="bl-slot-knop" onClick={onNaar}>
+              Naar stap {slot.nummer}
+            </button>
+          </>
+        )}
       </div>
     </section>
   );

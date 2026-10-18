@@ -42,6 +42,8 @@ Level 1 tot en met 6 hebben een eigen speelbord. Level 0 had nog de oude stappen
 - **Wie afvinkt** blijft zoals in de code: Account, Repo, AI-app, Desktop en Clonen vink je zelf af (de browser onthoudt het, `handmatig.ts`). Koppelen krijgt een vinkje als het koppelen lukt. Setup en 1e push hebben een check op je repo. Is level 0 af, dan heeft elke stap een vinkje.
 - **Slotscherm**: na de laatste stap scrolt de pagina naar het slotscherm (`Afronding`) met de melding, zoals nu. De confetti uit de schets valt weg; het slotscherm is het feest.
 
+- **Dezelfde slotregel voor de rest** (Harmen: "kun je dat nog doen"). Een level op slot zegt "Maak eerst level 1 af: je idee." De gesloten werkbladen van level 1 tot en met 6 zeggen "Eerst stap 3 van dit level: vat je idee samen in één zin." (of "…: nog 2 gesprekken."), met een knop **Naar stap 3** die je naar het werkblad brengt waar je nu bent.
+
 ## Keuzes van de bouwer
 
 - De uitgebreide uitleg per stap (`content/levels/level-0/*.md`) staat achter "Zo doe je het", dicht. Zo blijft het werkblad één zin, en wie meer nodig heeft, klapt het open. De opdracht voor je AI (Clonen, 1e push) staat wel altijd open.
