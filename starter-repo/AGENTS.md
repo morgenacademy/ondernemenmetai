@@ -35,6 +35,7 @@ In `skills/` staat per skill een map met een `SKILL.md`. Lees aan het begin van 
 - Stel vragen één voor één en wacht op antwoord.
 - Verzin geen marktinformatie. Wat niet uit de repo of van de eigenaar komt, benoem je als aanname.
 - Leg wijzigingen vast met een duidelijke commit; de eigenaar pusht via GitHub Desktop.
+- Interviews push je zelf met `git push`, direct na het vastleggen. Zo gaat het vak op het platform meteen aan. Lukt pushen niet, vraag de eigenaar dan om in GitHub Desktop op Push origin te klikken.
 - Vraagt de eigenaar "Is alles in sync?" of "Staat mijn interview al in de repo?", kijk dan met `git fetch` en `git status` en antwoord in één zin: wat nog alleen op de computer staat (niet vastgelegd of niet gepusht), wat nog op GitHub klaarstaat om op te halen, en wat bewust op de computer blijft, zoals de opnames in `interviews/`.
 - Schrijf kort en concreet, zonder vage claims.
 
@@ -43,7 +44,7 @@ In `skills/` staat per skill een map met een `SKILL.md`. Lees aan het begin van 
 Zodra `level-2-probleemvalidatie/doelgroep.md` is ingevuld, maak je onderscheid tussen keuzes van de eigenaar en materiaal:
 
 - **Keuzes van de eigenaar, via een pull request:** idee, visie, madlib, canvas (`vpc.md`), aannames, doelgroep (`doelgroep.md`), gekozen oplossing, prijs, MVP, product en `AGENTS.md`. Zet zo'n wijziging op een nieuwe branch, leg hem daar vast en vraag de eigenaar om in GitHub Desktop op Publish branch en Create Pull Request te klikken. Is de pull request gemerged, ga dan terug naar `main` en haal de nieuwste versie op.
-- **Materiaal en uitwerkingen, direct:** interviews, feedback, analyses (zoals `analyse.md` en `eerste-doelgroep.md`), testkaarten, resultaatkaarten, BMC, klanten en pijplijn. Die leg je vast op `main`; de eigenaar pusht.
+- **Materiaal en uitwerkingen, direct:** interviews, feedback, analyses (zoals `analyse.md` en `eerste-doelgroep.md`), testkaarten, resultaatkaarten, BMC, klanten en pijplijn. Die leg je vast op `main`. Interviews push je zelf; de rest pusht de eigenaar.
 
 Tot die tijd leg je alles direct vast op `main`, zonder branches.
 

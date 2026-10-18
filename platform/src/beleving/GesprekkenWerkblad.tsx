@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef, useState, type FormEvent } from 'react';
+import { forwardRef, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { UITSCHRIJF_OPDRACHT } from '../lib/levels/level2';
 import type { FileWrite, VoortgangStep } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
@@ -26,6 +26,22 @@ function KopieerRegel({ tekst }: { tekst: string }) {
       </div>
       {stand === 'fout' && <p className="bl-vul-klein">Kopiëren lukt hier niet. Selecteer de zin en kopieer hem zelf.</p>}
     </>
+  );
+}
+
+/** Eén stap: wie hem doet en waar, wat je doet, en wat er dan gebeurt. Een stap van je AI of een die vanzelf gaat, ziet er lichter uit. */
+function Stap({ n, wie, titel, soort = 'jij', children }: { n: number; wie: string; titel: string; soort?: 'jij' | 'ai' | 'vanzelf'; children: ReactNode }) {
+  return (
+    <li className={soort}>
+      <span className="n" aria-hidden="true">
+        {n}
+      </span>
+      <div>
+        <div className="wie">{wie}</div>
+        <b>{titel}</b>
+        {children}
+      </div>
+    </li>
   );
 }
 
@@ -88,56 +104,34 @@ export function ZoVulJeEenVak({ open, snapshot, onSluit, onSave, onVervers, onGe
         </button>
       </div>
       <ol className="bl-vul-stappen">
-        <li>
-          <span className="n" aria-hidden="true">
-            1
-          </span>
-          <div>
-            <div className="waar">Buiten</div>
-            <b>Neem het gesprek op</b>
-            <p>Vraag eerst of je mag opnemen.</p>
-          </div>
-        </li>
-        <li>
-          <span className="n" aria-hidden="true">
-            2
-          </span>
-          <div>
-            <div className="waar">Je computer</div>
-            <b>Zet de opname in je map</b>
-            <p>
-              In <code>interviews/</code> in je repo. Hij blijft op je computer.
-            </p>
-          </div>
-        </li>
-        <li>
-          <span className="n" aria-hidden="true">
-            3
-          </span>
-          <div>
-            <div className="waar">AI-app</div>
-            <b>Vraag je AI om hem uit te schrijven</b>
-            <KopieerRegel tekst={UITSCHRIJF_OPDRACHT} />
-          </div>
-        </li>
-        <li>
-          <span className="n" aria-hidden="true">
-            4
-          </span>
-          <div>
-            <div className="waar">Hier</div>
-            <b>Het vak gaat vanzelf aan</b>
-            <p>
-              Zodra je AI het interview pusht en je terug bent in dit tabblad.{' '}
-              <button type="button" className="bl-linkknop" onClick={ververs}>
-                Ververs
-              </button>
-              <span className="bl-vul-klein" aria-live="polite">
-                {ververst ? ' Bijgewerkt.' : ''}
-              </span>
-            </p>
-          </div>
-        </li>
+        <Stap n={1} wie="Jij · buiten" titel="Neem het gesprek op">
+          <p>Vraag eerst of je mag opnemen.</p>
+        </Stap>
+        <Stap n={2} wie="Jij · je computer" titel="Zet de opname in je map">
+          <p>
+            In <code>interviews/</code> in je repo. Hij blijft op je computer.
+          </p>
+        </Stap>
+        <Stap n={3} wie="Jij · AI-app" titel="Plak deze zin bij je AI">
+          <KopieerRegel tekst={UITSCHRIJF_OPDRACHT} />
+        </Stap>
+        <Stap n={4} wie="Je AI · je computer" titel="Je AI schrijft het gesprek uit" soort="ai">
+          <p>Vraagt je AI iets, klik dan op Toestaan. Daarna wacht je: 30 minuten gesprek kost zo’n 5 minuten. De eerste keer haalt je AI ongeveer 900 MB op.</p>
+        </Stap>
+        <Stap n={5} wie="Jij · AI-app" titel="Lees het en zeg “klopt”">
+          <p>Je AI zet het dan op GitHub. In GitHub Desktop hoef je niets te doen.</p>
+        </Stap>
+        <Stap n={6} wie="Vanzelf · hier" titel="Het vak gaat aan" soort="vanzelf">
+          <p>
+            Je hoeft niets meer te doen.{' '}
+            <button type="button" className="bl-linkknop" onClick={ververs}>
+              Ververs
+            </button>
+            <span className="bl-vul-klein" aria-live="polite">
+              {ververst ? ' Bijgewerkt.' : ''}
+            </span>
+          </p>
+        </Stap>
       </ol>
       <details className="bl-vul-ander">
         <summary>Geen opname, wel aantekeningen?</summary>

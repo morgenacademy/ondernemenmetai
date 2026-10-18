@@ -159,10 +159,13 @@ describe('level 2: je gesprekken', () => {
 describe('Zo vul je een vak', () => {
   const html = renderToStaticMarkup(<ZoVulJeEenVak open onSluit={niets} onSave={async () => true} onVervers={niets} snapshot={{ files: starterFiles, mergedPullRequests: 0 }} />);
 
-  it('vier stappen, elk met waar je hem doet', () => {
+  it('zes stappen, elk met wie hem doet en waar: jij, je AI of vanzelf', () => {
     expect(html).toContain('Zo vul je een vak');
-    for (const waar of ['Buiten', 'Je computer', 'AI-app', 'Hier']) expect(html).toContain(`>${waar}<`);
+    const wie = [...html.matchAll(/class="wie">(.*?)</g)].map((m) => m[1]);
+    expect(wie).toEqual(['Jij · buiten', 'Jij · je computer', 'Jij · AI-app', 'Je AI · je computer', 'Jij · AI-app', 'Vanzelf · hier']);
     expect(html).toContain('Vraag eerst of je mag opnemen.');
+    expect(html).toContain('Lees het en zeg “klopt”');
+    expect(html).toContain('Je hoeft niets meer te doen.');
     expect(html).toContain('<code>interviews/</code>');
     expect(html).toContain('Schrijf mijn nieuwe interviews uit.');
     expect(html).toMatch(/<button[^>]*>Kopieer<\/button>/);

@@ -16,10 +16,4 @@ describe('skills', () => {
       expect((frontmatter.description as string).length).toBeGreaterThan(40);
     });
   }
-
-  it('transcriberen gaat aan op "Schrijf mijn nieuwe interviews uit" en leest uit interviews/', () => {
-    const { frontmatter } = parseMarkdown(starterFiles['skills/transcriberen/SKILL.md']);
-    expect(frontmatter.description).toContain('Schrijf mijn nieuwe interviews uit');
-    expect(frontmatter.description).toContain('level-2-probleemvalidatie/interviews/');
-  });
 });

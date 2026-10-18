@@ -1,11 +1,16 @@
 Van elk interview komt een uitgeschreven versie zonder namen in je repo. Zo kan je AI straks alle gesprekken tegelijk analyseren.
 
-1. Zet na elk interview de opname of het transcript in `level-2-probleemvalidatie/interviews/` in je repomap op je computer.
-2. Geef je AI de opdracht hieronder. Je AI haalt de namen eruit, deelt het gesprek in volgens vraag 5 tot en met 8 en zet het ernaast als `.md`-bestand, zoals `04-apotheker-utrecht.md`.
-3. Push het in GitHub Desktop met **Push origin**. Daarna wordt een vak op het platform vol.
+Zo komt een gesprek in een vak. Bij elke stap staat wie hem doet.
+
+1. **Jij, buiten:** neem het gesprek op. Vraag eerst of je mag opnemen.
+2. **Jij, op je computer:** zet de opname in `level-2-probleemvalidatie/interviews/` in je repomap.
+3. **Jij, in je AI-app:** plak de opdracht hieronder.
+4. **Je AI:** schrijft het gesprek uit en haalt de namen eruit. Vraagt je AI iets, klik dan op Toestaan. Daarna wacht je: 30 minuten gesprek kost zo'n 5 minuten. De eerste keer haalt je AI ongeveer 900 MB op.
+5. **Jij, in je AI-app:** lees het interview en zeg "klopt". Moet er iets anders, zeg dat. Je AI zet het daarna op GitHub. In GitHub Desktop hoef je niets te doen.
+6. **Vanzelf, op het platform:** het vak gaat aan. Je hoeft niets meer te doen.
 
 - **Heb je al tekst?** Teams en Zoom maken zelf een transcript. Dat is de snelste route.
-- **Heb je alleen een opname?** Je AI installeert een spraakprogramma op je computer, zoals Whisper, en schrijft de opname daarmee uit. Dat kost niets en de opname gaat de deur niet uit.
+- **Waarom 900 MB?** Je AI schrijft de opname uit met Whisper, op je eigen computer. Dat kost niets en de opname gaat de deur niet uit. Daarna haalt je AI niets meer op.
 - **Zei iemand dat iets vertrouwelijk is?** Zeg het je AI. Die markeert dat stuk en gebruikt het nergens, ook niet in de analyse.
 
 Git slaat de opnames en ruwe transcripts in `interviews/` over (dat staat in `.gitignore`), dus ze komen nooit op GitHub. Alleen de `.md`-bestanden gaan mee. Twijfel je of een interview al meetelt? Vraag je AI: "Staat mijn interview al in de repo?"
