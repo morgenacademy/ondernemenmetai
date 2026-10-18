@@ -25,12 +25,32 @@ Kies de route op basis van wat er in `interviews/` staat.
 
 **Er is tekst** (.txt, .vtt, .srt, .docx of aantekeningen). Dit is de snelste route: Teams en Zoom maken zelf een transcript. Zet de tekst direct om.
 
-**Er is alleen audio** (.m4a, .mp3, .wav, .mp4 en dergelijke). Je luistert zelf niet naar audio, dus je maakt eerst lokaal een transcript met een spraakprogramma op de computer van de eigenaar:
+**Er is alleen audio** (.m4a, .mp3, .wav, .mp4 en dergelijke). Je luistert zelf niet naar audio. Je schrijft de opname uit met `uitschrijven.py`, het script naast deze skill. Het draait Whisper op de computer van de eigenaar: het model `small`, op de processor, in het Nederlands. De opname gaat de deur niet uit.
 
-1. Kijk of er al een programma is: `whisper --help` of `whisper-cli --help`.
-2. Is er niets, vraag dan toestemming om er een te installeren. Leg uit: het kost niets, het draait op de eigen computer en de opname gaat de deur niet uit. Op een Mac met Homebrew: `brew install openai-whisper`. Anders: `pip install openai-whisper`, en installeer ook `ffmpeg`.
-3. Draai het programma met Nederlands als taal en zet de uitvoer naast de opname: `whisper level-2-probleemvalidatie/interviews/gesprek.m4a --language nl --model small --output_format txt --output_dir level-2-probleemvalidatie/interviews`. Is de kwaliteit te laag en is de computer snel genoeg, probeer dan `--model medium` of `--model turbo`.
-4. Lukt installeren niet, of duurt het te lang: stel voor om de transcriptie van Teams, Zoom of de opname-app te gebruiken en die tekst in `interviews/` te zetten.
+Jij draait elke opdracht. De eigenaar keurt alleen goed en typt zelf niets in de terminal.
+
+1. **Kijk of `uv` er is:** `uv --version`. Werkt dat niet, probeer dan `~/.local/bin/uv --version` (Windows: `%USERPROFILE%\.local\bin\uv.exe --version`). `uv` haalt Python en de pakketten op die het script nodig heeft.
+2. **Is er geen `uv`, vraag dan toestemming om het te installeren.** Leg in twee zinnen uit: het kost niets, er zijn geen beheerdersrechten voor nodig en de opname blijft op de computer. Installeer na de toestemming:
+   - Mac en Linux: `curl -LsSf https://astral.sh/uv/0.11.1/install.sh | sh`
+   - Windows: `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/0.11.1/install.ps1 | iex"`
+
+   `uv` komt in `~/.local/bin`. Gebruik dat volledige pad tot er een nieuwe terminal open is.
+3. **Vertel vóór de eerste keer dat er ongeveer 900 MB binnenkomt,** en vraag toestemming. Daarna downloadt het niets meer.
+   - Python 3.12: 54 MB. `uv` zet het in een eigen map, los van andere Python op de computer.
+   - De pakketten: 367 MB. Faster-whisper en wat het nodig heeft, met vaste versies.
+   - Het model `small`: 464 MB. Dat deel herkent de spraak.
+
+   Op een gewone thuisverbinding duurt dat een paar minuten. Homebrew en ffmpeg zijn niet nodig.
+4. **Maak een lijst met vakwoorden,** 5 tot 15 woorden uit `doelgroep.md`, `interviewvragen.md` en `level-1-idee/`: de doelgroep, het product en woorden uit de branche. Geen namen van personen. Whisper schrijft vakwoorden met die lijst vaker goed, zoals "spoedrecepten" in plaats van "spoedresetten".
+5. **Schrijf de opname uit:**
+
+   ```
+   uv run skills/transcriberen/uitschrijven.py level-2-probleemvalidatie/interviews/gesprek.m4a --woorden "apotheker, spoedrecepten, baxterrol"
+   ```
+
+   Het script zet het transcript naast de opname (`gesprek.txt`) en meldt de duur, zoals `duur: 24 min`. Op een Mac met Apple Silicon duurt een gesprek van 30 minuten ongeveer 5 minuten; op een oudere laptop langer. Zeg vooraf hoe lang het ongeveer duurt. Draai het op de achtergrond of met een lange time-out, zodat het niet halverwege stopt. Verander de versies in het script niet: met nieuwere versies brak het uitschrijven.
+6. **Lees het transcript na.** Whisper weet niet wie er praat. De vragen uit `interviewvragen.md` zijn van de eigenaar, de rest is van de geïnterviewde. Verbeter alleen duidelijk verkeerd gehoorde vakwoorden.
+7. **Lukt installeren of uitschrijven niet,** stel dan voor om de transcriptie van Teams, Zoom of de opname-app te gebruiken en die tekst in `interviews/` te zetten.
 
 Stuur audio of een ruw transcript nooit naar een externe dienst zonder uitdrukkelijke toestemming van de eigenaar.
 
@@ -38,7 +58,7 @@ Stuur audio of een ruw transcript nooit naar een externe dienst zonder uitdrukke
 
 Maak `level-2-probleemvalidatie/interviews/NN-rol-plaats.md`, bijvoorbeeld `03-apotheker-breda.md`. NN is het volgende vrije nummer (01, 02, ...): kijk in `interviews/` en in submappen als `interviews/ronde-1/`. Rol en plaats schrijf je in kleine letters met streepjes. Dat nummer en die naam blijven de rest van de route bij deze persoon.
 
-Geef de opname en het ruwe transcript dezelfde naam, zoals `03-apotheker-breda.m4a` en `03-apotheker-breda.txt`. Zo zie je de volgende keer meteen wat al is uitgeschreven.
+Hernoem de opname en het ruwe transcript naar dezelfde naam, zoals `03-apotheker-breda.m4a` en `03-apotheker-breda.txt`. Git slaat ze over, dus een gewone `mv` is genoeg. Zo zie je de volgende keer meteen wat al is uitgeschreven.
 
 ```markdown
 ---
@@ -68,7 +88,7 @@ terugbellen: ja
 
 Vul elke sectie met wat de geïnterviewde zei, zo letterlijk mogelijk. Onder "Opvallend" zet je wat je niet verwachtte.
 
-`duur` is de lengte van het gesprek in minuten. `uitspraak` is de mooiste uitspraak uit het gesprek, letterlijk en zonder namen: die staat op het platform in het vak van dit gesprek.
+`duur` is de lengte van het gesprek in minuten: neem die over uit wat het script meldt. Bij een transcript uit Teams of Zoom staat de duur in de tijden; staat hij er niet, vraag het de eigenaar. `uitspraak` is de mooiste uitspraak uit het gesprek, letterlijk en zonder namen: die staat op het platform in het vak van dit gesprek.
 
 `terugbellen` is het antwoord op de slotvraag "Mag ik je bellen als ik iets heb wat hierbij helpt?": `ja` of `nee`. Staat het antwoord niet in het transcript, vraag het de eigenaar.
 
@@ -99,5 +119,5 @@ Wil de eigenaar het stuk liever helemaal weglaten, laat het dan weg.
 ## Afronden
 
 1. Laat de eigenaar het interviewbestand lezen.
-2. Leg het vast met een commit. Vraag de eigenaar te pushen in GitHub Desktop; daarna krijgt het vak op het platform een vinkje.
+2. Leg het vast met een commit op `main` en push zelf met `git push`, zonder pull request: een interview is materiaal. Na de push gaat het vak op het platform aan; zeg de eigenaar dat. Lukt pushen niet, vraag de eigenaar dan om in GitHub Desktop op Push origin te klikken.
 3. Vraagt de eigenaar "Staat mijn interview al in de repo?", antwoord dan in één zin: wat nog alleen op de computer staat, wat al op GitHub staat, en dat de opnames in `interviews/` bewust op de computer blijven.
