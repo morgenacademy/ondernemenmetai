@@ -10,3 +10,7 @@ context/
 # Node
 node_modules/
 dist/
+
+# Lokale omgeving en Netlify
+platform/.env
+.netlify/
