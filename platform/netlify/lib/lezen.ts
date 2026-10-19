@@ -1,7 +1,7 @@
 // De hele repo in één GraphQL-aanroep lezen en omzetten naar het RepoAntwoord van de browser.
 import type { Commit, RepoAntwoord } from '../../src/lib/repo/types';
 
-const DIEPTE = 6; // mappen diep; het diepste pad dat doorkomt is a/b/c/d/e/f/bestand.md
+const DIEPTE = 7; // lijsten met entries (de root plus zes mappen); het diepste pad dat doorkomt is a/b/c/d/e/f/bestand.md
 
 // Bouwt het geneste Tree-fragment: elke laag vraagt de bestanden en de mappen eronder.
 function boom(niveau: number): string {

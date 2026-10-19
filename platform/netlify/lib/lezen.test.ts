@@ -21,8 +21,8 @@ function antwoord(over: Record<string, unknown> = {}) {
 }
 
 describe('REPO_QUERY', () => {
-  it('schrijft zes mappen diep uit', () => {
-    expect(REPO_QUERY.match(/\.\.\. on Tree/g)).toHaveLength(6);
+  it('vraagt zeven lijsten entries: de root plus zes mappen', () => {
+    expect(REPO_QUERY.match(/entries/g)).toHaveLength(7);
   });
 });
 
@@ -40,6 +40,12 @@ describe('vertaalRepo', () => {
       'level-0-werkplek/setup.md': '# Setup',
       'level-2-probleemvalidatie/interviews/01-apotheker.md': 'Apotheker',
     });
+  });
+
+  it('laat a/b/c/d/e/f/bestand.md door', () => {
+    let laag: unknown = [met('bestand.md', blob('diep'))];
+    for (const m of ['f', 'e', 'd', 'c', 'b', 'a']) laag = [met(m, map(laag as unknown[]))];
+    expect(vertaalRepo(antwoord({ object: { entries: laag } })).files).toEqual({ 'a/b/c/d/e/f/bestand.md': 'diep' });
   });
 
   it('geeft een binair bestand een lege inhoud', () => {
