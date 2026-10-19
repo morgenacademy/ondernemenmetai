@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { json } from '../lib/github';
 import { SESSIE_COOKIE, STATE_COOKIE, TERUG_COOKIE, open, sluit, type Sessie } from '../lib/sessie';
 import type { Deps } from '../lib/deps';
-import { verwerk as koppel } from './koppel';
-import { verwerk as login } from './login';
-import { verwerk as callback } from './callback';
-import { verwerk as sessie } from './sessie';
-import { verwerk as repoKiezen } from './repo-kiezen';
-import { verwerk as uitloggen } from './uitloggen';
+import { verwerk as koppel } from '../functions/koppel';
+import { verwerk as login } from '../functions/login';
+import { verwerk as callback } from '../functions/callback';
+import { verwerk as sessie } from '../functions/sessie';
+import { verwerk as repoKiezen } from '../functions/repo-kiezen';
+import { verwerk as uitloggen } from '../functions/uitloggen';
 
 const sleutel = Buffer.alloc(32, 9).toString('base64');
 const env = {
