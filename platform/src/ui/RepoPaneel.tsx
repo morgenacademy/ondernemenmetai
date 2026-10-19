@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import type { Commit } from '../lib/repo/mockRepo';
-import type { RepoInfo, RepoSnapshot } from '../lib/repo/types';
+import type { Commit, RepoInfo, RepoSnapshot } from '../lib/repo/types';
 import { treeRows } from './tree';
 
 /** showPullRequests: pull requests komen pas in level 2; daarvoor noemt het paneel ze niet. */
@@ -45,7 +44,7 @@ export function RepoPaneel({ info, snapshot, commits, lastWritten, showPullReque
           <p className="eyebrow">Laatste commits</p>
           <ul className="space-y-1 text-sm text-[var(--text-secondary)]">
             {commits.slice(0, 3).map((c) => (
-              <li key={`${c.at}-${c.path}`}>{c.message}</li>
+              <li key={`${c.at}-${c.path ?? ''}`}>{c.message}</li>
             ))}
           </ul>
         </div>

@@ -2,16 +2,25 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { LEVELS } from '../lib/levels';
 import { levelStatus } from '../lib/levels/evaluate';
 import type { FileWrite } from '../lib/levels/types';
-import type { Commit, MockRepoAdapter } from '../lib/repo/mockRepo';
+import type { MockRepoAdapter } from '../lib/repo/mockRepo';
+import { RepoFout } from '../lib/repo/fouten';
 import { buildSnapshot } from '../lib/repo/snapshot';
-import type { RepoInfo, RepoSnapshot } from '../lib/repo/types';
+import type { Commit, RepoAdapter, RepoInfo, RepoSnapshot } from '../lib/repo/types';
 
 export const NIET_BEWAARD_MELDING =
   'Je browser bewaart de demo niet meer: de opslag is vol of geblokkeerd. Je werk staat alleen in dit tabblad. Herlaad je de pagina, dan ben je het kwijt.';
 
 /** Melding als de demo-opslag het werk niet meer bewaart, anders null. */
-export function opslagMelding(repo: MockRepoAdapter): string | null {
-  return repo.isPersisted() ? null : NIET_BEWAARD_MELDING;
+export function opslagMelding(repo: RepoAdapter): string | null {
+  if (!('isPersisted' in repo)) return null;
+  return (repo as MockRepoAdapter).isPersisted() ? null : NIET_BEWAARD_MELDING;
+}
+
+/** Vernieuwt de adapter en leest dan bestanden, info en commits. */
+export async function haalRepoOp(repo: RepoAdapter): Promise<{ snapshot: RepoSnapshot; info: RepoInfo; commits: Commit[] }> {
+  await repo.refresh();
+  const [snapshot, info, commits] = await Promise.all([buildSnapshot(repo), repo.getInfo(), repo.commits()]);
+  return { snapshot, info, commits };
 }
 
 type Luisteraar = Pick<EventTarget, 'addEventListener' | 'removeEventListener'>;
@@ -35,20 +44,26 @@ export function verversBijTerugkomst(win: Luisteraar, doc: Luisteraar & Pick<Doc
   };
 }
 
-export function useRepo(repo: MockRepoAdapter) {
+export function useRepo(repo: RepoAdapter) {
   const [snapshot, setSnapshot] = useState<RepoSnapshot | null>(null);
   const [info, setInfo] = useState<RepoInfo | null>(null);
   const [commits, setCommits] = useState<Commit[]>([]);
   const [lastWritten, setLastWritten] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
+  const [fout, setFout] = useState<Error | null>(null);
 
   const refresh = useCallback(async () => {
-    const [nextSnapshot, nextInfo, nextCommits] = await Promise.all([buildSnapshot(repo), repo.getInfo(), repo.commits()]);
-    setSnapshot(nextSnapshot);
-    setInfo(nextInfo);
-    setCommits(nextCommits);
-    setWarning(opslagMelding(repo));
+    try {
+      const next = await haalRepoOp(repo);
+      setSnapshot(next.snapshot);
+      setInfo(next.info);
+      setCommits(next.commits);
+      setWarning(opslagMelding(repo));
+      setFout(null);
+    } catch (e) {
+      setFout(e instanceof Error ? e : new Error(String(e)));
+    }
   }, [repo]);
 
   useEffect(() => {
@@ -63,10 +78,12 @@ export function useRepo(repo: MockRepoAdapter) {
         await repo.writeFile(w.path, w.content, w.message);
         setLastWritten(w.path);
         setError(null);
+        setFout(null);
         await refresh();
         return true;
-      } catch {
-        setError(`Opslaan van ${w.path} is mislukt. Je invoer staat er nog; probeer het opnieuw.`);
+      } catch (e) {
+        setFout(e instanceof Error ? e : new Error(String(e)));
+        setError(e instanceof RepoFout ? e.message : `Opslaan van ${w.path} is mislukt. Je invoer staat er nog; probeer het opnieuw.`);
         return false;
       }
     },
@@ -90,5 +107,5 @@ export function useRepo(repo: MockRepoAdapter) {
 
   const status = useMemo(() => (snapshot ? levelStatus(LEVELS, snapshot) : null), [snapshot]);
 
-  return { snapshot, info, commits, status, lastWritten, error, warning, write, run, refresh };
+  return { snapshot, info, commits, status, lastWritten, error, warning, write, run, refresh, fout };
 }
