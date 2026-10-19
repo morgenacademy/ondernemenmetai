@@ -11,18 +11,28 @@ const API_URL = 'https://api.github.com';
 const VERNIEUW_MARGE = 60_000; // ms: verloopt de token binnen een minuut, dan eerst vernieuwen
 const STANDAARD_GELDIG = 8 * 3_600_000; // ms: GitHub geeft 8 uur als expires_in ontbreekt
 
+// soort: afgewezen = GitHub weigert de code of refresh-token definitief; druk = rate limit; tijdelijk = de rest.
+export class TokenFout extends Error {
+  constructor(public soort: 'afgewezen' | 'druk' | 'tijdelijk', bericht: string) {
+    super(bericht);
+  }
+}
+
 async function haalTokens(body: Record<string, string>, haal: Haal, nu: () => number): Promise<Tokens> {
   const res = await haal(TOKEN_URL, {
     method: 'POST',
     headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams(body).toString(),
   });
-  if (!res.ok) throw new Error(`GitHub gaf status ${res.status} bij het wisselen van tokens`);
+  if (!res.ok) {
+    const soort = isDruk(res) ? 'druk' : res.status >= 400 && res.status < 500 ? 'afgewezen' : 'tijdelijk';
+    throw new TokenFout(soort, `GitHub gaf status ${res.status} bij het wisselen van tokens`);
+  }
   const data = (await res.json()) as Record<string, unknown>;
   // GitHub meldt fouten als status 200 met een veld error.
-  if (typeof data.error === 'string') throw new Error(`GitHub weigerde de token: ${data.error}`);
+  if (typeof data.error === 'string') throw new TokenFout('afgewezen', `GitHub weigerde de token: ${data.error}`);
   if (typeof data.access_token !== 'string' || typeof data.refresh_token !== 'string') {
-    throw new Error('GitHub gaf geen token terug');
+    throw new TokenFout('tijdelijk', 'GitHub gaf geen token terug');
   }
   // Zonder expires_in staan verlopende tokens uit; reken dan met de standaard van 8 uur.
   const geldig = typeof data.expires_in === 'number' ? data.expires_in * 1000 : STANDAARD_GELDIG;
@@ -91,12 +101,24 @@ export async function metSessie(
     try {
       sessie = { ...sessie, ...(await vernieuwToken(sessie.refresh, o, haal, nu)) };
       vernieuwd = true;
-    } catch {
-      return json({ fout: 'uit' }, 401, { 'Set-Cookie': wisCookie(req, SESSIE_COOKIE) });
+    } catch (e) {
+      const soort = e instanceof TokenFout ? e.soort : 'tijdelijk';
+      // Alleen bij een definitieve afwijzing uitloggen; bij een tijdelijke fout blijft het cookie staan.
+      if (soort === 'afgewezen') return json({ fout: 'uit' }, 401, { 'Set-Cookie': wisCookie(req, SESSIE_COOKIE) });
+      if (soort === 'druk') return json({ fout: 'druk' }, 429);
+      return json({ fout: 'github' }, 502);
     }
   }
 
-  const { antwoord, sessie: nieuw } = await doe(sessie, ghApi(sessie.token, haal));
+  let uitkomst: { antwoord: Response; sessie?: Sessie };
+  try {
+    uitkomst = await doe(sessie, ghApi(sessie.token, haal));
+  } catch {
+    // De oude refresh-token is al verbruikt: schrijf de nieuwe weg, anders raakt de deelnemer uitgelogd.
+    const fout = json({ fout: 'github' }, 502);
+    return vernieuwd ? metCookie(fout, zetCookie(req, SESSIE_COOKIE, await sluit(sessie, o.sessieSleutel), ZES_MAANDEN)) : fout;
+  }
+  const { antwoord, sessie: nieuw } = uitkomst;
   const laatste = nieuw ?? (vernieuwd ? sessie : null);
   if (!laatste) return antwoord;
   return metCookie(antwoord, zetCookie(req, SESSIE_COOKIE, await sluit(laatste, o.sessieSleutel), ZES_MAANDEN));

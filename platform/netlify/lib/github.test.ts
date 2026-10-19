@@ -214,4 +214,41 @@ describe('metSessie', () => {
     expect(uit?.repo).toBeNull();
     expect(uit?.token).toBe('ghu_nieuw');
   });
+
+  it('laat het cookie staan en geeft 502 bij een netwerkfout tijdens vernieuwen', async () => {
+    const haal = (async () => { throw new TypeError('netwerk'); }) as Haal;
+    const res = await metSessie(await verzoek({ ...sessie, verloopt: nu() + 10_000 }), o, haal, async () => ({ antwoord: json({}) }), nu);
+    expect(res.status).toBe(502);
+    expect(await res.json()).toEqual({ fout: 'github' });
+    expect(res.headers.get('set-cookie')).toBeNull();
+  });
+
+  it('geeft 502 zonder cookie te wissen bij een 5xx tijdens vernieuwen', async () => {
+    const { haal } = nepHaal([new Response('stuk', { status: 503 })]);
+    const res = await metSessie(await verzoek({ ...sessie, verloopt: nu() + 10_000 }), o, haal, async () => ({ antwoord: json({}) }), nu);
+    expect(res.status).toBe(502);
+    expect(res.headers.get('set-cookie')).toBeNull();
+  });
+
+  it('geeft 429 druk zonder cookie te wissen bij een rate limit tijdens vernieuwen', async () => {
+    const { haal } = nepHaal([new Response('', { status: 429 })]);
+    const res = await metSessie(await verzoek({ ...sessie, verloopt: nu() + 10_000 }), o, haal, async () => ({ antwoord: json({}) }), nu);
+    expect(res.status).toBe(429);
+    expect(await res.json()).toEqual({ fout: 'druk' });
+    expect(res.headers.get('set-cookie')).toBeNull();
+  });
+
+  it('bewaart de vernieuwde sessie als doe na het vernieuwen gooit', async () => {
+    const { haal } = nepHaal([tokenAntwoord()]);
+    const res = await metSessie(await verzoek({ ...sessie, verloopt: nu() + 30_000 }), o, haal, async () => { throw new Error('boem'); }, nu);
+    expect(res.status).toBe(502);
+    expect((await sessieUitCookie(res))?.refresh).toBe('ghr_nieuw');
+  });
+
+  it('zet geen cookie als doe gooit zonder dat er vernieuwd is', async () => {
+    const { haal } = nepHaal([]);
+    const res = await metSessie(await verzoek(sessie), o, haal, async () => { throw new Error('boem'); }, nu);
+    expect(res.status).toBe(502);
+    expect(res.headers.get('set-cookie')).toBeNull();
+  });
 });
