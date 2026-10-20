@@ -5,6 +5,7 @@ import type { FileWrite, LevelState } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
 import { KlantKnop } from '../ui/KlantKnop';
 import { BELEVING, HALTES } from './beleving';
+import { useStand } from './stand';
 import { huidigLevel } from './voortgang';
 
 type Props = {
@@ -29,6 +30,7 @@ const STAAT: Record<LevelState, { kort: 'af' | 'nu' | 'dicht'; label: string; ar
 
 /** De routekaart uit de schets levelkaart-v2: het pad met zeven lichtjes, en jij erop. */
 export function Routekaart({ status, van, snapshot, onOpen, onDemoVoortgang, onReset, onKlant, bezig, onAangekomen }: Props) {
+  const { demo } = useStand();
   const huidig = huidigLevel(status);
   const komtAan = van !== null && van < huidig;
   const [jijBij, setJijBij] = useState(komtAan ? van : huidig);
@@ -160,20 +162,22 @@ export function Routekaart({ status, van, snapshot, onOpen, onDemoVoortgang, onR
             <KlantKnop snapshot={snapshot} onSave={onKlant} />
           </div>
         )}
-        <details className="bl-demo">
-          <summary>Demo: zet je voortgang</summary>
-          <p>Vult de levels vóór het gekozen level met demo content, alsof jij en je AI het deden.</p>
-          <div className="rij">
-            {LEVELS.map((l) => (
-              <button key={l.id} type="button" className={l.id === huidig ? 'aan' : ''} disabled={bezig} onClick={() => onDemoVoortgang(l.id)}>
-                {l.id} {l.name}
+        {demo && (
+          <details className="bl-demo">
+            <summary>Demo: zet je voortgang</summary>
+            <p>Vult de levels vóór het gekozen level met demo content, alsof jij en je AI het deden.</p>
+            <div className="rij">
+              {LEVELS.map((l) => (
+                <button key={l.id} type="button" className={l.id === huidig ? 'aan' : ''} disabled={bezig} onClick={() => onDemoVoortgang(l.id)}>
+                  {l.id} {l.name}
+                </button>
+              ))}
+              <button type="button" disabled={bezig} onClick={onReset}>
+                Opnieuw beginnen
               </button>
-            ))}
-            <button type="button" disabled={bezig} onClick={onReset}>
-              Opnieuw beginnen
-            </button>
-          </div>
-        </details>
+            </div>
+          </details>
+        )}
       </main>
       <div className={`bl-gevierd${gevierd ? ' aan' : ''}`} role="status">
         {gevierd}

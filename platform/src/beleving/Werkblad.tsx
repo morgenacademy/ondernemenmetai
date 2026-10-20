@@ -1,5 +1,4 @@
 import { forwardRef } from 'react';
-import { DEMO_FORMS } from '../demo/formulieren';
 import type { FileWrite, LevelDef, LevelEvaluation } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
 import { FormStap } from '../ui/FormStap';
@@ -10,6 +9,7 @@ import { GesprekkenWerkblad } from './GesprekkenWerkblad';
 import { KORT } from './kort';
 import { MadlibWerkblad } from './MadlibWerkblad';
 import { aiBestand, aiResultaat } from './resultaat';
+import { useDemoWaarden } from './stand';
 import { DemoRegel, Uitleg, WerkbladKader } from './WerkbladDelen';
 import { werkbladNaam, werkbladVorm, type Slot, type Vorm, type Werkblad as WerkbladData } from './werkbladen';
 
@@ -29,6 +29,7 @@ export const Werkblad = forwardRef<HTMLHeadingElement, Props>(function Werkblad(
   const step = werkblad.stappen.find((s) => s.id === werkblad.id) ?? werkblad.stappen[0];
   const naam = werkbladNaam(werkblad.id, step.title);
   const demo = () => onDemoStap(step.id);
+  const demoWaarden = useDemoWaarden(step.id, snapshot);
 
   if (step.kind === 'form' && step.id === 'l1-madlib')
     return <MadlibWerkblad ref={kop} level={level} step={step} naam={naam} snapshot={snapshot} onSave={onSave} />;
@@ -39,7 +40,7 @@ export const Werkblad = forwardRef<HTMLHeadingElement, Props>(function Werkblad(
     return (
       <WerkbladKader ref={kop} id={werkblad.id} naam={naam}>
         {hint && <blockquote className="stap-hint">{hint}</blockquote>}
-        <FormStap step={step} snapshot={snapshot} alreadyDone={false} onSave={onSave} demoWaarden={DEMO_FORMS[step.id]?.(snapshot)} />
+        <FormStap step={step} snapshot={snapshot} alreadyDone={false} onSave={onSave} demoWaarden={demoWaarden} />
         {step.paneel && <Paneel soort={step.paneel} snapshot={snapshot} />}
         {step.popup && <InfoPopup levelId={level.id} popup={step.popup} link />}
         <Uitleg levelId={level.id} step={step} snapshot={snapshot} />

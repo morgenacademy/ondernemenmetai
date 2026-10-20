@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { DEMO_FORMS } from '../demo/formulieren';
+import { useDemoWaarden } from '../beleving/stand';
 import { level6 } from '../lib/levels/level6';
 import type { FileWrite, FormStep } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
@@ -12,6 +12,7 @@ const klantStap = level6.steps.find((s): s is FormStep => s.id === 'l6-klant' &&
  * zodra hij in klanten.md staat, gaat level 6 open.
  */
 export function KlantKnop({ snapshot, onSave }: { snapshot: RepoSnapshot; onSave: (w: FileWrite) => Promise<boolean> }) {
+  const demoWaarden = useDemoWaarden('l6-klant', snapshot);
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -53,7 +54,7 @@ export function KlantKnop({ snapshot, onSave }: { snapshot: RepoSnapshot; onSave
           <p className="mt-3 text-[var(--text-secondary)]">
             Gefeliciteerd. Zet je klant in je repo, met een rol en initialen. Daarmee gaat level 6 open, ook als je eerdere levels nog niet af zijn.
           </p>
-          <FormStap step={klantStap} snapshot={snapshot} alreadyDone={false} onSave={save} demoWaarden={DEMO_FORMS['l6-klant'](snapshot)} />
+          <FormStap step={klantStap} snapshot={snapshot} alreadyDone={false} onSave={save} demoWaarden={demoWaarden} />
           <button type="button" className="btn-o btn-klein mt-4" onClick={() => dialog.current?.close()}>
             Sluiten
           </button>

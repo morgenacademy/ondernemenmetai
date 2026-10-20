@@ -3,6 +3,7 @@ import type { FileWrite, LevelDef, LevelEvaluation } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
 import { KopieerBlok } from '../ui/KopieerBlok';
 import { BELEVING } from './beleving';
+import { useStand } from './stand';
 import type { StapStatus } from './voortgang';
 import { GeslotenWerkblad, Werkblad } from './Werkblad';
 import { Uitleg } from './WerkbladDelen';
@@ -29,6 +30,7 @@ type Props = {
  * Wat af is, staat bovenaan met een vinkje. De stap waar je bent, is één licht werkblad. Wat nog komt, ligt eronder op slot.
  */
 export function LevelBord({ level, snapshot, evaluation, statussen, levelAf, onSave, onDemoStap, onHandmatig, onFillLevel, onVervers }: Props) {
+  const { demo } = useStand();
   const b = BELEVING[level.id];
   const bord = bordVan(level, statussen);
   const slots = slotRedenen(level, bord, snapshot);
@@ -114,7 +116,7 @@ export function LevelBord({ level, snapshot, evaluation, statussen, levelAf, onS
               ))}
             </div>
           )}
-          {!levelAf && (
+          {!levelAf && demo && (
             <div className="bl-bord-demo">
               <button type="button" className="bl-knop-demo" onClick={onFillLevel}>
                 Vul het hele level met demo content

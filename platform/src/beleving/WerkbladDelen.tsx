@@ -4,6 +4,7 @@ import { filterVariants, setupFrom, stepContent } from '../lib/content';
 import type { Step } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
 import { Markdown } from '../ui/Markdown';
+import { useStand } from './stand';
 
 /** Het lichte werkblad: een kop, eventueel een teller met balk, en wat erop staat. */
 export const WerkbladKader = forwardRef<
@@ -30,8 +31,9 @@ export const WerkbladKader = forwardRef<
 
 /** "Vul met demo content" bij een stap die normaal buiten het platform gebeurt. */
 export function DemoRegel({ step, onDemo }: { step: Step; onDemo: () => void }) {
+  const stand = useStand();
   const demo = demoVoorStap(step);
-  if (demo?.soort !== 'simulatie') return null;
+  if (!stand.demo || demo?.soort !== 'simulatie') return null;
   return (
     <div className="bl-wb-demo">
       <button type="button" className="bl-knop-demo" onClick={onDemo}>
