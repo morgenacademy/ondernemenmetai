@@ -26,7 +26,7 @@ const clearAndReload = () => {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Foutgrens onClear={clearAndReload}>
-      <App repo={repo} storage={storage} />
+      <App stand={{ soort: 'demo', repo }} storage={storage} />
     </Foutgrens>
   </StrictMode>,
 );

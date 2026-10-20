@@ -2,7 +2,7 @@ import { api, gooiBijFout, type ApiFetch } from '../api';
 import { RepoFout } from './fouten';
 import type { Commit, RepoAdapter, RepoAntwoord, RepoInfo } from './types';
 
-const OPHALEN_MISLUKT = 'Je repo ophalen lukte niet. Probeer het opnieuw.';
+export const OPHALEN_MISLUKT = 'Je repo ophalen lukte niet. Probeer het opnieuw.';
 
 /** Leest en schrijft de echte repo via de Netlify Functions. */
 export class GitHubRepoAdapter implements RepoAdapter {
