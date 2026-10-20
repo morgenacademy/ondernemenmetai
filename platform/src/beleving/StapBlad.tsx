@@ -12,6 +12,7 @@ import { Markdown } from '../ui/Markdown';
 import { Paneel } from '../ui/Paneel';
 import { VoortgangStap } from '../ui/VoortgangStap';
 import { KORT } from './kort';
+import { KoppelenEcht } from './KoppelenEcht';
 import { aiResultaat } from './resultaat';
 import { useDemoWaarden, useStand } from './stand';
 import { Voorbeeld } from './Voorbeeld';
@@ -150,7 +151,7 @@ export function StapBlad({ level, step, nummer, totaal, status, snapshot, evalua
           </button>
         </div>
       );
-    if (step.id === 'l0-koppelen') return <Koppelen af={af} onKlaar={onKlaar} />;
+    if (step.id === 'l0-koppelen') return isDemo ? <Koppelen af={af} onKlaar={onKlaar} /> : <KoppelenEcht af={af} snapshot={snapshot} />;
     if (step.kind === 'form')
       return (
         <div className="bl-paneel-echt">
