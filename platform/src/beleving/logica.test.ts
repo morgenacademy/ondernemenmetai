@@ -3,10 +3,12 @@ import { LEVELS } from '../lib/levels';
 import { evaluateLevel } from '../lib/levels/evaluate';
 import { level0 } from '../lib/levels/level0';
 import { level1 } from '../lib/levels/level1';
+import { GeenRepo, NietIngelogd } from '../lib/repo/fouten';
 import { starterFiles } from '../lib/repo/starterFiles';
 import { BELEVING, HALTES } from './beleving';
 import { HANDMATIG_KEY, handmatigSleutel, leesHandmatig, schrijfHandmatig } from './handmatig';
 import { parseRoute, routeHash } from './route';
+import { repoNaSessie } from './useEchteSessie';
 import { huidigLevel, metKoppeling, repoZichtbaar, stapStatussen, strookUitsnede } from './voortgang';
 
 const snap = (files: Record<string, string> = {}) => ({ files: { ...starterFiles, ...files }, mergedPullRequests: 0 });
@@ -135,6 +137,28 @@ describe('metKoppeling', () => {
     const handmatig = new Set(['l0-account']);
     expect(metKoppeling(handmatig, false)).toBe(handmatig);
     expect([...handmatig]).toEqual(['l0-account']);
+  });
+});
+
+describe('repoNaSessie', () => {
+  const gekoppeld = { stand: 'gekoppeld', login: 'harmen', repo: 'harmen/mijn-onderneming' } as const;
+  const uit = { stand: 'uit' } as const;
+
+  it('gekoppeld: de repo uit de sessie', () => {
+    expect(repoNaSessie(null, gekoppeld, null)).toBe('harmen/mijn-onderneming');
+  });
+
+  it('uit bij het openen: geen repo, dus de lege repo', () => {
+    expect(repoNaSessie(null, uit, null)).toBeNull();
+  });
+
+  it('uitgelogd in een lopend tabblad: de repo blijft, en daarmee je formulieren', () => {
+    expect(repoNaSessie('harmen/mijn-onderneming', uit, new NietIngelogd())).toBe('harmen/mijn-onderneming');
+    expect(repoNaSessie('harmen/mijn-onderneming', uit, null)).toBe('harmen/mijn-onderneming');
+  });
+
+  it('je repo is weg: geen repo meer', () => {
+    expect(repoNaSessie('harmen/mijn-onderneming', { stand: 'kies-repo', login: 'harmen', repos: [] }, new GeenRepo())).toBeNull();
   });
 });
 

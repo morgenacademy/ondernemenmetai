@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { HANDMATIG_KEY, INTRO_KEY, handmatigSleutel, leesHandmatig, leesVlag, schrijfHandmatig, zetVlag } from './beleving/handmatig';
 import { LevelScherm } from './beleving/LevelScherm';
-import { alsRepoFout, meldingVoor } from './beleving/meldingen';
+import { toonMelding } from './beleving/meldingen';
 import { parseRoute, routeHash, type Route } from './beleving/route';
 import { Routekaart } from './beleving/Routekaart';
 import { StandContext, type Stand } from './beleving/stand';
@@ -13,7 +13,7 @@ import { LEVELS } from './lib/levels';
 import { evaluateLevel } from './lib/levels/evaluate';
 import type { FileWrite } from './lib/levels/types';
 import { GeenRepo, NietIngelogd } from './lib/repo/fouten';
-import { OPHALEN_MISLUKT, type GitHubRepoAdapter } from './lib/repo/githubRepo';
+import type { GitHubRepoAdapter } from './lib/repo/githubRepo';
 import { LegeRepo } from './lib/repo/legeRepo';
 import type { MockRepoAdapter, StorageLike } from './lib/repo/mockRepo';
 import type { RepoAdapter, RepoSnapshot } from './lib/repo/types';
@@ -33,8 +33,8 @@ const DEMO: Stand = { demo: true };
 export default function App({ stand, storage = null }: Props) {
   const echt = stand.soort === 'echt';
   const mock = stand.soort === 'demo' ? stand.repo : null;
-  const { sessie, fout: sessieFout, zoek, laad, kies, loguit } = useEchteSessie(echt);
-  const gekoppeldMet = sessie?.stand === 'gekoppeld' ? sessie.repo : null;
+  // gekoppeldMet: de repo waarmee dit tabblad rekent. Ben je hier uitgelogd, dan blijft hij staan, met je ingevulde formulieren.
+  const { sessie, repo: gekoppeldMet, fout: sessieFout, zoek, laad, kies, loguit } = useEchteSessie(echt);
   const gekoppeld = gekoppeldMet !== null;
   const repo: RepoAdapter = stand.soort === 'demo' ? stand.repo : gekoppeld ? stand.github : LEGE_REPO;
   const r = useRepo(repo);
@@ -51,12 +51,14 @@ export default function App({ stand, storage = null }: Props) {
 
   // Wisselt de repo (leeg ↔ gekoppeld), dan telt de stand van de vorige niet meer: tot de nieuwe binnen is, staat er "Laden…".
   // Anders zie je even een lege repo, en viert een level dat al af was zijn slotscherm opnieuw.
-  const [repoWissel, setRepoWissel] = useState<{ repo: RepoAdapter; oud: RepoSnapshot | null }>({ repo, oud: null });
-  if (repoWissel.repo !== repo) setRepoWissel({ repo, oud: r.snapshot });
+  // Ook een schrijffout van vóór de wissel (bijv. vóór het opnieuw koppelen) telt niet meer in de melding.
+  const [repoWissel, setRepoWissel] = useState<{ repo: RepoAdapter; oud: RepoSnapshot | null; error: string | null }>({ repo, oud: null, error: null });
+  if (repoWissel.repo !== repo) setRepoWissel({ repo, oud: r.snapshot, error: r.error });
   const snapshot = r.snapshot !== repoWissel.oud ? r.snapshot : null;
 
-  // Uitgelogd, of je repo is weg: haal de sessie opnieuw op. Die zegt dan uit of kies-repo, en App rekent met de lege repo.
-  // Geen lus: daarna is r.fout leeg (de lege repo faalt niet), of blijft het dezelfde fout (de sessie zegt nog gekoppeld), en dan draait dit effect niet opnieuw.
+  // Uitgelogd, of je repo is weg: haal de sessie opnieuw op. Na GeenRepo rekent App met de lege repo. Na uitloggen blijft de repo
+  // staan, en zeggen de melding en de bovenbalk dat je moet inloggen.
+  // Geen lus: blijft de repo, dan blijft r.fout dezelfde fout; met de lege repo is r.fout daarna leeg. Dan draait dit effect niet opnieuw.
   useEffect(() => {
     if (echt && (r.fout instanceof NietIngelogd || r.fout instanceof GeenRepo)) void laad(r.fout);
   }, [echt, r.fout, laad]);
@@ -78,17 +80,12 @@ export default function App({ stand, storage = null }: Props) {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [schermSleutel]);
 
-  // De melding: in de echte stand een fout met wat je kunt doen, anders (en in de demo) de melding van opslaan, zoals altijd.
-  // Een gewone Error (geen RepoFout) krijgt ook een zin, zodat je nooit eeuwig "Laden…" ziet zonder uitleg.
-  const fout = r.fout ? alsRepoFout(r.fout, r.error ?? OPHALEN_MISLUKT) : sessieFout;
-  const melding = echt ? meldingVoor(fout, zoek) : null;
-  const meldingTekst = melding?.tekst ?? r.error ?? r.warning;
-  // Na een mislukte schrijfactie geen "Opnieuw": die zou alleen verversen. Je klikt opnieuw op de knop van het formulier.
-  const meldingActie = melding?.actie === 'opnieuw' && r.error ? null : (melding?.actie ?? null);
-  const meldingBlok = meldingTekst && (
+  // De melding bovenaan, met wat je kunt doen (zie toonMelding). In de demo de melding van opslaan, zoals altijd.
+  const melding = toonMelding({ echt, fout: r.fout, error: r.error, errorBijWissel: repoWissel.error, warning: r.warning, sessieFout, zoek });
+  const meldingBlok = melding && (
     <p role="alert" className="bl-melding">
-      {meldingTekst}
-      {meldingActie === 'inloggen' && (
+      {melding.tekst}
+      {melding.actie === 'inloggen' && (
         <>
           <br />
           <a className="bl-knop-tweede" href={inlogUrl(routeHash(route))}>
@@ -96,10 +93,10 @@ export default function App({ stand, storage = null }: Props) {
           </a>
         </>
       )}
-      {meldingActie === 'opnieuw' && (
+      {melding.actie === 'opnieuw' && (
         <>
           <br />
-          <button type="button" className="bl-knop-tweede" onClick={() => void (r.fout ? r.refresh() : laad())}>
+          <button type="button" className="bl-knop-tweede" onClick={() => void (melding.bron === 'repo' ? r.refresh() : laad())}>
             Opnieuw
           </button>
         </>
@@ -109,7 +106,7 @@ export default function App({ stand, storage = null }: Props) {
 
   if (!snapshot || !status || !info || (echt && !sessie)) {
     if (!echt) return <p className="p-6">Laden…</p>;
-    return <div className="bl">{melding ? meldingBlok : <p className="p-6">Laden…</p>}</div>;
+    return <div className="bl">{meldingBlok ?? <p className="p-6">Laden…</p>}</div>;
   }
 
   const vinkAf = (stepId: string) => {
