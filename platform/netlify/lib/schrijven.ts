@@ -29,16 +29,17 @@ export class SchrijfConflict extends Error {}
 
 // Wat GitHub antwoordde, zodat de function er een eigen antwoord van kan maken.
 export class SchrijfFout extends Error {
-  constructor(public soort: 'geen-repo' | 'druk' | 'github', bericht: string) {
+  constructor(public soort: 'geen-repo' | 'geweigerd' | 'druk' | 'github', bericht: string) {
     super(bericht);
   }
 }
 
-// Vertaalt een mislukt antwoord van GitHub; 404 of 403 betekent dat de repo niet meer bereikbaar is.
+// Vertaalt een mislukt antwoord van GitHub. 404: de repo is weg. 403: weg of tijdelijk geweigerd; de function zoekt dat uit.
 function fout(res: Response, wat: string): SchrijfFout {
   const bericht = `GitHub gaf status ${res.status} bij ${wat}`;
   if (isDruk(res)) return new SchrijfFout('druk', bericht);
-  if (res.status === 404 || res.status === 403) return new SchrijfFout('geen-repo', bericht);
+  if (res.status === 404) return new SchrijfFout('geen-repo', bericht);
+  if (res.status === 403) return new SchrijfFout('geweigerd', bericht);
   return new SchrijfFout('github', bericht);
 }
 

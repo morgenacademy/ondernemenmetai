@@ -55,6 +55,13 @@ describe('vertaalRepo', () => {
     expect(vertaalRepo(data).files).toEqual({ 'level-3-prototype/mvp/logo.png': '' });
   });
 
+  it('houdt alleen de tekst van .md-bestanden, zodat het antwoord ook met een prototype in de repo klein blijft', () => {
+    const data = antwoord({
+      object: { entries: [met('level-3-prototype', map([met('mvp', map([met('index.html', blob('<html>')), met('README.md', blob('# MVP'))]))]))] },
+    });
+    expect(vertaalRepo(data).files).toEqual({ 'level-3-prototype/mvp/index.html': '', 'level-3-prototype/mvp/README.md': '# MVP' });
+  });
+
   it('laat submodules weg', () => {
     const data = antwoord({ object: { entries: [met('vendor', { type: 'commit', object: null }), met('a.md', blob('x'))] } });
     expect(Object.keys(vertaalRepo(data).files)).toEqual(['a.md']);

@@ -21,6 +21,18 @@ function maak(antwoord: () => Response) {
   return { deps, aanroepen };
 }
 
+// Routeert op URL: GraphQL krijgt `graphql`, de installaties geven `repos`.
+function maakMetInstallaties(graphql: () => Response, repos: string[]) {
+  const haal = (async (input: RequestInfo | URL) => {
+    const url = String(input);
+    if (url === 'https://api.github.com/graphql') return graphql();
+    if (url === 'https://api.github.com/user/installations?per_page=100') return json({ installations: [{ id: 7 }] });
+    if (url === 'https://api.github.com/user/installations/7/repositories?per_page=100') return json({ repositories: repos.map((full_name) => ({ full_name })) });
+    return json({}, 404);
+  }) as typeof fetch;
+  return { haal, env, nu: () => NU } satisfies Deps;
+}
+
 const vraag = async (deps: Deps, s: Partial<Sessie> = {}, method = 'GET') =>
   repo(
     new Request('http://localhost:8888/api/repo', { method, headers: { cookie: `${SESSIE_COOKIE}=${await gesloten(s)}` } }),
@@ -73,6 +85,34 @@ describe('repo', () => {
     const res = await vraag(deps);
     expect(res.status).toBe(409);
     expect(res.headers.getSetCookie().some((c) => c.startsWith(`${SESSIE_COOKIE}=`))).toBe(true);
+  });
+
+  it('bij een 403 terwijl de repo nog in de installatie zit, geeft 502 en blijft de repo staan', async () => {
+    const deps = maakMetInstallaties(() => json({ message: 'Forbidden' }, 403), ['harmen/mijn-onderneming']);
+    const res = await vraag(deps);
+    expect(res.status).toBe(502);
+    expect(res.headers.getSetCookie()).toEqual([]);
+  });
+
+  it('bij een 403 terwijl de repo uit de installatie is, geeft 409 en wist de repo', async () => {
+    const deps = maakMetInstallaties(() => json({ message: 'Forbidden' }, 403), ['harmen/iets-anders']);
+    const res = await vraag(deps);
+    expect(res.status).toBe(409);
+    expect(res.headers.getSetCookie().some((c) => c.startsWith(`${SESSIE_COOKIE}=`))).toBe(true);
+  });
+
+  it('bij een secundaire rate limit (403 met retry-after) geeft 429 en blijft de repo staan', async () => {
+    const { deps } = maak(() => json({ message: 'secondary rate limit' }, 403, { 'retry-after': '60' }));
+    const res = await vraag(deps);
+    expect(res.status).toBe(429);
+    expect(res.headers.getSetCookie()).toEqual([]);
+  });
+
+  it('bij een 401 van GitHub geeft 401 en wist het cookie', async () => {
+    const { deps } = maak(() => json({ message: 'Bad credentials' }, 401));
+    const res = await vraag(deps);
+    expect(res.status).toBe(401);
+    expect(res.headers.getSetCookie().find((c) => c.startsWith(`${SESSIE_COOKIE}=`))).toContain('Max-Age=0');
   });
 
   it('bij een rate limit geeft 429', async () => {

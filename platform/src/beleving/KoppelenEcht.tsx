@@ -4,7 +4,7 @@ import type { RepoSnapshot } from '../lib/repo/types';
 import { koppelUrl } from '../lib/sessie';
 import { useStand } from './stand';
 
-/** Koppelen met de echte GitHub App: installeren op GitHub, een repo kiezen als je er meer koos, en zien dat het gelukt is. */
+/** Koppelen met de echte GitHub App: installeren op GitHub, een repo kiezen als die er al is, en zien dat het gelukt is. */
 export function KoppelenEcht({ af, snapshot }: { af: boolean; snapshot: RepoSnapshot }) {
   const stand = useStand();
   const [bezig, setBezig] = useState(false);
@@ -27,7 +27,7 @@ export function KoppelenEcht({ af, snapshot }: { af: boolean; snapshot: RepoSnap
       </div>
     );
 
-  if (sessie.stand === 'kies-repo' && sessie.repos.length >= 2)
+  if (sessie.stand === 'kies-repo' && sessie.repos.length >= 1)
     return (
       <div className="bl-paneel-echt" style={{ textAlign: 'center' }}>
         <p className="bl-veldlabel">Welke repo is van je onderneming?</p>

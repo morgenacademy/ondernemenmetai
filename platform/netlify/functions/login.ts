@@ -1,6 +1,6 @@
 // Stuurt de deelnemer naar GitHub om in te loggen.
 import { omgeving } from '../lib/omgeving';
-import { STATE_COOKIE, TERUG_COOKIE, TIEN_MINUTEN, zetCookie } from '../lib/sessie';
+import { STATE_COOKIE, TERUG_COOKIE, TIEN_MINUTEN, UITGELOGD_COOKIE, leesCookie, zetCookie } from '../lib/sessie';
 import { geldigTerug, omleiding, standaardDeps, type Deps } from '../lib/deps';
 
 export async function verwerk(req: Request, deps: Deps): Promise<Response> {
@@ -15,6 +15,8 @@ export async function verwerk(req: Request, deps: Deps): Promise<Response> {
   authorize.searchParams.set('client_id', o.clientId);
   authorize.searchParams.set('state', state);
   authorize.searchParams.set('redirect_uri', `${url.origin}/api/callback`);
+  // Na uitloggen eerst het account kiezen; de callback wist de markering na een gelukte login.
+  if (leesCookie(req, UITGELOGD_COOKIE)) authorize.searchParams.set('prompt', 'select_account');
   return omleiding(authorize.toString(), cookies);
 }
 

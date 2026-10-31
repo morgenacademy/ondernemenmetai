@@ -91,13 +91,13 @@ describe('schrijfBestand', () => {
 
   it.each([
     ['repo 404', [() => json({}, 404)], 'geen-repo'],
-    ['repo 403', [() => json({}, 403)], 'geen-repo'],
+    ['repo 403', [() => json({}, 403)], 'geweigerd'],
     ['repo druk', [() => json({}, 403, { 'x-ratelimit-remaining': '0' })], 'druk'],
-    ['contents 403', [repoOk, () => json({}, 403)], 'geen-repo'],
+    ['contents 403', [repoOk, () => json({}, 403)], 'geweigerd'],
     ['contents druk', [repoOk, () => json({}, 429)], 'druk'],
     ['contents 500', [repoOk, () => json({}, 500)], 'github'],
     ['put 404', [repoOk, nieuw, () => json({}, 404)], 'geen-repo'],
-    ['put 403', [repoOk, nieuw, () => json({}, 403)], 'geen-repo'],
+    ['put 403', [repoOk, nieuw, () => json({}, 403)], 'geweigerd'],
     ['put druk', [repoOk, nieuw, () => json({}, 429)], 'druk'],
     ['put 500', [repoOk, nieuw, () => json({}, 500)], 'github'],
   ] as const)('%s wordt soort %s', async (_naam, antwoorden, soort) => {

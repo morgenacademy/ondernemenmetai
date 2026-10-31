@@ -30,6 +30,13 @@ describe('KoppelenEcht', () => {
     expect(render({ stand: 'kies-repo', login: 'harmen', repos: [] })).toContain('Koppel met GitHub');
   });
 
+  it('bij kies-repo met één repo toont een knop voor die repo, niet de installatiepagina', () => {
+    const html = render({ stand: 'kies-repo', login: 'harmen', repos: ['harmen/enige'] });
+    expect(html).toContain('harmen/enige');
+    expect(html.match(/<button/g)).toHaveLength(1);
+    expect(html).not.toContain('Koppel met GitHub');
+  });
+
   it('bij kies-repo met twee repo\'s toont een knop per repo', () => {
     const html = render({ stand: 'kies-repo', login: 'harmen', repos: ['harmen/een', 'harmen/twee'] });
     expect(html).toContain('Welke repo is van je onderneming?');

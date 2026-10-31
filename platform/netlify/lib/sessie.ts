@@ -4,6 +4,7 @@ export type Sessie = { token: string; refresh: string; verloopt: number; login: 
 export const SESSIE_COOKIE = 'oma_sessie';
 export const STATE_COOKIE = 'oma_state';
 export const TERUG_COOKIE = 'oma_terug';
+export const UITGELOGD_COOKIE = 'oma_uitgelogd'; // de volgende login vraagt welk GitHub-account
 export const ZES_MAANDEN = 15_897_600; // seconden
 export const TIEN_MINUTEN = 600; // seconden
 

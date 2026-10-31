@@ -20,12 +20,18 @@ export async function verwerk(req: Request, deps: Deps): Promise<Response> {
     deps.haal,
     async (s, api) => {
       if (s.repo) return { antwoord: json({ stand: 'gekoppeld', login: s.login, repo: s.repo }) };
-      return { antwoord: json({ stand: 'kies-repo', login: s.login, repos: await reposVanGebruiker(api) }) };
+      const repos = await reposVanGebruiker(api);
+      // Precies één repo: die is het. Zo loopt opnieuw koppelen niet vast, bijvoorbeeld na een hernoemde repo.
+      if (repos.length === 1) return { antwoord: json({ stand: 'gekoppeld', login: s.login, repo: repos[0] }), sessie: { ...s, repo: repos[0] } };
+      return { antwoord: json({ stand: 'kies-repo', login: s.login, repos }) };
     },
     deps.nu,
   );
-  // Definitief uitgelogd is geen fout voor de browser: hij krijgt gewoon 'uit', met het gewiste cookie.
-  if (res.status === 401) return json({ stand: 'uit' }, 200, { 'Set-Cookie': res.headers.get('set-cookie') ?? '' });
+  // Uitgelogd is geen fout voor de browser: die krijgt gewoon 'uit', met het gewiste cookie als dat er is.
+  if (res.status === 401) {
+    const cookie = res.headers.get('set-cookie');
+    return json({ stand: 'uit' }, 200, cookie ? { 'Set-Cookie': cookie } : undefined);
+  }
   return res;
 }
 

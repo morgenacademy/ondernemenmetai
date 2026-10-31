@@ -42,7 +42,8 @@ function verzamel(entries: unknown, voorvoegsel: string, files: Record<string, s
     const pad = `${voorvoegsel}${name}`;
     if (type === 'blob') {
       const blob = rij(object);
-      files[pad] = blob.isBinary === true ? '' : tekst(blob.text);
+      // Alleen .md-tekst: het platform leest niets anders, en een prototype in de repo kan het antwoord boven de 6 MB van Netlify duwen.
+      files[pad] = blob.isBinary !== true && pad.endsWith('.md') ? tekst(blob.text) : '';
     } else if (type === 'tree') {
       verzamel(rij(object).entries, `${pad}/`, files);
     }

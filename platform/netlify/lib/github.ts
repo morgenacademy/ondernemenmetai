@@ -52,6 +52,25 @@ export function vernieuwToken(refresh: string, o: Omgeving, haal: Haal, nu: () =
   );
 }
 
+// Trekt een token in bij GitHub. Mislukt dat, dan gaat uitloggen gewoon door: de token verloopt binnen 8 uur vanzelf.
+export async function trekTokenIn(token: string, o: Omgeving, haal: Haal): Promise<void> {
+  try {
+    await haal(`${API_URL}/applications/${o.clientId}/token`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${o.clientId}:${o.clientSecret}`).toString('base64')}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'User-Agent': 'ondernemen-met-ai',
+      },
+      body: JSON.stringify({ access_token: token }),
+    });
+  } catch {
+    // zie boven
+  }
+}
+
 export function ghApi(token: string, haal: Haal): Api {
   return (pad, init = {}) => {
     const headers = new Headers(init.headers);
@@ -74,8 +93,10 @@ export function origineKlopt(req: Request): boolean {
   return origin !== null && origin === new URL(req.url).origin;
 }
 
+// Een secundaire rate limit geeft 403 met retry-after, zonder x-ratelimit-remaining 0.
 export function isDruk(res: Response): boolean {
-  return res.status === 429 || (res.status === 403 && res.headers.get('x-ratelimit-remaining') === '0');
+  if (res.status === 429) return true;
+  return res.status === 403 && (res.headers.get('x-ratelimit-remaining') === '0' || res.headers.has('retry-after'));
 }
 
 function metCookie(res: Response, cookie: string): Response {
@@ -103,21 +124,34 @@ export async function metSessie(
       vernieuwd = true;
     } catch (e) {
       const soort = e instanceof TokenFout ? e.soort : 'tijdelijk';
-      // Alleen bij een definitieve afwijzing uitloggen; bij een tijdelijke fout blijft het cookie staan.
-      if (soort === 'afgewezen') return json({ fout: 'uit' }, 401, { 'Set-Cookie': wisCookie(req, SESSIE_COOKIE) });
+      // Afgewezen: uitgelogd, maar het cookie blijft staan. Een ander tabblad kan met dezelfde
+      // refresh-token net een nieuw cookie hebben gezet; dat mogen we niet wissen.
+      if (soort === 'afgewezen') return json({ fout: 'uit' }, 401);
       if (soort === 'druk') return json({ fout: 'druk' }, 429);
       return json({ fout: 'github' }, 502);
     }
   }
 
+  // Weigert GitHub de token (401), dan is de app ingetrokken of opnieuw aangemaakt: uitloggen, wat doe ook antwoordt.
+  let geweigerd = false;
+  const gh = ghApi(sessie.token, haal);
+  const api: Api = async (pad, init) => {
+    const res = await gh(pad, init);
+    if (res.status === 401) geweigerd = true;
+    return res;
+  };
+  const uit = () => json({ fout: 'uit' }, 401, { 'Set-Cookie': wisCookie(req, SESSIE_COOKIE) });
+
   let uitkomst: { antwoord: Response; sessie?: Sessie };
   try {
-    uitkomst = await doe(sessie, ghApi(sessie.token, haal));
+    uitkomst = await doe(sessie, api);
   } catch {
+    if (geweigerd) return uit();
     // De oude refresh-token is al verbruikt: schrijf de nieuwe weg, anders raakt de deelnemer uitgelogd.
     const fout = json({ fout: 'github' }, 502);
     return vernieuwd ? metCookie(fout, zetCookie(req, SESSIE_COOKIE, await sluit(sessie, o.sessieSleutel), ZES_MAANDEN)) : fout;
   }
+  if (geweigerd) return uit();
   const { antwoord, sessie: nieuw } = uitkomst;
   const laatste = nieuw ?? (vernieuwd ? sessie : null);
   if (!laatste) return antwoord;

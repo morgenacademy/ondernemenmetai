@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { json } from '../lib/github';
-import { SESSIE_COOKIE, STATE_COOKIE, TERUG_COOKIE, open, sluit, type Sessie } from '../lib/sessie';
+import { SESSIE_COOKIE, STATE_COOKIE, TERUG_COOKIE, UITGELOGD_COOKIE, open, sluit, type Sessie } from '../lib/sessie';
 import type { Deps } from '../lib/deps';
 import { verwerk as koppel } from '../functions/koppel';
 import { verwerk as login } from '../functions/login';
@@ -19,20 +19,25 @@ const env = {
 const NU = 1_000_000;
 const BASIS = 'http://localhost:8888';
 
-type Aanroep = { url: string; method: string; body: string };
+type Aanroep = { url: string; method: string; body: string; auth: string | null };
 
 // Nep-fetch die op URL routeert en bijhoudt wat er is aangeroepen.
-function nep(opties: { repos?: string[]; tokenOk?: boolean; token?: Response } = {}) {
+function nep(opties: { repos?: string[]; tokenOk?: boolean; token?: Response; api401?: boolean; intrekken?: Response | 'stuk' } = {}) {
   const repos = opties.repos ?? ['harmen/mijn-onderneming'];
   const aanroepen: Aanroep[] = [];
   const haal = (async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = String(input);
-    aanroepen.push({ url, method: init?.method ?? 'GET', body: typeof init?.body === 'string' ? init.body : '' });
+    aanroepen.push({ url, method: init?.method ?? 'GET', body: typeof init?.body === 'string' ? init.body : '', auth: new Headers(init?.headers).get('authorization') });
     if (url === 'https://github.com/login/oauth/access_token') {
       if (opties.token) return opties.token;
       if (opties.tokenOk === false) return json({ error: 'bad_verification_code' });
       return json({ access_token: 'ghu_a', refresh_token: 'ghr_a', expires_in: 28800 });
     }
+    if (url === 'https://api.github.com/applications/Iv1.test/token') {
+      if (opties.intrekken === 'stuk') throw new TypeError('netwerk');
+      return opties.intrekken ?? new Response(null, { status: 204 });
+    }
+    if (opties.api401 && url.startsWith('https://api.github.com/')) return json({ message: 'Bad credentials' }, 401);
     if (url === 'https://api.github.com/user') return json({ login: 'harmen' });
     if (url === 'https://api.github.com/user/installations?per_page=100') {
       return json({ installations: [{ id: 7 }] });
@@ -105,6 +110,14 @@ describe('login', () => {
     const zonder = await login(metCookie('/api/login', `${TERUG_COOKIE}=x`), deps);
     expect(cookieVan(zonder, TERUG_COOKIE)).toBeNull();
   });
+
+  it('vraagt na uitloggen eerst welk GitHub-account, anders niet', async () => {
+    const { deps } = nep();
+    const na = await login(metCookie('/api/login', `${UITGELOGD_COOKIE}=1`), deps);
+    expect(new URL(na.headers.get('location')!).searchParams.get('prompt')).toBe('select_account');
+    const gewoon = await login(verzoek('/api/login'), deps);
+    expect(new URL(gewoon.headers.get('location')!).searchParams.get('prompt')).toBeNull();
+  });
 });
 
 describe('callback', () => {
@@ -144,6 +157,7 @@ describe('callback', () => {
     expect(s?.verloopt).toBe(NU + 28_800_000);
     expect(cookieVan(res, STATE_COOKIE)).toContain('Max-Age=0');
     expect(cookieVan(res, TERUG_COOKIE)).toContain('Max-Age=0');
+    expect(cookieVan(res, UITGELOGD_COOKIE)).toContain('Max-Age=0');
     const wissel = aanroepen.find((a) => a.url.endsWith('/access_token'))!;
     expect(wissel.body).toContain('redirect_uri=http%3A%2F%2Flocalhost%3A8888%2Fapi%2Fcallback');
   });
@@ -205,13 +219,30 @@ describe('sessie', () => {
     expect(tekst).not.toContain('ghu_');
   });
 
-  it('geeft uit en wist het cookie als de refresh definitief wordt afgewezen', async () => {
+  it('geeft uit zonder het cookie aan te raken als de refresh wordt afgewezen', async () => {
     const { deps } = nep({ tokenOk: false });
     const c = await gesloten({ verloopt: NU });
     const res = await sessie(metCookie('/api/sessie', `${SESSIE_COOKIE}=${c}`), deps);
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ stand: 'uit' });
+    expect(res.headers.get('set-cookie')).toBeNull();
+  });
+
+  it('geeft uit en wist het cookie als GitHub de token weigert', async () => {
+    const { deps } = nep({ api401: true });
+    const c = await gesloten();
+    const res = await sessie(metCookie('/api/sessie', `${SESSIE_COOKIE}=${c}`), deps);
+    expect(await res.json()).toEqual({ stand: 'uit' });
     expect(cookieVan(res, SESSIE_COOKIE)).toContain('Max-Age=0');
+  });
+
+  it('kiest zelf de repo als er precies één is, zodat opnieuw koppelen niet vastloopt', async () => {
+    const { deps } = nep({ repos: ['harmen/nieuwe-naam'] });
+    const c = await gesloten();
+    const res = await sessie(metCookie('/api/sessie', `${SESSIE_COOKIE}=${c}`), deps);
+    expect(await res.json()).toEqual({ stand: 'gekoppeld', login: 'harmen', repo: 'harmen/nieuwe-naam' });
+    const s = await open(waardeVan(cookieVan(res, SESSIE_COOKIE))!, sleutel);
+    expect(s?.repo).toBe('harmen/nieuwe-naam');
   });
 
   it('geeft een tijdelijke fout door', async () => {
@@ -256,10 +287,33 @@ describe('repo-kiezen', () => {
 
 describe('uitloggen', () => {
   it('wist oma_sessie', async () => {
-    const { deps } = nep();
+    const { deps, aanroepen } = nep();
     const res = await uitloggen(post('/api/uitloggen', {}), deps);
     expect(res.status).toBe(204);
     expect(cookieVan(res, SESSIE_COOKIE)).toContain('Max-Age=0');
+    expect(aanroepen).toHaveLength(0);
+  });
+
+  it('trekt de token in bij GitHub en laat de volgende login een account kiezen', async () => {
+    const { deps, aanroepen } = nep();
+    const c = await gesloten();
+    const res = await uitloggen(post('/api/uitloggen', {}, `${SESSIE_COOKIE}=${c}`), deps);
+    expect(res.status).toBe(204);
+    expect(cookieVan(res, SESSIE_COOKIE)).toContain('Max-Age=0');
+    expect(waardeVan(cookieVan(res, UITGELOGD_COOKIE))).toBe('1');
+    expect(aanroepen).toHaveLength(1);
+    expect(aanroepen[0]).toMatchObject({ url: 'https://api.github.com/applications/Iv1.test/token', method: 'DELETE' });
+    expect(aanroepen[0].auth).toBe(`Basic ${Buffer.from('Iv1.test:geheim').toString('base64')}`);
+    expect(JSON.parse(aanroepen[0].body)).toEqual({ access_token: 'ghu_t' });
+  });
+
+  it('logt ook uit als intrekken mislukt', async () => {
+    for (const intrekken of ['stuk', json({}, 500)] as const) {
+      const { deps } = nep({ intrekken });
+      const res = await uitloggen(post('/api/uitloggen', {}, `${SESSIE_COOKIE}=${await gesloten()}`), deps);
+      expect(res.status).toBe(204);
+      expect(cookieVan(res, SESSIE_COOKIE)).toContain('Max-Age=0');
+    }
   });
 
   it('weigert een andere Origin (403) en GET (405)', async () => {

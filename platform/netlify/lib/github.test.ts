@@ -135,10 +135,12 @@ describe('origineKlopt', () => {
 });
 
 describe('isDruk', () => {
-  it('herkent 429 en 403 met x-ratelimit-remaining 0, maar geen gewone 403', () => {
+  it('herkent 429 en 403 met x-ratelimit-remaining 0 of retry-after, maar geen gewone 403', () => {
     expect(isDruk(new Response('', { status: 429 }))).toBe(true);
     expect(isDruk(new Response('', { status: 403, headers: { 'x-ratelimit-remaining': '0' } }))).toBe(true);
     expect(isDruk(new Response('', { status: 403 }))).toBe(false);
+    // Een secundaire rate limit: 403 met retry-after, zonder x-ratelimit-remaining 0.
+    expect(isDruk(new Response('', { status: 403, headers: { 'retry-after': '60' } }))).toBe(true);
     expect(isDruk(new Response('', { status: 200, headers: { 'x-ratelimit-remaining': '0' } }))).toBe(false);
   });
 });
@@ -190,14 +192,36 @@ describe('metSessie', () => {
     expect(await sessieUitCookie(res)).toEqual({ token: 'ghu_nieuw', refresh: 'ghr_nieuw', verloopt: 1_000_000 + 28_800_000, login: 'deelnemer', repo: 'deelnemer/mijn-repo' });
   });
 
-  it('geeft 401 en wist het cookie als vernieuwen mislukt, zonder doe aan te roepen', async () => {
+  it('geeft 401 zonder het cookie te wissen als vernieuwen wordt afgewezen, zonder doe aan te roepen', async () => {
+    // Een ander tabblad kan met dezelfde refresh-token net een nieuw cookie hebben gezet; dat mag blijven staan.
     const { haal } = nepHaal([json({ error: 'bad_refresh_token' })]);
     let geroepen = false;
     const res = await metSessie(await verzoek({ ...sessie, verloopt: nu() + 10_000 }), o, haal, async () => { geroepen = true; return { antwoord: json({}) }; }, nu);
     expect(res.status).toBe(401);
     expect(await res.json()).toEqual({ fout: 'uit' });
-    expect(res.headers.get('set-cookie')).toMatch(/^oma_sessie=;.*Max-Age=0/);
+    expect(res.headers.get('set-cookie')).toBeNull();
     expect(geroepen).toBe(false);
+  });
+
+  it('geeft 401 en wist het cookie als GitHub de token weigert, wat doe ook teruggeeft', async () => {
+    const { haal } = nepHaal([json({ message: 'Bad credentials' }, 401)]);
+    const res = await metSessie(await verzoek(sessie), o, haal, async (s, api) => {
+      await api('/user');
+      return { antwoord: json({ fout: 'github' }, 502), sessie: { ...s, repo: null } };
+    }, nu);
+    expect(res.status).toBe(401);
+    expect(await res.json()).toEqual({ fout: 'uit' });
+    expect(res.headers.get('set-cookie')).toMatch(/^oma_sessie=;.*Max-Age=0/);
+  });
+
+  it('geeft 401 en wist het cookie als doe gooit nadat GitHub de token weigerde', async () => {
+    const { haal } = nepHaal([json({ message: 'Bad credentials' }, 401)]);
+    const res = await metSessie(await verzoek(sessie), o, haal, async (_s, api) => {
+      const r = await api('/user/installations');
+      throw new Error(`status ${r.status}`);
+    }, nu);
+    expect(res.status).toBe(401);
+    expect(res.headers.get('set-cookie')).toMatch(/^oma_sessie=;.*Max-Age=0/);
   });
 
   it('zet een nieuw cookie als doe een sessie teruggeeft', async () => {

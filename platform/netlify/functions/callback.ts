@@ -2,7 +2,7 @@
 import { omgeving } from '../lib/omgeving';
 import { ghApi, wisselCode } from '../lib/github';
 import { reposVanGebruiker } from '../lib/installaties';
-import { SESSIE_COOKIE, STATE_COOKIE, TERUG_COOKIE, ZES_MAANDEN, leesCookie, sluit, wisCookie, zetCookie } from '../lib/sessie';
+import { SESSIE_COOKIE, STATE_COOKIE, TERUG_COOKIE, UITGELOGD_COOKIE, ZES_MAANDEN, leesCookie, sluit, wisCookie, zetCookie } from '../lib/sessie';
 import { geldigTerug, omleiding, standaardDeps, type Deps } from '../lib/deps';
 
 const MISLUKT = '/?fout=inloggen#/route';
@@ -32,6 +32,7 @@ export async function verwerk(req: Request, deps: Deps): Promise<Response> {
       zetCookie(req, SESSIE_COOKIE, await sluit(sessie, o.sessieSleutel), ZES_MAANDEN),
       wisCookie(req, STATE_COOKIE),
       wisCookie(req, TERUG_COOKIE),
+      wisCookie(req, UITGELOGD_COOKIE),
     ]);
   } catch {
     return omleiding(MISLUKT);

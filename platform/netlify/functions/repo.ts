@@ -2,6 +2,7 @@
 import { omgeving } from '../lib/omgeving';
 import { isDruk, json, metSessie } from '../lib/github';
 import { REPO_QUERY, vertaalRepo } from '../lib/lezen';
+import { heeftRepo } from '../lib/installaties';
 import { standaardDeps, type Deps } from '../lib/deps';
 
 export async function verwerk(req: Request, deps: Deps): Promise<Response> {
@@ -22,7 +23,8 @@ export async function verwerk(req: Request, deps: Deps): Promise<Response> {
       // De repo is hernoemd of uit de installatie gehaald: wis hem uit het cookie.
       const weg = { antwoord: json({ fout: 'geen-repo' }, 409), sessie: { ...s, repo: null } };
       if (isDruk(res)) return { antwoord: json({ fout: 'druk' }, 429) };
-      if (res.status === 404 || res.status === 403) return weg;
+      if (res.status === 404) return weg;
+      if (res.status === 403) return (await heeftRepo(api, s.repo)) ? { antwoord: json({ fout: 'github' }, 502) } : weg;
       if (!res.ok) return { antwoord: json({ fout: 'github' }, 502) };
       const body = (await res.json()) as { data?: { repository?: unknown } | null; errors?: { type?: string }[] };
       const fouten = Array.isArray(body.errors) ? body.errors : [];

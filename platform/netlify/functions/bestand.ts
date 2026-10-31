@@ -2,6 +2,7 @@
 import { omgeving } from '../lib/omgeving';
 import { json, metSessie, origineKlopt } from '../lib/github';
 import { SchrijfConflict, SchrijfFout, padToegestaan, schrijfBestand } from '../lib/schrijven';
+import { heeftRepo } from '../lib/installaties';
 import { standaardDeps, type Deps } from '../lib/deps';
 
 type Invoer = { path: string; content: string; message: string };
@@ -41,7 +42,8 @@ export async function verwerk(req: Request, deps: Deps): Promise<Response> {
       } catch (e) {
         if (e instanceof SchrijfConflict) return { antwoord: json({ fout: 'conflict' }, 500) };
         if (e instanceof SchrijfFout && e.soort === 'druk') return { antwoord: json({ fout: 'druk' }, 429) };
-        if (e instanceof SchrijfFout && e.soort === 'geen-repo') {
+        const weg = e instanceof SchrijfFout && (e.soort === 'geen-repo' || (e.soort === 'geweigerd' && !(await heeftRepo(api, s.repo))));
+        if (weg) {
           return { antwoord: json({ fout: 'geen-repo' }, 409), sessie: { ...s, repo: null } };
         }
         return { antwoord: json({ fout: 'github' }, 502) };

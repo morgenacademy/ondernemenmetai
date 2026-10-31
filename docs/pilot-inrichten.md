@@ -30,12 +30,12 @@ Ga naar morgenacademy › Settings › Developer settings › GitHub Apps › **
 ## 3. Netlify-site
 
 1. Maak een site onder het Morgen-team, gekoppeld aan `morgenacademy/ondernemenmetai`. `netlify.toml` in de repo-root regelt de build.
-2. Zet precies deze vier omgevingsvariabelen:
+2. Zet precies deze vier omgevingsvariabelen. Kies bij elk onder Deploy contexts alleen **Production**, en vink **Contains secret values** aan. De repo is openbaar: zo komen de geheimen niet in een deploy preview, ook niet bij een pull request vanuit een fork.
    - `GITHUB_CLIENT_ID`: de client-ID
    - `GITHUB_CLIENT_SECRET`: het client secret
    - `GITHUB_APP_SLUG`: de slug
    - `SESSIE_SLEUTEL`: de uitkomst van `openssl rand -base64 32`
-3. Deploy previews draaien helemaal in demo (`VITE_STAND=demo` staat al in `netlify.toml`). Inloggen kan daar niet; test de echte versie op de hoofdsite.
+3. Deploy previews draaien helemaal in demo (`VITE_STAND=demo` staat al in `netlify.toml`). Inloggen kan daar niet, want de variabelen staan er niet. Test de echte versie op de hoofdsite.
 
 ## 4. Lokaal draaien
 
@@ -45,7 +45,7 @@ Ga naar morgenacademy › Settings › Developer settings › GitHub Apps › **
 
 ## 5. Testen als deelnemer
 
-Doe dit op `https://<site>.netlify.app`, met een nieuw GitHub-account of een nieuwe repo onder morgenacademy.
+Doe dit op `https://<site>.netlify.app`, met een nieuw GitHub-account of een nieuwe repo onder morgenacademy. Installeer de app onder morgenacademy met **Only select repositories**. Anders ziet elk lid van de organisatie al die repo's in de keuzelijst.
 
 - [ ] Stap 2 van level 0 opent GitHub met de starter-repo als template. Je maakt een privé-repo.
 - [ ] Stap 3 van level 0: **Koppel met GitHub**, één scherm op GitHub, Install, en je komt terug op level 0. Account, Repo en Koppelen hebben een vinkje.
@@ -53,7 +53,7 @@ Doe dit op `https://<site>.netlify.app`, met een nieuw GitHub-account of een nie
 - [ ] Clonen in GitHub Desktop, en je AI haalt eerst op en vult `werkplek.md`. Push origin, terug in het tabblad: level 0 is af.
 - [ ] Level 1 met de formulieren: elk opgeslagen formulier is één commit op `main`.
 - [ ] Level 2: een pull request van je AI mergen op GitHub, en "1 gemergde pull request" staat in "Jouw repo".
-- [ ] Uitloggen en weer inloggen: je staat weer waar je was, zonder iets te kiezen op GitHub.
+- [ ] Uitloggen en weer inloggen: GitHub vraagt eerst met welk account je verdergaat. Daarna sta je weer waar je was, zonder een repo te kiezen.
 - [ ] Na inloggen staat de cookie `oma_sessie` van de site op `Secure` en `HttpOnly` (DevTools › Application › Cookies).
 - [ ] Een formulier opslaan werkt op de echte site. Dit bewijst ook dat de Origin-check het eigen adres van de site toelaat.
 - [ ] Optioneel: een repo zonder template (leeg, geen commits). Koppelen waarschuwt dat het niet op de starter-repo lijkt. Noteer of Setup opslaan daar werkt.

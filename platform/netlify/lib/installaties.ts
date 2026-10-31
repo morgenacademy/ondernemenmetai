@@ -18,3 +18,8 @@ export async function reposVanGebruiker(api: Api): Promise<string[]> {
   }
   return [...namen].sort();
 }
+
+// Een 403 kan ook een tijdelijke weigering zijn. Alleen als de repo uit de installatie is, is hij echt weg.
+export async function heeftRepo(api: Api, repo: string): Promise<boolean> {
+  return (await reposVanGebruiker(api)).includes(repo);
+}

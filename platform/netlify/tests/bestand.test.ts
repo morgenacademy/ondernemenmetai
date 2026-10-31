@@ -39,6 +39,7 @@ async function vraag(deps: Deps, body: unknown = GELDIG, opties: { s?: Partial<S
 
 const repoOk = () => json({ default_branch: 'main' });
 const nieuw = () => json({}, 404);
+const installaties = () => json({ installations: [{ id: 7 }] });
 
 describe('bestand', () => {
   it('weigert iets anders dan POST (405)', async () => {
@@ -99,11 +100,18 @@ describe('bestand', () => {
     expect(s?.login).toBe('harmen');
   });
 
-  it('een 403 bij het schrijven (geen rechten meer) geeft ook 409 met gewist cookie', async () => {
-    const { deps } = maak([repoOk, nieuw, () => json({}, 403)]);
+  it('een 403 bij het schrijven, met de repo uit de installatie, geeft 409 met gewist cookie', async () => {
+    const { deps } = maak([repoOk, nieuw, () => json({}, 403), installaties, () => json({ repositories: [{ full_name: 'harmen/iets-anders' }] })]);
     const res = await vraag(deps);
     expect(res.status).toBe(409);
     expect(res.headers.getSetCookie().some((c) => c.startsWith(`${SESSIE_COOKIE}=`))).toBe(true);
+  });
+
+  it('een 403 bij het schrijven, terwijl de repo nog in de installatie zit, geeft 502 en laat de repo staan', async () => {
+    const { deps } = maak([repoOk, nieuw, () => json({}, 403), installaties, () => json({ repositories: [{ full_name: 'harmen/mijn-onderneming' }] })]);
+    const res = await vraag(deps);
+    expect(res.status).toBe(502);
+    expect(res.headers.getSetCookie()).toEqual([]);
   });
 
   it('bij een rate limit geeft 429', async () => {
