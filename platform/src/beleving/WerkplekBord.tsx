@@ -4,6 +4,7 @@ import type { RepoSnapshot } from '../lib/repo/types';
 import { BELEVING } from './beleving';
 import { PAD, padStand, standLabel, volgendeKeuze, type Icoon } from './pad';
 import { StapBlad } from './StapBlad';
+import { useStand } from './stand';
 import type { StapStatus } from './voortgang';
 
 const PADEN: Record<Icoon | 'vink', ReactNode> = {
@@ -65,6 +66,7 @@ type Props = {
  * De kleur zegt waar je staat, het "Jij"-label staat bij de stap van nu, en het werkblad van het gekozen rondje staat eronder.
  */
 export function WerkplekBord({ level, snapshot, evaluation, statussen, levelAf, onSave, onDemoStap, onHandmatig, onFillLevel }: Props) {
+  const { demo } = useStand();
   const b = BELEVING[level.id];
   const stappen = level.steps.filter((s) => !s.optional);
   const stand = padStand(level, statussen);
@@ -165,7 +167,7 @@ export function WerkplekBord({ level, snapshot, evaluation, statussen, levelAf, 
               onNaarEerst={() => kies(stand.nu, true)}
             />
           )}
-          {!levelAf && (
+          {!levelAf && demo && (
             <div className="bl-bord-demo">
               <button type="button" className="bl-knop-demo" onClick={onFillLevel}>
                 Vul het hele level met demo content

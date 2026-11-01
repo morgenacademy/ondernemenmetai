@@ -27,3 +27,16 @@ describe('Foutgrens', () => {
     expect(html).toMatch(/<button type="button"[^>]*>Wis de demo-opslag en begin opnieuw<\/button>/);
   });
 });
+
+describe('Foutgrens in de echte stand', () => {
+  it('praat niet over de demo en biedt één knop om de pagina te herladen', () => {
+    const grens = new Foutgrens({ onClear: noop, soort: 'echt', children: <p>De app</p> });
+    grens.state = { failed: true };
+    const html = renderToStaticMarkup(<>{grens.render()}</>);
+    expect(html).toContain('role="alert"');
+    expect(html).not.toMatch(/demo/i);
+    expect(html).toContain('Je repo op GitHub is niet veranderd');
+    expect(html.match(/<button/g)).toHaveLength(1);
+    expect(html).toMatch(/<button type="button"[^>]*>Herlaad de pagina<\/button>/);
+  });
+});

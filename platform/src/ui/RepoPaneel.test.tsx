@@ -24,4 +24,25 @@ describe('RepoPaneel', () => {
     expect(render(true, 0)).toContain('Privé · 0 gemergde pull requests');
     expect(render(true, 1)).toContain('Privé · 1 gemergde pull request<');
   });
+
+  it('toont Bekijk op GitHub en de auteur bij url en auteur', () => {
+    const html = renderToStaticMarkup(
+      <RepoPaneel
+        info={{ name: 'mijn-onderneming', owner: 'harmen', isPrivate: true, mergedPullRequests: 0, url: 'https://github.com/harmen/mijn-onderneming' }}
+        snapshot={{ files: {}, mergedPullRequests: 0 }}
+        commits={[{ message: 'Mijn idee', at: '2026-10-20T10:00:00Z', auteur: 'Harmen' }]}
+        lastWritten={null}
+        showPullRequests={false}
+      />,
+    );
+    expect(html).toContain('href="https://github.com/harmen/mijn-onderneming"');
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('rel="noreferrer"');
+    expect(html).toContain('Bekijk op GitHub');
+    expect(html).toContain('Mijn idee · Harmen');
+  });
+
+  it('toont geen link zonder url', () => {
+    expect(render(false)).not.toContain('Bekijk op GitHub');
+  });
 });

@@ -53,3 +53,11 @@ export function strookUitsnede(van: Halte, naar: Halte): { left: number; top: nu
 export function repoZichtbaar(handmatig: Set<string>, status: Record<number, LevelState>): boolean {
   return handmatig.has('l0-koppelen') || status[0] === 'done';
 }
+
+/** Deze stappen krijgen in de echte stand vanzelf een vinkje zodra je repo gekoppeld is. */
+export const VANZELF_BIJ_KOPPELEN = ['l0-account', 'l0-repo', 'l0-koppelen'];
+
+/** De afgevinkte stappen, plus Account, Repo en Koppelen als je gekoppeld bent. Anders dezelfde set. */
+export function metKoppeling(handmatig: Set<string>, gekoppeld: boolean): Set<string> {
+  return gekoppeld ? new Set([...handmatig, ...VANZELF_BIJ_KOPPELEN]) : handmatig;
+}

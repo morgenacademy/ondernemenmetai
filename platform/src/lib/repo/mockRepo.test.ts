@@ -135,4 +135,11 @@ describe('MockRepoAdapter', () => {
     await repo.mergePullRequest();
     expect(await buildSnapshot(repo)).toEqual({ files: { 'README.md': '# Start\n' }, mergedPullRequests: 1 });
   });
+
+  it('refresh verandert niets', async () => {
+    const repo = new MockRepoAdapter(new MapStorage(), seed);
+    await repo.writeFile('README.md', 'nieuw', 'wijziging');
+    await repo.refresh();
+    expect(await repo.readFile('README.md')).toBe('nieuw');
+  });
 });

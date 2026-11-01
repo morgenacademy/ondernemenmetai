@@ -1,7 +1,7 @@
-import type { RepoAdapter, RepoInfo } from './types';
+import type { Commit, RepoAdapter, RepoInfo } from './types';
 
 export type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
-export type Commit = { message: string; path: string; at: string };
+export type { Commit } from './types';
 type State = { files: Record<string, string>; mergedPullRequests: number; commits: Commit[] };
 
 export const DEMO_STORAGE_KEY = 'ondernemen-met-ai.demo-repo.v1';
@@ -95,6 +95,9 @@ export class MockRepoAdapter implements RepoAdapter {
   async commits(): Promise<Commit[]> {
     return this.load().commits;
   }
+
+  /** De demo heeft geen andere bron dan zichzelf, dus er valt niets te verversen. */
+  async refresh(): Promise<void> {}
 
   async reset(): Promise<void> {
     this.memory = this.initial();

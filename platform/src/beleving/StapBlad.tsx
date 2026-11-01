@@ -1,5 +1,4 @@
 import { useState, type Ref } from 'react';
-import { DEMO_FORMS } from '../demo/formulieren';
 import { demoVoorStap } from '../demo/vullen';
 import { filterVariants, setupFrom, stepContent } from '../lib/content';
 import type { FileWrite, LevelDef, LevelEvaluation, Step } from '../lib/levels/types';
@@ -13,7 +12,9 @@ import { Markdown } from '../ui/Markdown';
 import { Paneel } from '../ui/Paneel';
 import { VoortgangStap } from '../ui/VoortgangStap';
 import { KORT } from './kort';
+import { KoppelenEcht } from './KoppelenEcht';
 import { aiResultaat } from './resultaat';
+import { useDemoWaarden, useStand } from './stand';
 import { Voorbeeld } from './Voorbeeld';
 import type { StapStatus } from './voortgang';
 
@@ -115,6 +116,8 @@ export function kleineLetter(tekst: string): string {
  * Een stap die nog niet aan de beurt is, zegt welke stap eerst moet en brengt je erheen.
  */
 export function StapBlad({ level, step, nummer, totaal, status, snapshot, evaluation, onSave, onDemo, onKlaar, eerst, onNaarEerst, titelRef }: Props) {
+  const { demo: isDemo } = useStand();
+  const demoWaarden = useDemoWaarden(step.id, snapshot);
   const setup = setupFrom(snapshot);
   const checks = evaluation.results.filter((r) => r.stepId === step.id);
   // Koppelen vink je niet zelf af: die stap is pas klaar als het koppelen gelukt is.
@@ -148,11 +151,11 @@ export function StapBlad({ level, step, nummer, totaal, status, snapshot, evalua
           </button>
         </div>
       );
-    if (step.id === 'l0-koppelen') return <Koppelen af={af} onKlaar={onKlaar} />;
+    if (step.id === 'l0-koppelen') return isDemo ? <Koppelen af={af} onKlaar={onKlaar} /> : <KoppelenEcht af={af} snapshot={snapshot} />;
     if (step.kind === 'form')
       return (
         <div className="bl-paneel-echt">
-          <FormStap step={step} snapshot={snapshot} alreadyDone={af} onSave={onSave} demoWaarden={DEMO_FORMS[step.id]?.(snapshot)} />
+          <FormStap step={step} snapshot={snapshot} alreadyDone={af} onSave={onSave} demoWaarden={demoWaarden} />
           {step.paneel && <Paneel soort={step.paneel} snapshot={snapshot} />}
         </div>
       );
@@ -245,7 +248,7 @@ export function StapBlad({ level, step, nummer, totaal, status, snapshot, evalua
             </ul>
           )}
           {/* Na afronden geen demoknop meer, behalve bij de interviewvakken: daar zet hij er telkens één bij. */}
-          {!straks && demo?.soort === 'simulatie' && (!af || step.kind === 'voortgang') && (
+          {isDemo && !straks && demo?.soort === 'simulatie' && (!af || step.kind === 'voortgang') && (
             <div className="bl-demo-stap">
               <button type="button" className="bl-knop-demo" onClick={onDemo}>
                 Vul met demo content

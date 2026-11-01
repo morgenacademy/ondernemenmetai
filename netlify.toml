@@ -1,0 +1,18 @@
+[build]
+  base = "platform"
+  command = "npm run build"
+  publish = "dist"
+[build.environment]
+  NODE_VERSION = "22"
+[functions]
+  directory = "netlify/functions"
+[context.deploy-preview.environment]
+  VITE_STAND = "demo"
+[dev]
+  command = "npm --prefix platform run dev"
+  targetPort = 5173
+  port = 8888
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

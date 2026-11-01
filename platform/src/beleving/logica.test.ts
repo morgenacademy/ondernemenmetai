@@ -3,11 +3,13 @@ import { LEVELS } from '../lib/levels';
 import { evaluateLevel } from '../lib/levels/evaluate';
 import { level0 } from '../lib/levels/level0';
 import { level1 } from '../lib/levels/level1';
+import { GeenRepo, NietIngelogd } from '../lib/repo/fouten';
 import { starterFiles } from '../lib/repo/starterFiles';
 import { BELEVING, HALTES } from './beleving';
-import { leesHandmatig, schrijfHandmatig } from './handmatig';
+import { HANDMATIG_KEY, handmatigSleutel, leesHandmatig, schrijfHandmatig } from './handmatig';
 import { parseRoute, routeHash } from './route';
-import { huidigLevel, repoZichtbaar, stapStatussen, strookUitsnede } from './voortgang';
+import { repoNaSessie } from './useEchteSessie';
+import { huidigLevel, metKoppeling, repoZichtbaar, stapStatussen, strookUitsnede } from './voortgang';
 
 const snap = (files: Record<string, string> = {}) => ({ files: { ...starterFiles, ...files }, mergedPullRequests: 0 });
 
@@ -106,6 +108,57 @@ describe('handmatig afgevinkte stappen', () => {
     expect(leesHandmatig({ getItem: () => '{kapot', setItem: () => {}, removeItem: () => {} }).size).toBe(0);
     expect(leesHandmatig({ getItem: () => { throw new Error('geblokkeerd'); }, setItem: () => {}, removeItem: () => {} }).size).toBe(0);
     expect(leesHandmatig(null).size).toBe(0);
+  });
+
+  it('handmatigSleutel: de demo houdt zijn sleutel, de echte stand bewaart per repo', () => {
+    expect(handmatigSleutel('demo', null)).toBe(HANDMATIG_KEY);
+    expect(handmatigSleutel('demo', 'harmen/mijn-onderneming')).toBe(HANDMATIG_KEY);
+    expect(handmatigSleutel('echt', 'harmen/mijn-onderneming')).toBe('ondernemen-met-ai.handmatig.harmen/mijn-onderneming.v1');
+    expect(handmatigSleutel('echt', null)).toBe('ondernemen-met-ai.handmatig.echt.v1');
+  });
+
+  it('vinkjes onder een eigen sleutel lopen niet door elkaar met de demo', () => {
+    const opslag = new Map<string, string>();
+    const storage = { getItem: (k: string) => opslag.get(k) ?? null, setItem: (k: string, v: string) => void opslag.set(k, v), removeItem: (k: string) => void opslag.delete(k) };
+    const sleutel = handmatigSleutel('echt', 'harmen/mijn-onderneming');
+    schrijfHandmatig(storage, new Set(['l0-download']), sleutel);
+    expect([...leesHandmatig(storage, sleutel)]).toEqual(['l0-download']);
+    expect(leesHandmatig(storage).size).toBe(0);
+    expect(opslag.has(sleutel)).toBe(true);
+  });
+});
+
+describe('metKoppeling', () => {
+  it('metKoppeling voegt Account, Repo en Koppelen toe als je gekoppeld bent', () => {
+    expect([...metKoppeling(new Set(['l0-download']), true)].sort()).toEqual(['l0-account', 'l0-download', 'l0-koppelen', 'l0-repo']);
+  });
+
+  it('laat de set ongemoeid als je niet gekoppeld bent', () => {
+    const handmatig = new Set(['l0-account']);
+    expect(metKoppeling(handmatig, false)).toBe(handmatig);
+    expect([...handmatig]).toEqual(['l0-account']);
+  });
+});
+
+describe('repoNaSessie', () => {
+  const gekoppeld = { stand: 'gekoppeld', login: 'harmen', repo: 'harmen/mijn-onderneming' } as const;
+  const uit = { stand: 'uit' } as const;
+
+  it('gekoppeld: de repo uit de sessie', () => {
+    expect(repoNaSessie(null, gekoppeld, null)).toBe('harmen/mijn-onderneming');
+  });
+
+  it('uit bij het openen: geen repo, dus de lege repo', () => {
+    expect(repoNaSessie(null, uit, null)).toBeNull();
+  });
+
+  it('uitgelogd in een lopend tabblad: de repo blijft, en daarmee je formulieren', () => {
+    expect(repoNaSessie('harmen/mijn-onderneming', uit, new NietIngelogd())).toBe('harmen/mijn-onderneming');
+    expect(repoNaSessie('harmen/mijn-onderneming', uit, null)).toBe('harmen/mijn-onderneming');
+  });
+
+  it('je repo is weg: geen repo meer', () => {
+    expect(repoNaSessie('harmen/mijn-onderneming', { stand: 'kies-repo', login: 'harmen', repos: [] }, new GeenRepo())).toBeNull();
   });
 });
 

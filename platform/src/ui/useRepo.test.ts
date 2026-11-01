@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { MockRepoAdapter, type StorageLike } from '../lib/repo/mockRepo';
-import { opslagMelding, verversBijTerugkomst } from './useRepo';
+import type { RepoAdapter } from '../lib/repo/types';
+import { haalRepoOp, opslagMelding, verversBijTerugkomst } from './useRepo';
 
 const fullStorage: StorageLike = {
   getItem: () => null,
@@ -27,6 +28,32 @@ describe('opslagMelding', () => {
     const repo = new MockRepoAdapter(fullStorage, {});
     await repo.writeFile('a.md', 'x', 'm');
     expect(opslagMelding(repo)).toMatch(/niet .*bewaard|kwijt/);
+  });
+});
+
+describe('haalRepoOp', () => {
+  const nepAdapter = (log: string[]): RepoAdapter => ({
+    getInfo: async () => (log.push('getInfo'), { name: 'n', owner: 'o', isPrivate: true, mergedPullRequests: 2 }),
+    listFiles: async () => (log.push('listFiles'), ['a.md']),
+    readFile: async () => (log.push('readFile'), 'inhoud'),
+    writeFile: async () => void log.push('writeFile'),
+    commits: async () => (log.push('commits'), []),
+    refresh: async () => void log.push('refresh'),
+  });
+
+  it('roept eerst refresh aan', async () => {
+    const log: string[] = [];
+    const { snapshot, info } = await haalRepoOp(nepAdapter(log));
+    expect(log[0]).toBe('refresh');
+    expect(snapshot.files).toEqual({ 'a.md': 'inhoud' });
+    expect(info.owner).toBe('o');
+  });
+});
+
+describe('opslagMelding zonder isPersisted', () => {
+  it('zegt niets bij een adapter zonder isPersisted', () => {
+    const adapter = { refresh: async () => {} } as unknown as RepoAdapter;
+    expect(opslagMelding(adapter)).toBeNull();
   });
 });
 

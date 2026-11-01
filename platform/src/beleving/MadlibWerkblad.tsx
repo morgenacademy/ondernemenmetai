@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState, type FormEvent } from 'react';
-import { DEMO_FORMS } from '../demo/formulieren';
 import type { FileWrite, FormStep, FormValues, LevelDef } from '../lib/levels/types';
 import type { RepoSnapshot } from '../lib/repo/types';
+import { useDemoWaarden } from './stand';
 import { Uitleg, WerkbladKader } from './WerkbladDelen';
 
 /** De madlib als zin: de vaste woorden, en per gat het veld uit level1.ts met wat erin hoort. */
@@ -59,7 +59,7 @@ export const MadlibWerkblad = forwardRef<HTMLHeadingElement, Props>(function Mad
   const gevuld = ZIN.filter((g) => waarden[g.veld].trim() !== '').length;
   const eersteLeeg = ZIN.find((g) => waarden[g.veld].trim() === '')?.veld;
   const label = (veld: string) => step.fields.find((f) => f.name === veld)?.label ?? veld;
-  const demo = DEMO_FORMS[step.id]?.(snapshot);
+  const demo = useDemoWaarden(step.id, snapshot);
 
   const zet = async (e: FormEvent) => {
     e.preventDefault();
