@@ -50,7 +50,7 @@
 .bl-dots a { width: 9px; height: 9px; border-radius: 99px; background: rgba(255,255,255,.25); display: block; transition: .3s; }
 .bl-dots a.aan { background: var(--bl-accent); box-shadow: 0 0 12px rgba(216,254,86,.6); }
 .bl-route-scene { justify-content: center; background: var(--bl-bg); }
-.bl-route-scene h2 { position: absolute; z-index: 3; top: max(96px, 13vh); left: 6vw; max-width: 8em; text-shadow: 0 2px 24px rgba(12,8,24,.9); }
+.bl-route-scene h2 { position: absolute; z-index: 3; top: max(96px, 13vh); left: 6vw; max-width: 7em; text-shadow: 0 2px 24px rgba(12,8,24,.9); }
 /* De route op het pad uit de eerste scène. De uitsnede loopt van x 560 tot 1536 en van y 250 tot 860 van start.webp. */
 .bl-pad { position: relative; width: min(100%, 160vh); aspect-ratio: 976 / 610; overflow: hidden; container-type: inline-size; }
 .bl-pad::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(12,8,24,.75) 0%, rgba(12,8,24,0) 26%), linear-gradient(180deg, rgba(12,8,24,.8) 0%, rgba(12,8,24,0) 34%), linear-gradient(0deg, var(--bl-bg) 0%, rgba(12,8,24,0) 14%), linear-gradient(270deg, var(--bl-bg) 0%, rgba(12,8,24,0) 4%); }
