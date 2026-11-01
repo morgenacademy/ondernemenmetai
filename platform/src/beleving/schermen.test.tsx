@@ -30,7 +30,7 @@ describe('Welkom', () => {
   it('op een telefoon staat de route als lijst, met de twee lussen erbij', () => {
     const lijst = html.match(/<ol class="bl-route-lijst[^"]*"[\s\S]*?<\/ol>/)?.[0] ?? '';
     for (const l of LEVELS) expect(lijst, l.name).toContain(l.name);
-    expect(lijst.match(/heen en weer/g)).toHaveLength(2);
+    expect(lijst.match(/iteratie/g)).toHaveLength(2);
   });
 
   it('eindigt met een knop naar je route', () => {
