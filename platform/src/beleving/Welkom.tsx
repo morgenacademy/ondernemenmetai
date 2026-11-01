@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { HALTES } from './beleving';
 import { useZichtbaar } from './useZichtbaar';
 
 const ICONEN = (
@@ -13,27 +14,23 @@ const ICONEN = (
   </svg>
 );
 
-type Halte = { nr: number; icoon: string; naam: string; wat: string; x: number; y: number; boven: boolean; vertraging: string; basis?: boolean };
+/** De levels op het pad van start.webp; de plek van elk lichtje staat in HALTES. kant: aan welke kant van het lichtje het kaartje staat. */
+type Stop = { nr: number; icoon: string; naam: string; wat: string; kant: 'links' | 'rechts'; vertraging: string; basis?: boolean };
 
-const HALTES: Halte[] = [
-  { nr: 0, icoon: 'werkplek', naam: 'Werkplek', wat: 'Je basiskamp', x: 100, y: 330, boven: false, vertraging: '.1s', basis: true },
-  { nr: 1, icoon: 'idee', naam: 'Idee', wat: 'Wat ga je doen?', x: 270, y: 170, boven: true, vertraging: '.6s' },
-  { nr: 2, icoon: 'probleem', naam: 'Probleem-validatie', wat: 'Hebben ze dit probleem?', x: 420, y: 390, boven: false, vertraging: '1s' },
-  { nr: 3, icoon: 'prototype', naam: 'Prototype', wat: 'Je eerste versie', x: 610, y: 220, boven: true, vertraging: '1.5s' },
-  { nr: 4, icoon: 'feedback', naam: 'Markt feedback', wat: 'Wat vinden ze ervan?', x: 820, y: 140, boven: true, vertraging: '1.9s' },
-  { nr: 5, icoon: 'validatie', naam: 'Product-validatie', wat: 'Willen ze ervoor betalen?', x: 930, y: 390, boven: false, vertraging: '2.3s' },
-  { nr: 6, icoon: 'lancering', naam: 'Lancering', wat: 'Je eerste klanten', x: 1110, y: 230, boven: true, vertraging: '3s' },
+const STOPS: Stop[] = [
+  { nr: 0, icoon: 'werkplek', naam: 'Werkplek', wat: 'Je basiskamp', kant: 'rechts', vertraging: '.2s', basis: true },
+  { nr: 1, icoon: 'idee', naam: 'Idee', wat: 'Wat ga je doen?', kant: 'links', vertraging: '.6s' },
+  { nr: 2, icoon: 'probleem', naam: 'Probleem-validatie', wat: 'Hebben ze dit probleem?', kant: 'rechts', vertraging: '1s' },
+  { nr: 3, icoon: 'prototype', naam: 'Prototype', wat: 'Je eerste versie', kant: 'links', vertraging: '1.4s' },
+  { nr: 4, icoon: 'feedback', naam: 'Markt feedback', wat: 'Wat vinden ze ervan?', kant: 'links', vertraging: '1.8s' },
+  { nr: 5, icoon: 'validatie', naam: 'Product-validatie', wat: 'Willen ze ervoor betalen?', kant: 'rechts', vertraging: '2.2s' },
+  { nr: 6, icoon: 'lancering', naam: 'Lancering', wat: 'Je eerste klanten', kant: 'links', vertraging: '2.6s' },
 ];
 
-const PIJLEN = [
-  ['M130 292 C160 230 190 200 222 188', '.3s'],
-  ['M236 214 C200 300 290 385 368 396', '.8s'],
-  ['M452 352 C478 280 392 176 320 170', '1.2s'],
-  ['M468 382 C522 362 542 286 568 254', '1.6s'],
-  ['M658 204 C700 180 738 162 770 152', '2s'],
-  ['M796 188 C770 276 818 366 880 388', '2.4s'],
-  ['M962 352 C990 280 934 176 868 150', '2.8s'],
-  ['M978 378 C1030 352 1052 296 1070 268', '3.2s'],
+/** Tussen idee en probleem-validatie, en tussen markt feedback en product-validatie, loopt een lichtje heen en weer over het pad. Coördinaten in pixels van start.webp. */
+const ITERATIES = [
+  { pad: 'M1127 711 C1190 712 1262 690 1280 635', label: { x: 79.5, y: 67.8 } },
+  { pad: 'M1300 511 C1330 506 1360 494 1367 472', label: { x: 88.3, y: 51.6 } },
 ];
 
 const SCENES = ['start', 'route', 'werkplek', 'markt', 'klanten'];
@@ -73,59 +70,47 @@ export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
 
       <section className="bl-scene bl-route-scene" id="bl-welkom-route">
         <h2 className="bl-in">Zes stappen naar de markt</h2>
-        <svg
-          className="bl-zigzag"
-          viewBox="0 0 1200 560"
+        {/* De route op het pad uit de eerste scène: elk lichtje is een level. */}
+        <div
+          className="bl-pad"
           role="img"
-          aria-label="De route: werkplek, idee, probleem-validatie, prototype, markt feedback, product-validatie en lancering. Tussen idee en probleem-validatie, en tussen markt feedback en product-validatie, ga je een paar keer heen en weer."
+          aria-label="De route over het pad: werkplek, idee, probleem-validatie, prototype, markt feedback, product-validatie en lancering. Tussen idee en probleem-validatie, en tussen markt feedback en product-validatie, doe je een paar rondes: iteratie."
         >
-          <defs>
-            <marker id="bl-punt" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
-              <path d="M0 0L10 5L0 10z" fill="#9B6FCF" />
-            </marker>
-          </defs>
-          {PIJLEN.map(([d, vertraging]) => (
-            <path key={d} className="pijl" pathLength={1} markerEnd="url(#bl-punt)" style={{ transitionDelay: vertraging }} d={d} />
-          ))}
-          <circle className="lichtje" r="7">
-            <animateMotion dur="3.2s" repeatCount="indefinite" path="M270 170 C200 300 290 385 420 390 C478 280 392 176 270 170" />
-          </circle>
-          <circle className="lichtje" r="7">
-            <animateMotion dur="3.2s" repeatCount="indefinite" path="M820 140 C770 276 818 366 930 390 C990 280 934 176 820 140" />
-          </circle>
-          <text className="lus-tekst" x="352" y="290">
-            ↻ heen en weer
-          </text>
-          <text className="lus-tekst" x="884" y="276">
-            ↻ heen en weer
-          </text>
-          {HALTES.map((h) => (
-            <g key={h.nr} className="node" style={{ transitionDelay: h.vertraging }} transform={`translate(${h.x} ${h.y})`}>
-              {h.basis && (
-                <>
-                  <rect x="-70" y="-98" width="140" height="28" rx="9" fill="#D8FE56" />
-                  <text x="0" y="-79" textAnchor="middle" fontSize="13" fontWeight="800" fill="#1A1A2E" letterSpacing="1.5">
-                    JIJ BEGINT HIER
-                  </text>
-                </>
-              )}
-              <ellipse rx="46" ry="44" fill={h.basis ? '#fff' : '#D8FE56'} />
-              <use href={`#bl-i-${h.icoon}`} x="-22" y="-22" width="44" height="44" stroke="#5B2D8E" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              <circle className="badge" cx="36" cy="-34" r="15" />
-              <text className="badge-nr" x="36" y="-34">
-                {h.nr}
-              </text>
-              <text className="naam" y={h.boven ? -80 : 74}>
-                {h.naam}
-              </text>
-              <text className="wat" y={h.boven ? -58 : 96}>
-                {h.wat}
-              </text>
-            </g>
-          ))}
-        </svg>
+          <div className="bl-pad-laag">
+            <img className="plaat" src="/beelden/start.webp" alt="" />
+            <svg className="bl-pad-iteratie" viewBox="0 0 1536 1024" aria-hidden="true">
+              {ITERATIES.map((it) => (
+                <circle key={it.pad} className="lichtje" r="6">
+                  <animateMotion dur="2.4s" repeatCount="indefinite" path={it.pad} keyPoints="0;1;0" keyTimes="0;0.5;1" calcMode="linear" />
+                </circle>
+              ))}
+            </svg>
+            {ITERATIES.map((it) => (
+              <span key={it.pad} className="bl-pad-lus" aria-hidden="true" style={{ left: `${it.label.x}%`, top: `${it.label.y}%` }}>
+                ↻ iteratie
+              </span>
+            ))}
+            {STOPS.map((s) => (
+              <span
+                key={s.nr}
+                className={`bl-pad-halte${s.basis ? ' basis' : ''}`}
+                aria-hidden="true"
+                style={{ left: `${HALTES[s.nr].x}%`, top: `${HALTES[s.nr].y}%`, transitionDelay: s.vertraging, ['--d' as string]: `${3.4 - s.nr * 0.3}cqw` }}
+              >
+                <span className="ring" />
+                <span className={`kaartje ${s.kant}`}>
+                  {s.basis && <span className="begin">Jij begint hier</span>}
+                  <span className="naam">
+                    <span className="nr">{s.nr}</span> {s.naam}
+                  </span>
+                  <span className="wat">{s.wat}</span>
+                </span>
+              </span>
+            ))}
+          </div>
+        </div>
         <ol className="bl-route-lijst bl-in d1">
-          {HALTES.map((h) => (
+          {STOPS.map((h) => (
             <li key={h.nr} className={h.basis ? 'basis' : ''}>
               <span className="blob" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
@@ -137,7 +122,7 @@ export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
                 <span className="naam">{h.naam}</span>
                 <span className="wat">{h.wat}</span>
               </span>
-              {(h.nr === 1 || h.nr === 4) && <span className="lus">↻ heen en weer met level {h.nr + 1}</span>}
+              {(h.nr === 1 || h.nr === 4) && <span className="lus">↻ iteratie met level {h.nr + 1}</span>}
             </li>
           ))}
         </ol>

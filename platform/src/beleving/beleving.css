@@ -45,25 +45,32 @@
   .bl-tekst { padding-right: 6vw; }
 }
 
-/* Welkom: voortgangsbolletjes en de zigzagroute */
+/* Welkom: voortgangsbolletjes en de route op het pad */
 .bl-dots { position: fixed; right: 26px; top: 50%; transform: translateY(-50%); z-index: 10; display: grid; gap: 10px; }
 .bl-dots a { width: 9px; height: 9px; border-radius: 99px; background: rgba(255,255,255,.25); display: block; transition: .3s; }
 .bl-dots a.aan { background: var(--bl-accent); box-shadow: 0 0 12px rgba(216,254,86,.6); }
-.bl-route-scene { flex-direction: column; justify-content: center; padding: 12vh 6vw; background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(91,45,142,.55), transparent 65%), var(--bl-bg); }
-.bl-route-scene h2 { text-align: center; }
-.bl-zigzag { width: min(1200px, 100%); margin-top: 6vh; overflow: visible; font-family: 'Barlow', sans-serif; }
-.bl-zigzag .pijl { fill: none; stroke: var(--bl-purple-light); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; transition: stroke-dashoffset 1s ease, opacity .3s; }
-.bl-zichtbaar .bl-zigzag .pijl { stroke-dashoffset: 0; opacity: 1; }
-.bl-zigzag .node { opacity: 0; transition: opacity .6s; }
-.bl-zichtbaar .bl-zigzag .node { opacity: 1; }
-.bl-zigzag .naam { fill: #fff; font-weight: 800; font-size: 21px; text-anchor: middle; }
-.bl-zigzag .wat { fill: var(--bl-muted); font-size: 16px; text-anchor: middle; }
-.bl-zigzag .badge { fill: var(--bl-bg); stroke: var(--bl-accent); stroke-width: 2; }
-.bl-zigzag .badge-nr { fill: var(--bl-accent); font-weight: 900; font-size: 15px; text-anchor: middle; dominant-baseline: central; }
-.bl-zigzag .lus-tekst { fill: var(--bl-accent); font-size: 15px; font-weight: 700; letter-spacing: .08em; text-anchor: middle; text-transform: uppercase; opacity: 0; transition: opacity .6s 3.4s; }
-.bl-zichtbaar .bl-zigzag .lus-tekst { opacity: .9; }
-.bl-zigzag .lichtje { fill: var(--bl-accent); filter: drop-shadow(0 0 6px rgba(216,254,86,.9)); opacity: 0; transition: opacity .6s 3.4s; }
-.bl-zichtbaar .bl-zigzag .lichtje { opacity: 1; }
+.bl-route-scene { justify-content: center; background: var(--bl-bg); }
+.bl-route-scene h2 { position: absolute; z-index: 3; top: max(96px, 13vh); left: 6vw; max-width: 8em; text-shadow: 0 2px 24px rgba(12,8,24,.9); }
+/* De route op het pad uit de eerste scène. De uitsnede loopt van x 560 tot 1536 en van y 250 tot 860 van start.webp. */
+.bl-pad { position: relative; width: min(100%, 160vh); aspect-ratio: 976 / 610; overflow: hidden; container-type: inline-size; }
+.bl-pad::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(12,8,24,.75) 0%, rgba(12,8,24,0) 26%), linear-gradient(180deg, rgba(12,8,24,.8) 0%, rgba(12,8,24,0) 34%), linear-gradient(0deg, var(--bl-bg) 0%, rgba(12,8,24,0) 14%), linear-gradient(270deg, var(--bl-bg) 0%, rgba(12,8,24,0) 4%); }
+.bl-pad-laag { position: absolute; width: 157.38%; left: -57.38%; top: -40.98%; aspect-ratio: 1536 / 1024; }
+.bl-pad-laag img.plaat { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.bl-pad-halte { position: absolute; z-index: 2; transform: translate(-50%, -50%); opacity: 0; transition: opacity .6s; }
+.bl-zichtbaar .bl-pad-halte { opacity: 1; }
+.bl-pad-halte .ring { display: block; width: var(--d); height: var(--d); border-radius: 99px; border: 2px solid rgba(216,254,86,.9); box-shadow: 0 0 18px rgba(216,254,86,.55); }
+.bl-pad-halte.basis .ring { border-color: #fff; box-shadow: 0 0 18px rgba(255,255,255,.5); }
+.bl-pad-halte .kaartje { position: absolute; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: .15em; white-space: nowrap; font-size: clamp(12px, 1.2cqw, 18px); line-height: 1.2; background: rgba(12,8,24,.72); border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(8px); padding: .45em .8em; border-radius: .7em; }
+.bl-pad-halte .kaartje.links { right: calc(100% + .7em); } .bl-pad-halte .kaartje.rechts { left: calc(100% + .7em); }
+.bl-pad-halte .naam { font-weight: 800; color: #fff; }
+.bl-pad-halte .nr { color: var(--bl-accent); font-weight: 900; margin-right: .15em; }
+.bl-pad-halte .wat { font-size: .82em; color: var(--bl-muted); }
+.bl-pad-halte .begin { align-self: flex-start; margin-bottom: .35em; font-size: .66em; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #1A1A2E; background: var(--bl-accent); padding: .25em .6em; border-radius: .5em; }
+.bl-pad-lus { position: absolute; z-index: 2; transform: translate(-50%, -50%); white-space: nowrap; font-size: clamp(10px, .95cqw, 14px); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--bl-accent); text-shadow: 0 1px 8px rgba(0,0,0,.95); opacity: 0; transition: opacity .6s 3s; }
+.bl-pad-iteratie { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+.bl-pad-iteratie .lichtje { fill: var(--bl-accent); filter: drop-shadow(0 0 6px rgba(216,254,86,.9)); opacity: 0; transition: opacity .6s 3s; }
+.bl-zichtbaar .bl-pad-lus, .bl-zichtbaar .bl-pad-iteratie .lichtje { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .bl-pad-halte, .bl-pad-lus { opacity: 1; transition: none; } .bl-pad-iteratie { display: none; } }
 
 /* Knoppen */
 .bl-knop { display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; background: linear-gradient(135deg, var(--bl-accent), #b8e040); color: #1A1A2E; font: 800 18px 'Barlow', sans-serif; padding: 16px 30px; border-radius: 20px; text-decoration: none; box-shadow: 0 6px 30px rgba(216,254,86,.35); border: 0; cursor: pointer; transition: .4s; }
@@ -320,7 +327,7 @@
 .bl-licht .keuze-knop { background: #fff; color: #1d1d1f; border-color: #d1d1d6; }
 .bl-licht .keuze-knop[aria-pressed="true"] { border-color: #5B2D8E; background: rgba(91,45,142,.1); }
 
-/* De route als lijst op een telefoon; de zigzag is daar te klein */
+/* De route als lijst op een smal scherm; de kaartjes op het pad zijn daar te klein */
 .bl-route-lijst { display: none; list-style: none; padding: 0; margin: 5vh 0 0; width: 100%; max-width: 420px; }
 .bl-route-lijst li { display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: center; padding: 8px 0; position: relative; }
 .bl-route-lijst .blob { width: 56px; height: 56px; border-radius: 46% 54% 52% 48% / 55% 45% 55% 45%; background: var(--bl-accent); display: grid; place-items: center; }
@@ -330,11 +337,14 @@
 .bl-route-lijst .naam { display: block; font-weight: 800; font-size: 18px; color: #fff; }
 .bl-route-lijst .wat { display: block; font-size: 14px; color: var(--bl-muted); }
 .bl-route-lijst .lus { grid-column: 2; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--bl-accent); }
-@media (max-width: 760px) {
-  .bl-zigzag { display: none; }
+@media (max-width: 900px) {
+  .bl-pad { display: none; }
   .bl-route-lijst { display: block; }
+  .bl-route-scene { flex-direction: column; align-items: center; justify-content: flex-start; padding: 14vh 6vw 8vh; background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(91,45,142,.55), transparent 65%), var(--bl-bg); }
+  .bl-route-scene h2 { position: static; max-width: none; text-align: center; }
+}
+@media (max-width: 760px) {
   .bl-dots { display: none; }
-  .bl-route-scene { justify-content: flex-start; padding-top: 14vh; }
 }
 
 .bl-kort { display: none; }

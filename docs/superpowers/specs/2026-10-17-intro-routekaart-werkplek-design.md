@@ -42,7 +42,7 @@ Wat Harmen in de eerste versie stoorde: te veel tekst en vakjes ("ik kijk en ik 
   3. "Eerst je basiskamp." — `werkplek.webp`
   4. "Dan de markt op." — `markt.webp`
   5. "Tot je eerste klant." — `klanten.webp`, met de knop "Bekijk je route"
-- **De route loopt zigzag, zoals in de launch path.** Tussen 1 en 2 en tussen 4 en 5 draait een lichtje rond met "↻ heen en weer". Harmen vroeg om de lus tussen 4 en 5; die tussen 1 en 2 komt uit de launch path-PDF.
+- **De route staat op het pad uit `start.webp`.** Elk van de zeven lichtjes is een level, met naam en vraag erbij. Tussen 1 en 2 en tussen 4 en 5 loopt een lichtje heen en weer, met "↻ iteratie". Harmen vroeg om de lus tussen 4 en 5; die tussen 1 en 2 komt uit de launch path-PDF. *(1 november: de losse zigzag uit de launch path is vervangen door het pad, op verzoek van Harmen. Op een smal scherm staat de route als lijst.)*
 - **Eén beeldserie in Morgen-kleuren** voor alles: dezelfde hoofdpersoon, nachtpaars met spaarzaam limoen.
 
 ### Routekaart
