@@ -299,6 +299,8 @@
 /* Jouw repo als lade */
 .bl-lade { position: fixed; inset: 0 0 0 auto; width: min(420px, 100vw); z-index: 60; background: #0C0818; border-left: 1px solid var(--bl-card-border); overflow: auto; padding: 18px; box-shadow: -20px 0 60px rgba(0,0,0,.5); }
 .bl-lade-sluit { float: right; }
+/* De repo-naam is lang en zonder spaties: klein houden en laten afbreken, anders valt hij buiten de lade. */
+.bl-lade h2 { font-size: 22px; line-height: 1.2; overflow-wrap: anywhere; margin-top: 4px; }
 
 /* Aanvullingen voor het stapvenster en de app */
 .bl-voorbeeld { width: 100%; height: 100%; }
@@ -608,6 +610,9 @@ button.bl-vak:focus-visible { outline: 2px solid #5B2D8E; outline-offset: 3px; }
 .bl-zo summary { cursor: pointer; font-weight: 700; color: var(--bl-purple); font-size: 16px; }
 .bl-zo .prose-morgen { color: #3a3a3c; font-size: 16px; line-height: 1.55; margin-top: 8px; }
 .bl-zo .prose-morgen strong { color: #1d1d1f; }
+.bl-zo .prose-morgen a { color: var(--bl-purple); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.bl-zo .prose-morgen a.bl-link-knop { display: inline-block; margin-top: 8px; background: #5B2D8E; color: #fff; text-decoration: none; border-radius: 10px; padding: 10px 16px; font-weight: 600; }
+.bl-zo .prose-morgen a.bl-link-knop:hover { background: #4a2475; }
 .bl-stap-slot { display: grid; justify-items: center; text-align: center; gap: 12px; }
 .bl-stap-slot p { margin: 0; font-size: 18px; font-weight: 600; color: #1d1d1f; }
 .bl-stap-slot-rond { width: 52px; height: 52px; border-radius: 50%; background: #e5e5ea; display: grid; place-items: center; font-size: 22px; }
