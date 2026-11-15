@@ -33,8 +33,12 @@ describe('Welkom', () => {
     expect(lijst.match(/iteratie/g)).toHaveLength(2);
   });
 
-  it('eindigt met een knop naar je route', () => {
-    expect(html).toMatch(/<button[^>]*class="bl-knop[^"]*"[^>]*>Bekijk je route →<\/button>/);
+  it('eindigt met de route, met daarin de knop naar je route', () => {
+    const scenes = [...html.matchAll(/<section[^>]*id="bl-welkom-([a-z]+)"/g)].map((m) => m[1]);
+    expect(scenes).toEqual(['start', 'werkplek', 'markt', 'klanten', 'route']);
+    const route = html.slice(html.indexOf('id="bl-welkom-route"'));
+    expect(route).toMatch(/<button[^>]*class="bl-knop[^"]*"[^>]*>Bekijk je route →<\/button>/);
+    expect(html.match(/Bekijk je route →/g)).toHaveLength(1);
   });
 });
 

@@ -33,9 +33,9 @@ const ITERATIES = [
   { pad: 'M1300 511 C1330 506 1360 494 1367 472', label: { x: 88.3, y: 51.6 } },
 ];
 
-const SCENES = ['start', 'route', 'werkplek', 'markt', 'klanten'];
+const SCENES = ['start', 'werkplek', 'markt', 'klanten', 'route'];
 
-/** Het welkomstscherm uit de schets welkom-v4: vijf scènes om doorheen te scrollen. */
+/** Het welkomstscherm uit de schets welkom-v4: vijf scènes om doorheen te scrollen, met de route als laatste. */
 export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
   const [aan, setAan] = useState(0);
   const wortel = useZichtbaar<HTMLDivElement>((el) => {
@@ -63,13 +63,49 @@ export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
             Van idee tot je eerste klanten. <span className="bl-accent">Met AI naast je.</span>
           </p>
         </div>
-        <button type="button" className="bl-scroll-hint" onClick={() => document.getElementById('bl-welkom-route')?.scrollIntoView({ behavior: 'smooth' })}>
+        <button type="button" className="bl-scroll-hint" onClick={() => document.getElementById('bl-welkom-werkplek')?.scrollIntoView({ behavior: 'smooth' })}>
           Zo gaan we het doen<span className="streep" aria-hidden="true" />
         </button>
       </section>
 
+      <section className="bl-scene" id="bl-welkom-werkplek">
+        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/werkplek.webp')" }} />
+        <div className="bl-tekst">
+          <div className="bl-label bl-in">Level 0 · Werkplek</div>
+          <h2 className="bl-in d1">Eerst je basiskamp.</h2>
+          <p className="bl-zin bl-in d2">
+            Even pas op de plaats. Alles wat je bij je doelgroep ophaalt, komt op één plek. <span className="bl-accent">Je AI leest mee.</span>
+          </p>
+        </div>
+      </section>
+
+      <section className="bl-scene" id="bl-welkom-markt">
+        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/markt.webp')" }} />
+        <div className="bl-tekst">
+          <div className="bl-label bl-in">Level 1 t/m 5</div>
+          <h2 className="bl-in d1">Dan de markt op.</h2>
+          <p className="bl-zin bl-in d2">
+            Jij praat met echte mensen. <span className="bl-accent">Je AI ordent, zoekt uit en schrijft mee.</span>
+          </p>
+        </div>
+      </section>
+
+      <section className="bl-scene" id="bl-welkom-klanten">
+        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/klanten.webp')" }} />
+        <div className="bl-tekst">
+          <div className="bl-label bl-in">Level 6 · Lancering</div>
+          <h2 className="bl-in d1">Tot je eerste klant.</h2>
+          <p className="bl-zin bl-in d2">En een manier van werken met AI waar je nog jaren op bouwt.</p>
+        </div>
+      </section>
+
       <section className="bl-scene bl-route-scene" id="bl-welkom-route">
-        <h2 className="bl-in">Zes stappen naar de markt</h2>
+        <div className="bl-route-kop">
+          <h2 className="bl-in">Zes stappen naar de markt</h2>
+          <button type="button" className="bl-knop bl-in d2" onClick={onNaarRoute}>
+            Bekijk je route →
+          </button>
+        </div>
         {/* De route op het pad uit de eerste scène: elk lichtje is een level. */}
         <div
           className="bl-pad"
@@ -126,40 +162,6 @@ export function Welkom({ onNaarRoute }: { onNaarRoute: () => void }) {
             </li>
           ))}
         </ol>
-      </section>
-
-      <section className="bl-scene" id="bl-welkom-werkplek">
-        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/werkplek.webp')" }} />
-        <div className="bl-tekst">
-          <div className="bl-label bl-in">Level 0 · Werkplek</div>
-          <h2 className="bl-in d1">Eerst je basiskamp.</h2>
-          <p className="bl-zin bl-in d2">
-            Even pas op de plaats. Alles wat je bij je doelgroep ophaalt, komt op één plek. <span className="bl-accent">Je AI leest mee.</span>
-          </p>
-        </div>
-      </section>
-
-      <section className="bl-scene" id="bl-welkom-markt">
-        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/markt.webp')" }} />
-        <div className="bl-tekst">
-          <div className="bl-label bl-in">Level 1 t/m 5</div>
-          <h2 className="bl-in d1">Dan de markt op.</h2>
-          <p className="bl-zin bl-in d2">
-            Jij praat met echte mensen. <span className="bl-accent">Je AI ordent, zoekt uit en schrijft mee.</span>
-          </p>
-        </div>
-      </section>
-
-      <section className="bl-scene" id="bl-welkom-klanten">
-        <div className="bl-beeld" style={{ backgroundImage: "url('/beelden/klanten.webp')" }} />
-        <div className="bl-tekst">
-          <div className="bl-label bl-in">Level 6 · Lancering</div>
-          <h2 className="bl-in d1">Tot je eerste klant.</h2>
-          <p className="bl-zin bl-in d2">En een manier van werken met AI waar je nog jaren op bouwt.</p>
-          <button type="button" className="bl-knop bl-in d3" onClick={onNaarRoute}>
-            Bekijk je route →
-          </button>
-        </div>
       </section>
     </div>
   );
